@@ -22,7 +22,7 @@ steps:
     - git checkout f30
     - dnf -y builddep kernel.spec
     - |
-      for i in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/${i}; done
+      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
     - fedpkg srpm
     - ./scripts/fast-build.sh x86_64 kernel-4.15.3-300.my_kernel.fc27.src.rpm
     - cp -rfv x86_64/*.rpm /tmp/artifacts/
