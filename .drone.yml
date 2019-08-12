@@ -1,0 +1,22 @@
+---
+kind: pipeline
+name: mbp-fedora-kernel
+
+steps:
+- name: build
+  image: fedora:30
+  pull: always
+  volumes:
+    - name: build-products
+      path: /tmp/products
+  commands:
+    - ls
+    - |
+      echo "Threads/core: $(nproc --all)"
+    - pwd
+    - dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools
+    - git clone https://src.fedoraproject.org/rpms/kernel.git
+    - cd kernel
+    - dnf -y builddep kernel.spec
+    - git checkout f30
+    - fedpkg local
