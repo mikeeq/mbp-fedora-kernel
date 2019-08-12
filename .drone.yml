@@ -26,7 +26,7 @@ steps:
     - |
       sed -i "s/Patch527/Patch537/g" kernel.spec
     - |
-      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
+      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v camera | grep -v touchpad | grep -v wifi | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
     - fedpkg srpm
     - ./scripts/fast-build.sh x86_64 $(ls | grep src.rpm)
     - cp -rfv x86_64/*.rpm /tmp/artifacts/
