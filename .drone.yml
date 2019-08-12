@@ -26,7 +26,11 @@ steps:
     - |
       sed -i "s/Patch527/Patch537/g" kernel.spec
     - |
-      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v camera | grep -v touchpad | grep -v wifi | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
+      sed -i "/.*Subject: .*/c Subject: [PATCH 4/4] nvme-pci: Support apple t2" ../linux-mbp-arch/2004-nvme-pci-Support-shared-tags-across-queues-for-Apple.patch
+    - |
+      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 00); do sed -i "1 i\From: fedora kernel <fedora@kernel.org>\nSubject: patch $patch_file" ../linux-mbp-arch/$patch_file; done
+    - |
+      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
     - fedpkg srpm
     - ./scripts/fast-build.sh x86_64 $(ls | grep src.rpm)
     - cp -rfv x86_64/*.rpm /tmp/artifacts/
