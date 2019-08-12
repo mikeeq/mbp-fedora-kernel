@@ -33,7 +33,7 @@ steps:
       for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
     - fedpkg srpm
     - ./scripts/fast-build.sh x86_64 $(ls | grep src.rpm)
-    - cp -rfv x86_64/*.rpm /tmp/artifacts/
+    - cp -rfv /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
 
 - name: publish-github
   image: plugins/github-release
