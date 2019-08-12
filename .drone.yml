@@ -22,11 +22,11 @@ steps:
     - git checkout f30
     - dnf -y builddep kernel.spec
     - |
-      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
-    - |
       sed -i "s/Patch526/Patch536/g" kernel.spec
     - |
       sed -i "s/Patch527/Patch537/g" kernel.spec
+    - |
+      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
     - fedpkg srpm
     - ./scripts/fast-build.sh x86_64 kernel-4.15.3-300.my_kernel.fc27.src.rpm
     - cp -rfv x86_64/*.rpm /tmp/artifacts/
