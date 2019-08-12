@@ -7,16 +7,39 @@ steps:
   image: fedora:30
   pull: always
   volumes:
-    - name: build-products
-      path: /tmp/products
+    - name: build-artifacts
+      path: /tmp/artifacts
   commands:
     - ls
     - |
-      echo "Threads/core: $(nproc --all)"
+      echo "CPU threads: $(nproc --all)"
+    - cat /proc/cpuinfo | grep 'model name' | uniq
     - pwd
     - dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools
     - git clone https://src.fedoraproject.org/rpms/kernel.git
+    - git clone https://github.com/aunali1/linux-mbp-arch
     - cd kernel
-    - dnf -y builddep kernel.spec
     - git checkout f30
-    - fedpkg local
+    - dnf -y builddep kernel.spec
+    - |
+      for i in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/${i}; done
+    - fedpkg srpm
+    - ./scripts/fast-build.sh x86_64 kernel-4.15.3-300.my_kernel.fc27.src.rpm
+    - cp -rfv x86_64/*.rpm /tmp/artifacts/
+
+- name: publish-github
+  image: plugins/github-release
+  volumes:
+    - name: build-artifacts
+      path: /tmp/artifacts
+  settings:
+    api_key:
+      from_secret: github_token
+    files: /tmp/artifacts/*
+    prerelease: yes
+  when:
+    event: tag
+
+volumes:
+- name: build-artifacts
+  temp: {}
