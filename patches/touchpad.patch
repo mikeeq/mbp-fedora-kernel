@@ -2,7 +2,7 @@ From: fedora kernel <fedora@kernel.org>
 Subject: patch touchpad
 
 diff --git a/drivers/input/mouse/bcm5974.c b/drivers/input/mouse/bcm5974.c
-index d0122134f320..15cf3b5ec7eb 100644
+index d0122134f..0d438c812 100644
 --- a/drivers/input/mouse/bcm5974.c
 +++ b/drivers/input/mouse/bcm5974.c
 @@ -161,6 +161,8 @@ static const struct usb_device_id bcm5974_table[] = {
@@ -33,3 +33,4 @@ index d0122134f320..15cf3b5ec7eb 100644
 +	},
  	{}
  };
+
