@@ -1,0 +1,184 @@
+From: fedora kernel <fedora@kernel.org>
+Subject: patch nvme
+
+diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
+index 527d64545023..2c69bbb5c1f5 100644
+--- a/drivers/nvme/host/nvme.h
++++ b/drivers/nvme/host/nvme.h
+@@ -92,6 +92,11 @@ enum nvme_quirks {
+ 	 * Broken Write Zeroes.
+ 	 */
+ 	NVME_QUIRK_DISABLE_WRITE_ZEROES		= (1 << 9),
++
++	/*
++	 * Apple 2018 and latter variant has a few issues
++	 */
++	NVME_QUIRK_APPLE_2018			= (1 << 10),
+ };
+
+ /*
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 693f2a856200..559d7562e32c 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -27,8 +27,8 @@
+ #include "trace.h"
+ #include "nvme.h"
+
+-#define SQ_SIZE(depth)		(depth * sizeof(struct nvme_command))
+-#define CQ_SIZE(depth)		(depth * sizeof(struct nvme_completion))
++#define SQ_SIZE(q)	((((size_t)(q)->q_depth) << (q)->sq_extra_shift) * sizeof(struct nvme_command))
++#define CQ_SIZE(q)	(((size_t)(q)->q_depth) * sizeof(struct nvme_completion))
+
+ #define SGES_PER_PAGE	(PAGE_SIZE / sizeof(struct nvme_sgl_desc))
+
+@@ -196,6 +196,7 @@ struct nvme_queue {
+ 	u16 last_cq_head;
+ 	u16 qid;
+ 	u8 cq_phase;
++	u8 sq_extra_shift;
+ 	unsigned long flags;
+ #define NVMEQ_ENABLED		0
+ #define NVMEQ_SQ_CMB		1
+@@ -540,8 +541,11 @@ static inline void nvme_write_sq_db(struct nvme_queue *nvmeq, bool write_sq)
+ static void nvme_submit_cmd(struct nvme_queue *nvmeq, struct nvme_command *cmd,
+ 			    bool write_sq)
+ {
++	u16 sq_actual_pos;
++
+ 	spin_lock(&nvmeq->sq_lock);
+-	memcpy(&nvmeq->sq_cmds[nvmeq->sq_tail], cmd, sizeof(*cmd));
++	sq_actual_pos = nvmeq->sq_tail << nvmeq->sq_extra_shift;
++	memcpy(&nvmeq->sq_cmds[sq_actual_pos], cmd, sizeof(*cmd));
+ 	if (++nvmeq->sq_tail == nvmeq->q_depth)
+ 		nvmeq->sq_tail = 0;
+ 	nvme_write_sq_db(nvmeq, write_sq);
+@@ -1374,16 +1378,16 @@ static enum blk_eh_timer_return nvme_timeout(struct request *req, bool reserved)
+
+ static void nvme_free_queue(struct nvme_queue *nvmeq)
+ {
+-	dma_free_coherent(nvmeq->q_dmadev, CQ_SIZE(nvmeq->q_depth),
++	dma_free_coherent(nvmeq->q_dmadev, CQ_SIZE(nvmeq),
+ 				(void *)nvmeq->cqes, nvmeq->cq_dma_addr);
+ 	if (!nvmeq->sq_cmds)
+ 		return;
+
+ 	if (test_and_clear_bit(NVMEQ_SQ_CMB, &nvmeq->flags)) {
+ 		pci_free_p2pmem(to_pci_dev(nvmeq->q_dmadev),
+-				nvmeq->sq_cmds, SQ_SIZE(nvmeq->q_depth));
++				nvmeq->sq_cmds, SQ_SIZE(nvmeq));
+ 	} else {
+-		dma_free_coherent(nvmeq->q_dmadev, SQ_SIZE(nvmeq->q_depth),
++		dma_free_coherent(nvmeq->q_dmadev, SQ_SIZE(nvmeq),
+ 				nvmeq->sq_cmds, nvmeq->sq_dma_addr);
+ 	}
+ }
+@@ -1465,12 +1469,12 @@ static int nvme_cmb_qdepth(struct nvme_dev *dev, int nr_io_queues,
+ }
+
+ static int nvme_alloc_sq_cmds(struct nvme_dev *dev, struct nvme_queue *nvmeq,
+-				int qid, int depth)
++				int qid)
+ {
+ 	struct pci_dev *pdev = to_pci_dev(dev->dev);
+
+ 	if (qid && dev->cmb_use_sqes && (dev->cmbsz & NVME_CMBSZ_SQS)) {
+-		nvmeq->sq_cmds = pci_alloc_p2pmem(pdev, SQ_SIZE(depth));
++		nvmeq->sq_cmds = pci_alloc_p2pmem(pdev, SQ_SIZE(nvmeq));
+ 		nvmeq->sq_dma_addr = pci_p2pmem_virt_to_bus(pdev,
+ 						nvmeq->sq_cmds);
+ 		if (nvmeq->sq_dma_addr) {
+@@ -1479,7 +1483,7 @@ static int nvme_alloc_sq_cmds(struct nvme_dev *dev, struct nvme_queue *nvmeq,
+ 		}
+ 	}
+
+-	nvmeq->sq_cmds = dma_alloc_coherent(dev->dev, SQ_SIZE(depth),
++	nvmeq->sq_cmds = dma_alloc_coherent(dev->dev, SQ_SIZE(nvmeq),
+ 				&nvmeq->sq_dma_addr, GFP_KERNEL);
+ 	if (!nvmeq->sq_cmds)
+ 		return -ENOMEM;
+@@ -1493,12 +1497,24 @@ static int nvme_alloc_queue(struct nvme_dev *dev, int qid, int depth)
+ 	if (dev->ctrl.queue_count > qid)
+ 		return 0;
+
+-	nvmeq->cqes = dma_alloc_coherent(dev->dev, CQ_SIZE(depth),
++	/*
++	 * On Apple 2018 or later implementations, the IO submission
++	 * queue(s) have twice as large entries. Current implementations
++	 * seem to only have qid 1, let's assume this is true of all IO
++	 * queues until we know better.
++	 */
++	if (qid && (dev->ctrl.quirks & NVME_QUIRK_APPLE_2018))
++		nvmeq->sq_extra_shift = 1;
++	else
++		nvmeq->sq_extra_shift = 0;
++
++	nvmeq->q_depth = depth;
++	nvmeq->cqes = dma_alloc_coherent(dev->dev, CQ_SIZE(nvmeq),
+ 					 &nvmeq->cq_dma_addr, GFP_KERNEL);
+ 	if (!nvmeq->cqes)
+ 		goto free_nvmeq;
+
+-	if (nvme_alloc_sq_cmds(dev, nvmeq, qid, depth))
++	if (nvme_alloc_sq_cmds(dev, nvmeq, qid))
+ 		goto free_cqdma;
+
+ 	nvmeq->q_dmadev = dev->dev;
+@@ -1508,7 +1524,6 @@ static int nvme_alloc_queue(struct nvme_dev *dev, int qid, int depth)
+ 	nvmeq->cq_head = 0;
+ 	nvmeq->cq_phase = 1;
+ 	nvmeq->q_db = &dev->dbs[qid * 2 * dev->db_stride];
+-	nvmeq->q_depth = depth;
+ 	nvmeq->qid = qid;
+ 	nvmeq->cq_vector = -1;
+ 	dev->ctrl.queue_count++;
+@@ -1516,7 +1531,7 @@ static int nvme_alloc_queue(struct nvme_dev *dev, int qid, int depth)
+ 	return 0;
+
+  free_cqdma:
+-	dma_free_coherent(dev->dev, CQ_SIZE(depth), (void *)nvmeq->cqes,
++	dma_free_coherent(dev->dev, CQ_SIZE(nvmeq), (void *)nvmeq->cqes,
+ 							nvmeq->cq_dma_addr);
+  free_nvmeq:
+ 	return -ENOMEM;
+@@ -1544,8 +1559,9 @@ static void nvme_init_queue(struct nvme_queue *nvmeq, u16 qid)
+ 	nvmeq->last_sq_tail = 0;
+ 	nvmeq->cq_head = 0;
+ 	nvmeq->cq_phase = 1;
++
+ 	nvmeq->q_db = &dev->dbs[qid * 2 * dev->db_stride];
+-	memset((void *)nvmeq->cqes, 0, CQ_SIZE(nvmeq->q_depth));
++	memset((void *)nvmeq->cqes, 0, CQ_SIZE(nvmeq));
+ 	nvme_dbbuf_init(dev, nvmeq, qid);
+ 	dev->online_queues++;
+ 	wmb(); /* ensure the first interrupt sees the initialization */
+@@ -1563,11 +1579,18 @@ static int nvme_create_queue(struct nvme_queue *nvmeq, int qid, bool polled)
+ 	 * A queue's vector matches the queue identifier unless the controller
+ 	 * has only one vector available.
+ 	 */
+-	if (!polled)
++	if (!polled) {
+ 		vector = dev->num_vecs == 1 ? 0 : qid;
+-	else
++		/*
++		 * On Apple 2018 or later implementations, only vector 0 is accepted
++		 * by the drive firmware
++		 */
++		if (dev->ctrl.quirks & NVME_QUIRK_APPLE_2018)
++			vector = 0;
++	} else
+ 		vector = -1;
+
++
+ 	result = adapter_alloc_cq(dev, qid, nvmeq, vector);
+ 	if (result)
+ 		return result;
+@@ -2966,6 +2989,8 @@ static const struct pci_device_id nvme_id_table[] = {
+ 	{ PCI_DEVICE_CLASS(PCI_CLASS_STORAGE_EXPRESS, 0xffffff) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2001) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2003) },
++	{ PCI_DEVICE(PCI_VENDOR_ID_APPLE, 0x2005),
++		.driver_data = NVME_QUIRK_APPLE_2018},
+ 	{ 0, }
+ };
+ MODULE_DEVICE_TABLE(pci, nvme_id_table);

@@ -10,30 +10,7 @@ steps:
     - name: build-artifacts
       path: /tmp/artifacts
   commands:
-    - ls
-    - |
-      echo "CPU threads: $(nproc --all)"
-    - cat /proc/cpuinfo | grep 'model name' | uniq
-    - pwd
-    - dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools
-    - git clone https://src.fedoraproject.org/rpms/kernel.git
-    - git clone https://github.com/aunali1/linux-mbp-arch
-    - cd kernel
-    - git checkout f30
-    - dnf -y builddep kernel.spec
-    - |
-      sed -i "s/Patch526/Patch536/g" kernel.spec
-    - |
-      sed -i "s/Patch527/Patch537/g" kernel.spec
-    - |
-      sed -i "/.*Subject: .*/c Subject: [PATCH 4/4] nvme-pci: Support apple t2" ../linux-mbp-arch/2004-nvme-pci-Support-shared-tags-across-queues-for-Apple.patch
-    - |
-      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 00); do sed -i "1 i\From: fedora kernel <fedora@kernel.org>\nSubject: patch $patch_file" ../linux-mbp-arch/$patch_file; done
-    - |
-      for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000); do scripts/newpatch.sh ../linux-mbp-arch/$patch_file; done
-    - fedpkg srpm
-    - ./scripts/fast-build.sh x86_64 $(ls | grep src.rpm)
-    - cp -rfv /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
+    - ./build.sh
 
 - name: publish-github
   image: plugins/github-release
