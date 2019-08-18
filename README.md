@@ -71,6 +71,7 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 - VHCI+Sound driver (Apple T2) <https://github.com/MCMrARM/mbp2018-bridge-drv/>
 - TouchBar driver: <https://github.com/roadrunner2/macbook12-spi-driver/tree/mbp15>
 - Kernel patches (all are mentioned in github issue above): <https://github.com/aunali1/linux-mbp-arch>
+- ArchLinux kernel patches: <https://github.com/ppaulweber/linux-mba>
 
 ## Credits
 
@@ -78,3 +79,4 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 - @ozbenh - thanks for submitting NVME patch
 - @roadrunner2 - thanks for SPI (touchbar) driver
 - @aunali1 - thanks for ArchLinux Kernel CI
+- @ppaulweber - thanks for keyboard and Macbook Air patches

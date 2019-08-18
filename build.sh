@@ -59,7 +59,10 @@ done
 fedpkg --release $FEDORA_KERNEL_BRANCH_NAME srpm
 
 ### Build non-debug rpms
-./scripts/fast-build.sh x86_64 $(ls | grep src.rpm)
+rpmbuild --target x86_64 --with headers --without debug --without debuginfo --without perf --without tools --rebuild $(ls | grep src.rpm)
+rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
 cp -rfv /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
+
+exit $rpmbuild_exitcode
