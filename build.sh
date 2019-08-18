@@ -18,7 +18,15 @@ dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkc
 ### Clone Fedora Kernel git repo
 git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME https://src.fedoraproject.org/rpms/kernel.git
 cd kernel
+## Cleanup
+rm -rfv *.rpm
+git reset --hard $FEDORA_KERNEL_BRANCH_NAME
+git checkout $FEDORA_KERNEL_BRANCH_NAME
+git branch -d fedora_patch_src
+fedpkg clean
+## Change branch
 git checkout $FEDORA_KERNEL_COMMIT_HASH
+git reset --hard $FEDORA_KERNEL_COMMIT_HASH
 git checkout -b fedora_patch_src
 dnf -y builddep kernel.spec
 

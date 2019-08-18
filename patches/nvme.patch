@@ -182,3 +182,4 @@ index 693f2a856200..559d7562e32c 100644
  	{ 0, }
  };
  MODULE_DEVICE_TABLE(pci, nvme_id_table);
+
