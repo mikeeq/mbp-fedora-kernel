@@ -8,7 +8,18 @@ Fedora 30 kernel for Macs produced after 2018 (with Apple T2 chip).
 
 - 5.2 kernel - random kernel panics - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-510652894>
 
+## TODO:
+
+- integrate `roadrunner2/macbook12-spi-driver` and `MCMrARM/mbp2018-bridge-drv` drivers
+- add `kernel-headers` rpm generation
+
 > Tested on: Macbook Pro 13" 2019 i5 TouchBar Z0WQ000AR
+
+#### Not working
+
+- keyboard backlight brightness control
+- microphone
+- audio outputs switching
 
 #### Working out-of-the-box
 
@@ -22,9 +33,11 @@ Fedora 30 kernel for Macs produced after 2018 (with Apple T2 chip).
 
 - NVMe
 - Camera
+- keyboard
+- touchpad (scroll, right click)
 - wifi - you need to manually extract firmware from MacOS - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517444300>
 
-> The firmware files to use can be found by running `ioreg -l | grep C-4364`.
+> The firmware files to use can be found by running `ioreg -l | grep C-4364` or `ioreg -l | grep RequestedFiles`, copy from `/usr/share/firmware/wifi` when being on MacOS
 
 <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-515401480>
 
@@ -40,16 +53,13 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 >> with @MCMrARM mbp2018-bridge-drv
 
 - keyboard
+- touchpad
+- touchbar
+- audio
 
 #### Partially working
 
-- touchpad (only LMB is working, no RMB)
 - audio (you need to manually switch between audio outputs) - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517208901>
-- touchbar (fn mode is broken and keyboard brightness isn't working) - <https://github.com/Dunedan/mbp-2016-linux/issues/110#issuecomment-521044302>
-
-#### Not working
-
-- microphone
 
 #### Not tested
 
