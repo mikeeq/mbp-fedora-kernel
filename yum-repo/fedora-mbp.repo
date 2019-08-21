@@ -1,0 +1,5 @@
+[fedora-mbp]
+name=Fedora MBP
+baseurl=http://12ba210cd832
+gpgcheck=0
+enabled=1

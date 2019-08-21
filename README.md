@@ -4,26 +4,27 @@
 
 Fedora 30 kernel for Macs produced after 2018 (with Apple T2 chip).
 
-Fedora 30 iso (with this kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
+Fedora 30 iso (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
 
-## Known issues
-
-- 5.2 kernel - random kernel panics - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-510652894>
-
-## TODO:
+## TODO
 
 - integrate `roadrunner2/macbook12-spi-driver` and `MCMrARM/mbp2018-bridge-drv` drivers
 - add `kernel-headers` rpm generation
+
+### Known issues
+
+- 5.2 kernel - random kernel panics - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-510652894>
 
 > Tested on: Macbook Pro 13" 2019 i5 TouchBar Z0WQ000AR
 
 #### Not working
 
-- keyboard backlight brightness control
+- keyboard backlight
 - microphone
-- audio outputs switching
+- dynamic audio outputs change (on connecting/disconnecting headphones jack)
+- suspend/resume (sleep mode)
 
-#### Working out-of-the-box
+#### Working with upstream stable kernel 5.1
 
 - Display/Screen
 - Thunderbolt 3/USB-C
@@ -31,17 +32,18 @@ Fedora 30 iso (with this kernel builtin) - <https://github.com/mikeeq/mbp-fedora
 - Ethernet/Video USB-C adapters
 - Bluetooth
 
-#### Working with this kernel
+#### Working with mbp-fedora-kernel
 
 - NVMe
 - Camera
 - keyboard
 - touchpad (scroll, right click)
-- wifi - you need to manually extract firmware from MacOS - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517444300>
+- wifi
+  - you need to manually extract firmware from MacOS
+    - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517444300>
+    - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-515401480>
 
 > The firmware files to use can be found by running `ioreg -l | grep C-4364` or `ioreg -l | grep RequestedFiles`, copy from `/usr/share/firmware/wifi` when being on MacOS
-
-<https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-515401480>
 
 ```
 Put the firmware in the right place!
@@ -59,14 +61,8 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 - touchbar
 - audio
 
-#### Partially working
-
-- audio (you need to manually switch between audio outputs) - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517208901>
-
 #### Not tested
 
-- suspend/resume (sleep mode)
-- hibernation
 - eGPU
 
 ## Docs
