@@ -4,6 +4,8 @@
 
 Fedora 30 kernel for Macs produced after 2018 (with Apple T2 chip).
 
+Fedora 30 iso (with this kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
+
 ## Known issues
 
 - 5.2 kernel - random kernel panics - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-510652894>
