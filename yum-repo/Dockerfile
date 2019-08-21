@@ -12,11 +12,9 @@ RUN dnf -y install \
     gettext \
   && dnf clean all
 
-RUN wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/kernel-5.1.19-300.wifi.patch.fc30.x86_64.rpm && \
-    wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/kernel-core-5.1.19-300.wifi.patch.fc30.x86_64.rpm && \
-    wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/kernel-modules-5.1.19-300.wifi.patch.fc30.x86_64.rpm && \
-    wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/kernel-modules-extra-5.1.19-300.wifi.patch.fc30.x86_64.rpm && \
-    wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/kernel-devel-5.1.19-300.wifi.patch.fc30.x86_64.rpm && \
+RUN for rpm in $(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest -L | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1); do \
+      wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/$rpm; \
+    done && \
     chown -R nginx:nginx /var/repo
 
 RUN createrepo /var/repo
