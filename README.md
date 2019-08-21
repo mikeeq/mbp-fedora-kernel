@@ -1,10 +1,16 @@
 # mbp-fedora-kernel
 
+Fedora 30 kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
+
+Fedora 30 ISO (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
+
+## CI status
+
+Drone kernel build status:
 [![Build Status](https://cloud.drone.io/api/badges/mikeeq/mbp-fedora-kernel/status.svg)](https://cloud.drone.io/mikeeq/mbp-fedora-kernel)
 
-Fedora 30 kernel for Macs produced after 2018 (with Apple T2 chip).
-
-Fedora 30 iso (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
+Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
+[![Publish Status](https://travis-ci.com/mikeeq/mbp-fedora-kernel.svg?branch=master)](https://travis-ci.com/mikeeq/mbp-fedora-kernel)
 
 ## TODO
 
@@ -19,10 +25,10 @@ Fedora 30 iso (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-
 
 #### Not working
 
-- keyboard backlight
-- microphone
-- dynamic audio outputs change (on connecting/disconnecting headphones jack)
-- suspend/resume (sleep mode)
+- Keyboard backlight
+- Microphone
+- Dynamic audio outputs change (on connecting/disconnecting headphones jack)
+- Suspend/Resume (sleep mode)
 
 #### Working with upstream stable kernel 5.1
 
