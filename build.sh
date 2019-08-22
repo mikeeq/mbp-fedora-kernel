@@ -20,6 +20,7 @@ git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME https://src.fedora
 cd kernel
 ## Cleanup
 rm -rfv *.rpm
+rm -rf ~/rpmbuild/*
 git reset --hard $FEDORA_KERNEL_BRANCH_NAME
 git checkout $FEDORA_KERNEL_BRANCH_NAME
 git branch -d fedora_patch_src
@@ -30,26 +31,7 @@ git reset --hard $FEDORA_KERNEL_COMMIT_HASH
 git checkout -b fedora_patch_src
 dnf -y builddep kernel.spec
 
-##### v5.2.8 patches from aunali1 repo
-# cd ..
-# git clone https://github.com/aunali1/linux-mbp-arch
-# cd kernel
-### Fix for 5.2.8
-# sed -i "s/Patch526/Patch536/g" kernel.spec
-# sed -i "s/Patch527/Patch537/g" kernel.spec
-
-### Fix subject header in patch files, subject header cannot be longer than 64 chars
-# sed -i "/.*Subject: .*/c Subject: [PATCH 4/4] nvme-pci: Support apple t2" ../linux-mbp-arch/2004-nvme-pci-Support-shared-tags-across-queues-for-Apple.patch
-# for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 00)
-# do
-#   sed -i "1 i\From: fedora kernel <fedora@kernel.org>\nSubject: patch $patch_file" ../linux-mbp-arch/$patch_file
-# done
-# for patch_file in $(ls ../linux-mbp-arch | grep patch | grep -v 000)
-# do
-#   scripts/newpatch.sh ../linux-mbp-arch/$patch_file
-# done
-#####
-
+### Apply patches
 for patch_file in $(ls ../patches)
 do
   scripts/newpatch.sh ../patches/$patch_file
@@ -59,10 +41,11 @@ done
 fedpkg --release $FEDORA_KERNEL_BRANCH_NAME srpm
 
 ### Build non-debug rpms
-rpmbuild --target x86_64 --with headers --without debug --without debuginfo --without perf --without tools --rebuild $(ls | grep src.rpm)
+./scripts/fast-build.sh x86_64 $(ls | grep src.rpm)
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
-cp -rfv /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
+find ~/rpmbuild/ | grep '\.rpm'
+cp -rfv ~/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
 
 exit $rpmbuild_exitcode

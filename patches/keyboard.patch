@@ -1,21 +1,6 @@
 From: fedora kernel <fedora@kernel.org>
 Subject: patch keyboard
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index 1cb41992a..58197f729 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
-@@ -557,6 +557,10 @@ static const struct hid_device_id apple_devices[] = {
- 		.driver_data = APPLE_HAS_FN },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
- 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MBA8_1),
-+		.driver_data = APPLE_HAS_FN },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MBP15_X),
-+		.driver_data = APPLE_HAS_FN },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI),
- 		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO),
 diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
 index adce58f24..1ee41d05c 100644
 --- a/drivers/hid/hid-ids.h
