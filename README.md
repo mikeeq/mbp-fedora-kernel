@@ -20,6 +20,7 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 ### Known issues
 
 - 5.2 kernel - random kernel panics - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-510652894>
+  - <https://bugs.archlinux.org/task/63159#comment180568>
 
 > Tested on: Macbook Pro 13" 2019 i5 TouchBar Z0WQ000AR
 
