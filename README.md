@@ -22,11 +22,10 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 - 5.2 kernel - random kernel panics - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-510652894>
   - <https://bugs.archlinux.org/task/63159#comment180568>
 
-> Tested on: Macbook Pro 13" 2019 i5 TouchBar Z0WQ000AR
+> Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1
 
 #### Not working
 
-- Keyboard backlight
 - Microphone
 - Dynamic audio outputs change (on connecting/disconnecting headphones jack)
 - Suspend/Resume (sleep mode)
@@ -83,7 +82,8 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 ### Github
 
 - GitHub issue (RE history): <https://github.com/Dunedan/mbp-2016-linux/issues/71>
-- VHCI+Sound driver (Apple T2) <https://github.com/MCMrARM/mbp2018-bridge-drv/>
+- VHCI+Sound driver (Apple T2): <https://github.com/MCMrARM/mbp2018-bridge-drv/>
+- hid-apple keyboard backlight patch: <https://github.com/MCMrARM/mbp2018-etc>
 - TouchBar driver: <https://github.com/roadrunner2/macbook12-spi-driver/tree/mbp15>
 - Kernel patches (all are mentioned in github issue above): <https://github.com/aunali1/linux-mbp-arch>
 - ArchLinux kernel patches: <https://github.com/ppaulweber/linux-mba>
