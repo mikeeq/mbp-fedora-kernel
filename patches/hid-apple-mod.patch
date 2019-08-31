@@ -11,20 +11,20 @@ index 1cb4199..3f30d04 100644
   *  Copyright (c) 2008 Jiri Slaby <jirislaby@gmail.com>
 + *  Copyright (c) 2019 Paul Pawlowski <paul@mrarm.io>
   */
- 
+
  /*
 @@ -33,6 +34,7 @@
  #define APPLE_INVERT_HWHEEL	0x0040
  #define APPLE_IGNORE_HIDINPUT	0x0080
  #define APPLE_NUMLOCK_EMULATION	0x0100
 +#define APPLE_BACKLIGHT_CTL	0x0200
- 
+
  #define APPLE_FLAG_FKEY		0x01
- 
+
 @@ -54,11 +56,31 @@
  		"(For people who want to keep Windows PC keyboard muscle memory. "
  		"[0] = as-is, Mac layout. 1 = swapped, Windows layout.)");
- 
+
 +static unsigned int swap_fn_leftctrl;
 +module_param(swap_fn_leftctrl, uint, 0644);
 +MODULE_PARM_DESC(swap_fn_leftctrl, "Swap the Fn and left Control keys. "
@@ -51,12 +51,12 @@ index 1cb4199..3f30d04 100644
 +    struct hid_device *hdev;
 +    unsigned short backlight_off, backlight_on_min, backlight_on_max;
  };
- 
+
  struct apple_key_translation {
 @@ -166,6 +188,16 @@
  	{ }
  };
- 
+
 +static const struct apple_key_translation swapped_fn_leftctrl_keys[] = {
 +	{ KEY_FN, KEY_LEFTCTRL },
 +	{ }
@@ -73,7 +73,7 @@ index 1cb4199..3f30d04 100644
 @@ -185,9 +217,11 @@
  	struct apple_sc *asc = hid_get_drvdata(hid);
  	const struct apple_key_translation *trans, *table;
- 
+
 -	if (usage->code == KEY_FN) {
 +	u16 fn_keycode = (swap_fn_leftctrl) ? (KEY_LEFTCTRL) : (KEY_FN);
 +
@@ -83,11 +83,11 @@ index 1cb4199..3f30d04 100644
 +		input_event(input, usage->type, KEY_FN, value);
  		return 1;
  	}
- 
+
 @@ -266,6 +300,22 @@
  		}
  	}
- 
+
 +	if (rightalt_as_rightctrl) {
 +		trans = apple_find_translation(rightalt_as_rightctrl_keys, usage->code);
 +		if (trans) {
@@ -106,9 +106,9 @@ index 1cb4199..3f30d04 100644
 +
  	return 0;
  }
- 
+
 @@ -329,6 +379,17 @@
- 
+
  	for (trans = apple_iso_keyboard; trans->from; trans++)
  		set_bit(trans->to, input->keybit);
 +
@@ -123,12 +123,12 @@ index 1cb4199..3f30d04 100644
 +	}
 +
  }
- 
+
  static int apple_input_mapping(struct hid_device *hdev, struct hid_input *hi,
 @@ -366,6 +427,11 @@
  	return 0;
  }
- 
+
 +static int apple_init_backlight(struct hid_device *hdev);
 +static int apple_set_backlight(struct hid_device *hdev, u16 value, u16 rate);
 +static int apple_led_set_backlight(struct led_classdev *led_cdev,
@@ -140,13 +140,13 @@ index 1cb4199..3f30d04 100644
 @@ -401,9 +467,106 @@
  		return ret;
  	}
- 
+
 +  if (quirks & APPLE_BACKLIGHT_CTL)
 +      apple_init_backlight(hdev);
 +
  	return 0;
  }
- 
+
 +struct apple_backlight_config_report {
 +    u8 report_id;
 +    u8 version;
@@ -248,11 +248,12 @@ index 1cb4199..3f30d04 100644
  		.driver_data = APPLE_HAS_FN },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
  		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MBA8_1),
++	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING10_T2_A),
 +		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MBP15_X),
++	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING10_T2_B),
++		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING10_T2_C),
 +		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI),
  		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO),
-
