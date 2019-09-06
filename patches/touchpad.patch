@@ -2,35 +2,42 @@ From: fedora kernel <fedora@kernel.org>
 Subject: patch touchpad
 
 diff --git a/drivers/input/mouse/bcm5974.c b/drivers/input/mouse/bcm5974.c
-index d0122134f..da9162306 100644
+index 59a14505b9cd..5df8baa58e00 100644
 --- a/drivers/input/mouse/bcm5974.c
 +++ b/drivers/input/mouse/bcm5974.c
-@@ -96,6 +96,8 @@
+@@ -82,6 +82,13 @@
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI	0x0272
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_ISO	0x0273
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_JIS	0x0274
-+/* MacbookAir8,1 (2018) */
-+#define USB_DEVICE_ID_APPLE_MBA81	0x027a
++/* T2-Attached Devices */
++/* MacbookAir8,1 (2019) */
++#define USB_DEVICE_ID_APPLE_WELLSPRING10_T2_A	0x027a
++/* MacbookPro15,2 (2018) */
++#define USB_DEVICE_ID_APPLE_WELLSPRING10_T2_B	0x027b
++/* MacbookPro15,1 (2018) */
++#define USB_DEVICE_ID_APPLE_WELLSPRING10_T2_C	0x027c
 
  #define BCM5974_DEVICE(prod) {					\
  	.match_flags = (USB_DEVICE_ID_MATCH_DEVICE |		\
-@@ -161,6 +163,10 @@ static const struct usb_device_id bcm5974_table[] = {
+@@ -147,6 +154,12 @@ static const struct usb_device_id bcm5974_table[] = {
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI),
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_ISO),
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
 +	/* MacbookAir8,1 */
-+	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_MBA81),
-+	/* MacbookPro15 */
-+	BCM5974_DEVICE(0x027b),
++	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING10_T2_A),
++	/* MacbookPro15,2 */
++	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING10_T2_B),
++	/* MacbookPro15,1 */
++	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING10_T2_C),
  	/* Terminating entry */
  	{}
  };
-@@ -497,6 +503,32 @@ static const struct bcm5974_config bcm5974_config_table[] = {
+@@ -483,6 +496,45 @@ static const struct bcm5974_config bcm5974_config_table[] = {
  		{ SN_COORD, -203, 6803 },
  		{ SN_ORIENT, -MAX_FINGER_ORIENTATION, MAX_FINGER_ORIENTATION }
  	},
 +	{
-+		USB_DEVICE_ID_APPLE_MBA81,
++		USB_DEVICE_ID_APPLE_WELLSPRING10_T2_A,
 +		0,
 +		0,
 +		HAS_INTEGRATED_BUTTON,
@@ -43,7 +50,20 @@ index d0122134f..da9162306 100644
 +		{ SN_ORIENT, -MAX_FINGER_ORIENTATION, MAX_FINGER_ORIENTATION }
 +	},
 +	{
-+		0x027b,
++		USB_DEVICE_ID_APPLE_WELLSPRING10_T2_B,
++		0,
++		0,
++		HAS_INTEGRATED_BUTTON,
++		0, sizeof(struct bt_data),
++		0x83, DATAFORMAT(TYPE4),
++		{ SN_PRESSURE, 0, 300 },
++		{ SN_WIDTH, 0, 2048 },
++		{ SN_COORD, -6243, 6749 },
++		{ SN_COORD, -170, 7685 },
++		{ SN_ORIENT, -MAX_FINGER_ORIENTATION, MAX_FINGER_ORIENTATION }
++	},
++	{
++		USB_DEVICE_ID_APPLE_WELLSPRING10_T2_C,
 +		0,
 +		0,
 +		HAS_INTEGRATED_BUTTON,

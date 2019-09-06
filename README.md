@@ -26,9 +26,9 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 #### Not working
 
-- Microphone
-- Dynamic audio outputs change (on connecting/disconnecting headphones jack)
+- Dynamic audio input/output change (on connecting/disconnecting headphones jack)
 - Suspend/Resume (sleep mode)
+- TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
 
 #### Working with upstream stable kernel 5.1
 
