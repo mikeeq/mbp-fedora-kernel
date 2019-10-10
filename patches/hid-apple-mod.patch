@@ -5,7 +5,7 @@ diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
 index 1cb4199..3f30d04 100644
 --- a/drivers/hid/hid-apple.c
 +++ b/drivers/hid/hid-apple.c
-@@ -6,6 +6,7 @@
+@@ -7,6 +7,7 @@
   *  Copyright (c) 2005 Michael Haboustak <mike-@cinci.rr.com> for Concept2, Inc
   *  Copyright (c) 2006-2007 Jiri Kosina
   *  Copyright (c) 2008 Jiri Slaby <jirislaby@gmail.com>
@@ -13,7 +13,7 @@ index 1cb4199..3f30d04 100644
   */
 
  /*
-@@ -33,6 +34,7 @@
+@@ -30,6 +31,7 @@
  #define APPLE_INVERT_HWHEEL	0x0040
  #define APPLE_IGNORE_HIDINPUT	0x0080
  #define APPLE_NUMLOCK_EMULATION	0x0100
@@ -21,7 +21,7 @@ index 1cb4199..3f30d04 100644
 
  #define APPLE_FLAG_FKEY		0x01
 
-@@ -54,11 +56,31 @@
+@@ -51,10 +53,30 @@
  		"(For people who want to keep Windows PC keyboard muscle memory. "
  		"[0] = as-is, Mac layout. 1 = swapped, Windows layout.)");
 
@@ -41,7 +41,6 @@ index 1cb4199..3f30d04 100644
  struct apple_sc {
  	unsigned long quirks;
  	unsigned int fn_on;
- 	DECLARE_BITMAP(pressed_fn, KEY_CNT);
  	DECLARE_BITMAP(pressed_numlock, KEY_CNT);
 +  struct apple_sc_backlight *backlight;
 +};
@@ -53,7 +52,7 @@ index 1cb4199..3f30d04 100644
  };
 
  struct apple_key_translation {
-@@ -166,6 +188,16 @@
+@@ -162,6 +184,16 @@
  	{ }
  };
 
@@ -70,9 +69,9 @@ index 1cb4199..3f30d04 100644
  static const struct apple_key_translation *apple_find_translation(
  		const struct apple_key_translation *table, u16 from)
  {
-@@ -185,9 +217,11 @@
- 	struct apple_sc *asc = hid_get_drvdata(hid);
- 	const struct apple_key_translation *trans, *table;
+@@ -183,9 +215,11 @@
+ 	bool do_translate;
+ 	u16 code = 0;
 
 -	if (usage->code == KEY_FN) {
 +	u16 fn_keycode = (swap_fn_leftctrl) ? (KEY_LEFTCTRL) : (KEY_FN);
@@ -84,7 +83,7 @@ index 1cb4199..3f30d04 100644
  		return 1;
  	}
 
-@@ -266,6 +300,22 @@
+@@ -270,6 +304,22 @@
  		}
  	}
 
@@ -107,7 +106,7 @@ index 1cb4199..3f30d04 100644
  	return 0;
  }
 
-@@ -329,6 +379,17 @@
+@@ -333,6 +383,16 @@
 
  	for (trans = apple_iso_keyboard; trans->from; trans++)
  		set_bit(trans->to, input->keybit);
@@ -121,11 +120,10 @@ index 1cb4199..3f30d04 100644
 +		for (trans = rightalt_as_rightctrl_keys; trans->from; trans++)
 +			set_bit(trans->to, input->keybit);
 +	}
-+
  }
 
  static int apple_input_mapping(struct hid_device *hdev, struct hid_input *hi,
-@@ -366,6 +427,11 @@
+@@ -370,6 +430,11 @@
  	return 0;
  }
 
@@ -137,7 +135,7 @@ index 1cb4199..3f30d04 100644
  static int apple_probe(struct hid_device *hdev,
  		const struct hid_device_id *id)
  {
-@@ -401,9 +467,106 @@
+@@ -405,9 +470,106 @@
  		return ret;
  	}
 
@@ -244,7 +242,7 @@ index 1cb4199..3f30d04 100644
  static const struct hid_device_id apple_devices[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MIGHTYMOUSE),
  		.driver_data = APPLE_MIGHTYMOUSE | APPLE_INVERT_HWHEEL },
-@@ -557,6 +720,12 @@
+@@ -561,6 +723,12 @@
  		.driver_data = APPLE_HAS_FN },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
  		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
@@ -257,4 +255,3 @@ index 1cb4199..3f30d04 100644
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI),
  		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO),
-
