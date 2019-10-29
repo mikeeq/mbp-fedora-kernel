@@ -1,7 +1,7 @@
 #!/bin/sh
 
-FEDORA_KERNEL_BRANCH_NAME=f30
-FEDORA_KERNEL_COMMIT_HASH=bb6f824ef6d6471ed1ba20779cdbd252a5936fc6      # Linux v5.3.5 - https://src.fedoraproject.org/rpms/kernel/commits/f30
+FEDORA_KERNEL_BRANCH_NAME=f31
+FEDORA_KERNEL_COMMIT_HASH=f60b42ed46ef58380467f69991c9b772b1327c10      # Linux v5.3.8 - https://src.fedoraproject.org/rpms/kernel/commits/f30
 
 ### Debug commands
 echo "FEDORA_KERNEL_BRANCH_NAME=$FEDORA_KERNEL_BRANCH_NAME"
