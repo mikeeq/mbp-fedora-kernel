@@ -1,7 +1,7 @@
 #!/bin/sh
 
 FEDORA_KERNEL_BRANCH_NAME=f31
-FEDORA_KERNEL_COMMIT_HASH=f60b42ed46ef58380467f69991c9b772b1327c10      # Linux v5.3.8 - https://src.fedoraproject.org/rpms/kernel/commits/f30
+FEDORA_KERNEL_COMMIT_HASH=f60b42ed46ef58380467f69991c9b772b1327c10      # Linux v5.3.8 - https://src.fedoraproject.org/rpms/kernel/commits/f31
 
 ### Debug commands
 echo "FEDORA_KERNEL_BRANCH_NAME=$FEDORA_KERNEL_BRANCH_NAME"
@@ -30,6 +30,9 @@ git checkout $FEDORA_KERNEL_COMMIT_HASH
 git reset --hard $FEDORA_KERNEL_COMMIT_HASH
 git checkout -b fedora_patch_src
 dnf -y builddep kernel.spec
+
+### Fixes for kernel.spec
+sed -i "s/Patch506/Patch516/g" kernel.spec
 
 ### Apply patches
 for patch_file in $(ls ../patches)
