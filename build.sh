@@ -31,6 +31,9 @@ git reset --hard $FEDORA_KERNEL_COMMIT_HASH
 git checkout -b fedora_patch_src
 dnf -y builddep kernel.spec
 
+### Fixes for kernel.spec
+sed -i "s/Patch506/Patch516/g" kernel.spec
+
 ### Apply patches
 for patch_file in $(ls ../patches)
 do
