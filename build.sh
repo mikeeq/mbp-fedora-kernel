@@ -37,7 +37,7 @@ dnf -y builddep kernel.spec
 sed -i "s/Patch509/Patch516/g" kernel.spec
 
 ### Create patch file with custom drivers
-./patch_driver.sh
+../patch_driver.sh
 
 ### Apply patches
 for patch_file in $(ls ../patches)
