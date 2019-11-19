@@ -37,6 +37,7 @@ echo 'obj-$(CONFIG_TOUCHBAR)           += touchbar/' >> ./Makefile
 sed -i "\$i source \"drivers/bce/Kconfig\"\n" Kconfig
 sed -i "\$i source \"drivers/touchbar/Kconfig\"\n" Kconfig
 
+git add .
 git diff >> ${REPO_PWD}/../patches/custom-drivers.patch
 
 ### back to fedora kernel repo
