@@ -18,24 +18,24 @@ cd ./linux-stable/drivers
 git clone --depth 1 --single-branch --branch ${BCE_DRIVER_BRANCH_NAME} https://github.com/MCMrARM/mbp2018-bridge-drv.git ./bce
 cd bce
 git checkout ${BCE_DRIVER_COMMIT_HASH}
-rm -rfv .git
+rm -rf .git
 cd ..
-cp -rfv ${REPO_PWD}/templates/Kconfig bce/Kconfig
+cp -rfv ${REPO_PWD}/../templates/Kconfig bce/Kconfig
 sed -i "s/TEST_DRIVER/BCE_DRIVER/g" bce/Kconfig
 
 ### apple-ib
 git clone --single-branch --branch ${APPLE_IB_DRIVER_BRANCH_NAME} https://github.com/roadrunner2/macbook12-spi-driver.git touchbar
 cd touchbar
 git checkout ${APPLE_IB_DRIVER_COMMIT_HASH}
-rm -rfv .git
+rm -rf .git
 cd ..
-cp -rfv ${REPO_PWD}/templates/Kconfig touchbar/Kconfig
+cp -rfv ${REPO_PWD}/../templates/Kconfig touchbar/Kconfig
 sed -i "s/TEST_DRIVER/TOUCHBAR_DRIVER/g" touchbar/Kconfig
 
-cat 'obj-$(CONFIG_BCE)           += bce/' >> ./Makefile
-cat 'obj-$(CONFIG_TOUCHBAR)           += touchbar/' >> ./Makefile
-sed "\$i source \"drivers/bce/Kconfig\"\n" Kconfig
-sed "\$i source \"drivers/touchbar/Kconfig\"\n" Kconfig
+echo 'obj-$(CONFIG_BCE)           += bce/' >> ./Makefile
+echo 'obj-$(CONFIG_TOUCHBAR)           += touchbar/' >> ./Makefile
+sed -i "\$i source \"drivers/bce/Kconfig\"\n" Kconfig
+sed -i "\$i source \"drivers/touchbar/Kconfig\"\n" Kconfig
 
 git diff >> ${REPO_PWD}/../patches/custom-drivers.patch
 

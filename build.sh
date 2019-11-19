@@ -6,6 +6,7 @@ FEDORA_KERNEL_BRANCH_NAME=f31
 FEDORA_KERNEL_COMMIT_HASH=a4828aea55cf33e5cacf60ec2482496cf309aa18      # Linux v5.3.11 - https://src.fedoraproject.org/rpms/kernel/commits/f31
 
 ### Debug commands
+echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
 echo "FEDORA_KERNEL_BRANCH_NAME=$FEDORA_KERNEL_BRANCH_NAME"
 echo "FEDORA_KERNEL_COMMIT_HASH=$FEDORA_KERNEL_COMMIT_HASH"
 pwd
@@ -37,7 +38,7 @@ dnf -y builddep kernel.spec
 sed -i "s/Patch509/Patch516/g" kernel.spec
 
 ### Create patch file with custom drivers
-../patch_driver.sh
+FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} ../patch_driver.sh
 
 ### Apply patches
 for patch_file in $(ls ../patches)
