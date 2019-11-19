@@ -1,5 +1,6 @@
 #!/bin/sh
 
+## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 FEDORA_KERNEL_BRANCH_NAME=f31
 FEDORA_KERNEL_COMMIT_HASH=a4828aea55cf33e5cacf60ec2482496cf309aa18      # Linux v5.3.11 - https://src.fedoraproject.org/rpms/kernel/commits/f31
 

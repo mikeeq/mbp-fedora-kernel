@@ -4,7 +4,7 @@ name: mbp-fedora-kernel
 
 steps:
 - name: build
-  image: fedora:30
+  image: fedora:31
   pull: always
   volumes:
     - name: build-artifacts
