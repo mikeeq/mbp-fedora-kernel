@@ -42,5 +42,7 @@ git diff HEAD >> ${REPO_PWD}/../patches/custom-drivers.patch
 
 ### back to fedora kernel repo
 cd $REPO_PWD
-echo 'CONFIG_BCE=y' >> kernel-x86_64.config
-echo 'CONFIG_TOUCHBAR=y' >> kernel-x86_64.config
+echo 'CONFIG_BCE_DRIVER=y' >> kernel-x86_64.config
+echo 'CONFIG_TOUCHBAR_DRIVER=y' >> kernel-x86_64.config
+echo 'CONFIG_BCE_DRIVER=y' >> kernel-x86_64-debug.config
+echo 'CONFIG_TOUCHBAR_DRIVER=y' >> kernel-x86_64-debug.config
