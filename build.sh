@@ -35,7 +35,7 @@ git checkout -b fedora_patch_src
 dnf -y builddep kernel.spec
 
 ### Fixes for kernel.spec
-sed -i "s/Patch509/Patch516/g" kernel.spec
+# sed -i "s/Patch509/Patch516/g" kernel.spec
 
 ### Create patch file with custom drivers
 FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} ../patch_driver.sh
