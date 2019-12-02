@@ -2,15 +2,21 @@
 
 ### Apple T2 drivers commit hashes
 BCE_DRIVER_BRANCH_NAME=master
-BCE_DRIVER_COMMIT_HASH=488a4fe0c467bc0aaf5d74102df2f0e1c31dfad6
+BCE_DRIVER_COMMIT_HASH=7330e638b9a32b4ae9ea97857f33838b5613cad3
 APPLE_IB_DRIVER_BRANCH_NAME=mbp15
 APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
+APPLE_SMC_DRIVER_BRANCH_NAME=master
+APPLE_SMC_DRIVER_COMMIT_HASH=cf42289ad637d3073e2fd348af71ad43dd31b8b4
 
 REPO_PWD=$(pwd)
 echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > ../patches/custom-drivers.patch
 
 mkdir -p /root/temp
 cd /root/temp
+
+git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} https://github.com/MCMrARM/mbp2018-etc
+cp -rfv mbp2018-etc/applesmc/patches/* ${REPO_PWD}/../patches/
+
 git clone --depth 1 --single-branch --branch v${FEDORA_KERNEL_VERSION} git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 cd ./linux-stable/drivers
 
