@@ -21,7 +21,7 @@ index 1cb4199..3f30d04 100644
 
  #define APPLE_FLAG_FKEY		0x01
 
-@@ -51,10 +53,30 @@
+@@ -51,17 +53,31 @@
  		"(For people who want to keep Windows PC keyboard muscle memory. "
  		"[0] = as-is, Mac layout. 1 = swapped, Windows layout.)");
 
@@ -43,16 +43,22 @@ index 1cb4199..3f30d04 100644
  	unsigned int fn_on;
  	DECLARE_BITMAP(pressed_numlock, KEY_CNT);
 +  struct apple_sc_backlight *backlight;
-+};
-+
+ };
+
+-struct apple_key_translation {
+-	u16 from;
+-	u16 to;
+-	u8 flags;
+-};
 +struct apple_sc_backlight {
 +    struct led_classdev cdev;
 +    struct hid_device *hdev;
 +    unsigned short backlight_off, backlight_on_min, backlight_on_max;
- };
++ };
 
- struct apple_key_translation {
-@@ -162,6 +184,16 @@
+ static const struct apple_key_translation macbookair_fn_keys[] = {
+ 	{ KEY_BACKSPACE, KEY_DELETE },
+@@ -162,6 +178,16 @@
  	{ }
  };
 
@@ -69,7 +75,7 @@ index 1cb4199..3f30d04 100644
  static const struct apple_key_translation *apple_find_translation(
  		const struct apple_key_translation *table, u16 from)
  {
-@@ -183,9 +215,11 @@
+@@ -183,9 +209,11 @@
  	bool do_translate;
  	u16 code = 0;
 
@@ -83,7 +89,7 @@ index 1cb4199..3f30d04 100644
  		return 1;
  	}
 
-@@ -270,6 +304,22 @@
+@@ -270,6 +298,22 @@
  		}
  	}
 
@@ -106,12 +112,12 @@ index 1cb4199..3f30d04 100644
  	return 0;
  }
 
-@@ -333,6 +383,16 @@
+@@ -333,6 +377,16 @@
 
  	for (trans = apple_iso_keyboard; trans->from; trans++)
  		set_bit(trans->to, input->keybit);
 +
-+	if (swap_fn_leftctrl) {
++  if (swap_fn_leftctrl) {
 +		for (trans = swapped_fn_leftctrl_keys; trans->from; trans++)
 +			set_bit(trans->to, input->keybit);
 +	}
@@ -123,7 +129,7 @@ index 1cb4199..3f30d04 100644
  }
 
  static int apple_input_mapping(struct hid_device *hdev, struct hid_input *hi,
-@@ -370,6 +430,11 @@
+@@ -370,6 +424,11 @@
  	return 0;
  }
 
@@ -135,7 +141,7 @@ index 1cb4199..3f30d04 100644
  static int apple_probe(struct hid_device *hdev,
  		const struct hid_device_id *id)
  {
-@@ -405,9 +470,106 @@
+@@ -405,9 +464,107 @@
  		return ret;
  	}
 
@@ -239,10 +245,11 @@ index 1cb4199..3f30d04 100644
 +    return apple_set_backlight(backlight->hdev, brightness, 0);
 +}
 +
++
  static const struct hid_device_id apple_devices[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MIGHTYMOUSE),
  		.driver_data = APPLE_MIGHTYMOUSE | APPLE_INVERT_HWHEEL },
-@@ -561,6 +723,12 @@
+@@ -561,6 +718,14 @@
  		.driver_data = APPLE_HAS_FN },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
  		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
