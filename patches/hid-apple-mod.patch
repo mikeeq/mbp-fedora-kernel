@@ -21,7 +21,7 @@ index 1cb4199..3f30d04 100644
 
  #define APPLE_FLAG_FKEY		0x01
 
-@@ -51,10 +53,30 @@
+@@ -51,12 +53,32 @@
  		"(For people who want to keep Windows PC keyboard muscle memory. "
  		"[0] = as-is, Mac layout. 1 = swapped, Windows layout.)");
 
@@ -43,15 +43,17 @@ index 1cb4199..3f30d04 100644
  	unsigned int fn_on;
  	DECLARE_BITMAP(pressed_numlock, KEY_CNT);
 +  struct apple_sc_backlight *backlight;
-+};
-+
+ };
+
 +struct apple_sc_backlight {
 +    struct led_classdev cdev;
 +    struct hid_device *hdev;
 +    unsigned short backlight_off, backlight_on_min, backlight_on_max;
- };
-
++ };
++
  struct apple_key_translation {
+ 	u16 from;
+ 	u16 to;
 @@ -162,6 +184,16 @@
  	{ }
  };
@@ -111,7 +113,7 @@ index 1cb4199..3f30d04 100644
  	for (trans = apple_iso_keyboard; trans->from; trans++)
  		set_bit(trans->to, input->keybit);
 +
-+	if (swap_fn_leftctrl) {
++  if (swap_fn_leftctrl) {
 +		for (trans = swapped_fn_leftctrl_keys; trans->from; trans++)
 +			set_bit(trans->to, input->keybit);
 +	}
@@ -135,7 +137,7 @@ index 1cb4199..3f30d04 100644
  static int apple_probe(struct hid_device *hdev,
  		const struct hid_device_id *id)
  {
-@@ -405,9 +470,106 @@
+@@ -405,9 +470,107 @@
  		return ret;
  	}
 
@@ -239,10 +241,11 @@ index 1cb4199..3f30d04 100644
 +    return apple_set_backlight(backlight->hdev, brightness, 0);
 +}
 +
++
  static const struct hid_device_id apple_devices[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MIGHTYMOUSE),
  		.driver_data = APPLE_MIGHTYMOUSE | APPLE_INVERT_HWHEEL },
-@@ -561,6 +723,12 @@
+@@ -561,6 +724,14 @@
  		.driver_data = APPLE_HAS_FN },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
  		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
@@ -251,6 +254,8 @@ index 1cb4199..3f30d04 100644
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING10_T2_B),
 +		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING10_T2_C),
++		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING10_T2_D),
 +		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI),
  		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },

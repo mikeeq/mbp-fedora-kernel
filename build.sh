@@ -1,9 +1,12 @@
 #!/bin/sh
 
+## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
+FEDORA_KERNEL_VERSION=5.4
 FEDORA_KERNEL_BRANCH_NAME=master
-FEDORA_KERNEL_COMMIT_HASH=f16f4a5c11ff9730a000051c85ca3e4ebcf605f5      # Linux v5.4-rc5 - https://src.fedoraproject.org/rpms/kernel/commits/master
+FEDORA_KERNEL_COMMIT_HASH=aa92e83bbbe79026d32233778371a7fb1ed6c5d1      # Linux v5.4 - https://src.fedoraproject.org/rpms/kernel/commits/master
 
 ### Debug commands
+echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
 echo "FEDORA_KERNEL_BRANCH_NAME=$FEDORA_KERNEL_BRANCH_NAME"
 echo "FEDORA_KERNEL_COMMIT_HASH=$FEDORA_KERNEL_COMMIT_HASH"
 pwd
@@ -31,11 +34,20 @@ git reset --hard $FEDORA_KERNEL_COMMIT_HASH
 git checkout -b fedora_patch_src
 dnf -y builddep kernel.spec
 
+### Fixes for kernel.spec
+# sed -i "s/Patch509/Patch516/g" kernel.spec
+
+### Create patch file with custom drivers
+FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} ../patch_driver.sh
+
 ### Apply patches
 for patch_file in $(ls ../patches)
 do
   scripts/newpatch.sh ../patches/$patch_file
 done
+
+### Change buildid to mbp
+sed -i 's/%define buildid.*/%define buildid .mbp/' ./kernel.spec
 
 ### Build src rpm
 fedpkg --release $FEDORA_KERNEL_BRANCH_NAME srpm

@@ -1,8 +1,15 @@
 # mbp-fedora-kernel
 
-Fedora 30 kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
+Fedora kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
 
-Fedora 30 ISO (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
+Fedora ISO (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
+
+There are multiple version of the kernel maintained on seperate branches (all compiled versions could be found in releases section):
+
+- 5.4-f31 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.4-f31>
+- 5.3-f31 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.3-f31>
+- 5.3-f30 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.3-f30>
+- 5.1-f30 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.1>
 
 ## CI status
 
@@ -17,23 +24,27 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 - integrate `roadrunner2/macbook12-spi-driver` and `MCMrARM/mbp2018-bridge-drv` drivers
 - add `kernel-headers` rpm generation
 
-### Known issues
-
-- 5.2 kernel - random kernel panics - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-510652894>
-  - <https://bugs.archlinux.org/task/63159#comment180568>
-
 > Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1
 
-#### Not working
+### Known issues
 
-- Microphone
+- 5.2<= kernel random kernel panics - just disable thunderbolt driver
+
+  ```
+  ➜ cat /etc/modprobe.d/blacklist.conf
+  blacklist applesmc
+  blacklist thunderbolt
+  ```
+  - it's working on 5.1, because 5.1 is failing to load thunderbolt firmware
+- Microphone (it's recognised with new apple t2 sound driver, but there is a low mic volume amp)
 - Dynamic audio outputs change (on connecting/disconnecting headphones jack)
 - Suspend/Resume (sleep mode)
+- Thunderbolt
 
 #### Working with upstream stable kernel 5.1
 
 - Display/Screen
-- Thunderbolt 3/USB-C
+- USB-C
 - Battery/AC
 - Ethernet/Video USB-C adapters
 - Bluetooth
@@ -73,6 +84,8 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 
 ## Docs
 
+- Discord: <https://discord.gg/39Rmjh>
+
 ### Fedora
 
 - <https://fedoraproject.org/wiki/Building_a_custom_kernel>
@@ -83,7 +96,8 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 
 - GitHub issue (RE history): <https://github.com/Dunedan/mbp-2016-linux/issues/71>
 - VHCI+Sound driver (Apple T2): <https://github.com/MCMrARM/mbp2018-bridge-drv/>
-- hid-apple keyboard backlight patch: <https://github.com/MCMrARM/mbp2018-etc>
+- AppleSMC driver (fan control): <https://github.com/MCMrARM/mbp2018-etc/tree/master/applesmc>
+- hid-apple keyboard backlight patch: <https://github.com/MCMrARM/mbp2018-etc/tree/master/apple-hid>
 - TouchBar driver: <https://github.com/roadrunner2/macbook12-spi-driver/tree/mbp15>
 - Kernel patches (all are mentioned in github issue above): <https://github.com/aunali1/linux-mbp-arch>
 - ArchLinux kernel patches: <https://github.com/ppaulweber/linux-mba>
