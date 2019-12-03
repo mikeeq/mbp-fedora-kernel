@@ -63,6 +63,6 @@ cp -rfv ~/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
 ### Add patches to artifacts
 cd ..
 zip -r patches.zip patches/
-cp -rfv patches.zip
+cp -rfv patches.zip /tmp/artifacts/
 
 exit $rpmbuild_exitcode
