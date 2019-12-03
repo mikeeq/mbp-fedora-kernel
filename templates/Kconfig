@@ -1,3 +1,4 @@
 config TEST_DRIVER
-	tristate “TEST_DRIVER”
+	tristate "TEST_DRIVER"
 	default y
+

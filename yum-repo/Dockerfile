@@ -1,6 +1,6 @@
 FROM fedora:31
 
-ARG RELEASE_VERSION=5.1.19-2
+ARG RELEASE_VERSION=5.3.11-f31
 
 WORKDIR /var/repo
 
@@ -14,7 +14,8 @@ RUN dnf -y install \
 
 RUN wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/ \
     && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/ \
-    && wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/
+    && wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/ \
+    && chown -R nginx:nginx /var/repo
 
 RUN for rpm in $(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest -L | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1); do \
       wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/$rpm; \
@@ -33,4 +34,4 @@ USER nginx
 ENV PORT=8080
 EXPOSE ${PORT}
 
-CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/nginx.conf > /etc/nginx/nginx.conf" && nginx -g 'daemon off;'
+CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/nginx.conf > /tmp/nginx.conf; cat /tmp/nginx.conf > /etc/nginx/nginx.conf" && nginx -g 'daemon off;'

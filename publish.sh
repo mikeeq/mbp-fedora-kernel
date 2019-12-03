@@ -16,3 +16,4 @@ heroku container:release -a fedora-mbp-repo web
 
 # Docker build
 # docker build -t fedora-mbp-repo --build-arg RELEASE_VERSION=${LATEST_RELEASE} .
+# docker build -t fedora-mbp-repo  .

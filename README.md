@@ -84,6 +84,8 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 
 ## Docs
 
+- Discord: <https://discord.gg/39Rmjh>
+
 ### Fedora
 
 - <https://fedoraproject.org/wiki/Building_a_custom_kernel>
