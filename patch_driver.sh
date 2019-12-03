@@ -28,7 +28,7 @@ rm -rf .git
 cd ..
 cp -rfv ${REPO_PWD}/../templates/Kconfig bce/Kconfig
 sed -i "s/TEST_DRIVER/BCE_DRIVER/g" bce/Kconfig
-sed -i "s/obj-m/obj-$(CONFIG_BCE)/g" bce/Makefile
+sed -i 's/obj-m/obj-$(CONFIG_BCE)/g' bce/Makefile
 
 ### apple-ib
 git clone --single-branch --branch ${APPLE_IB_DRIVER_BRANCH_NAME} https://github.com/roadrunner2/macbook12-spi-driver.git touchbar
@@ -38,7 +38,7 @@ rm -rf .git
 cd ..
 cp -rfv ${REPO_PWD}/../templates/Kconfig touchbar/Kconfig
 sed -i "s/TEST_DRIVER/TOUCHBAR_DRIVER/g" touchbar/Kconfig
-sed -i "s/obj-m/obj-$(CONFIG_TOUCHBAR)/g" touchbar/Makefile
+sed -i 's/obj-m/obj-$(CONFIG_TOUCHBAR)/g' touchbar/Makefile
 
 echo 'obj-$(CONFIG_BCE)           += bce/' >> ./Makefile
 echo 'obj-$(CONFIG_TOUCHBAR)           += touchbar/' >> ./Makefile
