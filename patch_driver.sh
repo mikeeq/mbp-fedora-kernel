@@ -52,8 +52,11 @@ git diff HEAD >> ${REPO_PWD}/../patches/custom-drivers.patch
 cd $REPO_PWD
 for config_file in $(ls | grep kernel | grep '.config')
 do
-  echo 'CONFIG_BCE_DRIVER=y' >> $config_file
-  echo 'CONFIG_TOUCHBAR_DRIVER=y' >> $config_file
+  echo 'CONFIG_BCE_DRIVER=m' >> $config_file
+  echo 'CONFIG_TOUCHBAR_DRIVER=m' >> $config_file
 done
+
+echo 'CONFIG_BCE_DRIVER=m' > kernel/configs/fedora/generic/CONFIG_BCE_DRIVER
+echo 'CONFIG_TOUCHBAR_DRIVER=m' >> kernel/configs/fedora/generic/CONFIG_TOUCHBAR_DRIVER
 
 echo -e "bce.ko\napple-ib-als.ko\napple-ib-tb.ko\napple-ibridge.ko" >> mod-extra.list
