@@ -16,7 +16,7 @@ cat /proc/cpuinfo | grep 'model name' | uniq
 # git clone --depth 1 --single-branch --branch v5.1.19 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 
 ### Dependencies
-dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools
+dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip
 
 ### Clone Fedora Kernel git repo
 git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME https://src.fedoraproject.org/rpms/kernel.git
@@ -59,5 +59,10 @@ rpmbuild_exitcode=$?
 ### Copy artifacts to shared volume
 find ~/rpmbuild/ | grep '\.rpm'
 cp -rfv ~/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
+
+### Add patches to artifacts
+cd ..
+zip -r patches.zip patches/
+cp -rfv patches.zip
 
 exit $rpmbuild_exitcode
