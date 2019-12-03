@@ -1,4 +1,4 @@
-FROM fedora:30
+FROM fedora:31
 
 ARG RELEASE_VERSION=5.1.19-2
 
@@ -11,6 +11,10 @@ RUN dnf -y install \
     nginx \
     gettext \
   && dnf clean all
+
+RUN wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/ \
+    && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/ \
+    && wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/
 
 RUN for rpm in $(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest -L | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1); do \
       wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/$rpm; \
