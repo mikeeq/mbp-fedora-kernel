@@ -60,3 +60,5 @@ echo 'CONFIG_BCE_DRIVER=m' > configs/fedora/generic/CONFIG_BCE_DRIVER
 echo 'CONFIG_TOUCHBAR_DRIVER=m' >> configs/fedora/generic/CONFIG_TOUCHBAR_DRIVER
 
 echo -e "bce.ko\napple-ib-als.ko\napple-ib-tb.ko\napple-ibridge.ko" >> mod-extra.list
+
+echo 'inputdrvs="gameport tablet touchscreen bce touchbar"' >> filter-x86_64.sh
