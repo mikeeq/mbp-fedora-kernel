@@ -56,7 +56,7 @@ do
   echo 'CONFIG_TOUCHBAR_DRIVER=m' >> $config_file
 done
 
-echo 'CONFIG_BCE_DRIVER=m' > kernel/configs/fedora/generic/CONFIG_BCE_DRIVER
-echo 'CONFIG_TOUCHBAR_DRIVER=m' >> kernel/configs/fedora/generic/CONFIG_TOUCHBAR_DRIVER
+echo 'CONFIG_BCE_DRIVER=m' > configs/fedora/generic/CONFIG_BCE_DRIVER
+echo 'CONFIG_TOUCHBAR_DRIVER=m' >> configs/fedora/generic/CONFIG_TOUCHBAR_DRIVER
 
 echo -e "bce.ko\napple-ib-als.ko\napple-ib-tb.ko\napple-ibridge.ko" >> mod-extra.list
