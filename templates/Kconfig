@@ -1,4 +1,4 @@
-config TEST_DRIVER
+menuconfig TEST_DRIVER
 	depends on X86_64
 	tristate "TEST_DRIVER"
 	default m

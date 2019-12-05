@@ -27,6 +27,10 @@ cd ./linux-stable/drivers
 git clone --depth 1 --single-branch --branch ${BCE_DRIVER_BRANCH_NAME} ${BCE_DRIVER_GIT_URL} ./bce
 cd bce
 git checkout ${BCE_DRIVER_COMMIT_HASH}
+### Patch bce for kernel 5.3
+curl -sL https://raw.githubusercontent.com/mikeeq/mbp-fedora/f31/files/patches/bce_5_3.patch -o /opt/bce_5_3.patch
+git apply /opt/bce_5_3.patch
+
 rm -rf .git
 cd ..
 cp -rfv ${REPO_PWD}/../templates/Kconfig bce/Kconfig
@@ -48,6 +52,10 @@ echo 'obj-$(CONFIG_TOUCHBAR)           += touchbar/' >> ./Makefile
 sed -i "\$i source \"drivers/bce/Kconfig\"\n" Kconfig
 sed -i "\$i source \"drivers/touchbar/Kconfig\"\n" Kconfig
 
+### Remove thunderbolt driver
+rm -rfv thunderbolt
+
+### Prepare patch
 git add .
 git diff HEAD >> ${REPO_PWD}/../patches/custom-drivers.patch
 
