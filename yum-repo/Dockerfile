@@ -15,6 +15,9 @@ RUN dnf -y install \
 RUN wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/ \
     && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/ \
     && wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/ \
+    && mv -f ./fedora-mbp-repo.herokuapp.com/fedora-mbp-repo.herokuapp.com/*.rpm ./ \
+    && mv -f ./fedora-mbp-repo.herokuapp.com/*.rpm ./ \
+    && rm -rfv fedora-mbp-repo.herokuapp.com \
     && chown -R nginx:nginx /var/repo
 
 RUN for rpm in $(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest -L | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1); do \
