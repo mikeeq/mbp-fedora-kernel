@@ -12,9 +12,9 @@ RUN dnf -y install \
     gettext \
   && dnf clean all
 
-RUN wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/ \
-    && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/ \
-    && wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/ \
+RUN wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/ \
+    # && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/ \
+    # && wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/ \
     && mv -f ./fedora-mbp-repo.herokuapp.com/*.rpm ./ \
     # && mv -f ./fedora-mbp-repo.herokuapp.com/repodata ./ \
     && rm -rfv fedora-mbp-repo.herokuapp.com \
