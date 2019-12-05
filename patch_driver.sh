@@ -76,5 +76,4 @@ echo -e "bce.ko\napple-ib-als.ko\napple-ib-tb.ko\napple-ibridge.ko" >> mod-extra
 echo 'inputdrvs="gameport tablet touchscreen bce touchbar"' >> filter-x86_64.sh
 
 sed -i '/CONFIG_THUNDERBOLT=m/d' kernel-x86_64*
-sed -i '/CONFIG_THUNDERBOLT_NET=m/d' kernel-x86_64*
-sed -i '/CONFIG_INTEL_WMI_THUNDERBOLT=m/d' kernel-x86_64*
+rm -rfv configs/fedora/generic/x86/x86_64/CONFIG_THUNDERBOLT
