@@ -52,10 +52,6 @@ echo 'obj-$(CONFIG_TOUCHBAR)           += touchbar/' >> ./Makefile
 sed -i "\$i source \"drivers/bce/Kconfig\"\n" Kconfig
 sed -i "\$i source \"drivers/touchbar/Kconfig\"\n" Kconfig
 
-### Remove thunderbolt driver
-rm -rfv thunderbolt
-sed -i '/source "drivers\/thunderbolt\/Kconfig"/d' Kconfig
-
 ### Prepare patch
 git add .
 git diff HEAD >> ${REPO_PWD}/../patches/custom-drivers.patch
@@ -72,8 +68,8 @@ echo 'CONFIG_BCE_DRIVER=m' > configs/fedora/generic/CONFIG_BCE_DRIVER
 echo 'CONFIG_TOUCHBAR_DRIVER=m' >> configs/fedora/generic/CONFIG_TOUCHBAR_DRIVER
 
 echo -e "bce.ko\napple-ib-als.ko\napple-ib-tb.ko\napple-ibridge.ko" >> mod-extra.list
-
 echo 'inputdrvs="gameport tablet touchscreen bce touchbar"' >> filter-x86_64.sh
 
+### Remove thunderbolt driver
 sed -i '/CONFIG_THUNDERBOLT=m/d' kernel-x86_64*
 rm -rfv configs/fedora/generic/x86/x86_64/CONFIG_THUNDERBOLT
