@@ -1,10 +1,13 @@
 #!/bin/sh
 
 ### Apple T2 drivers commit hashes
+BCE_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-bridge-drv.git
 BCE_DRIVER_BRANCH_NAME=master
 BCE_DRIVER_COMMIT_HASH=7330e638b9a32b4ae9ea97857f33838b5613cad3
+APPLE_IB_DRIVER_GIT_URL=https://github.com/roadrunner2/macbook12-spi-driver.git
 APPLE_IB_DRIVER_BRANCH_NAME=mbp15
 APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-etc
 APPLE_SMC_DRIVER_BRANCH_NAME=master
 APPLE_SMC_DRIVER_COMMIT_HASH=cf42289ad637d3073e2fd348af71ad43dd31b8b4
 
@@ -14,14 +17,14 @@ echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\
 mkdir -p /root/temp
 cd /root/temp
 
-git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} https://github.com/MCMrARM/mbp2018-etc
+git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
 cp -rfv mbp2018-etc/applesmc/patches/* ${REPO_PWD}/../patches/
 
 git clone --depth 1 --single-branch --branch v${FEDORA_KERNEL_VERSION} git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 cd ./linux-stable/drivers
 
 ### bce
-git clone --depth 1 --single-branch --branch ${BCE_DRIVER_BRANCH_NAME} https://github.com/MCMrARM/mbp2018-bridge-drv.git ./bce
+git clone --depth 1 --single-branch --branch ${BCE_DRIVER_BRANCH_NAME} ${BCE_DRIVER_GIT_URL} ./bce
 cd bce
 git checkout ${BCE_DRIVER_COMMIT_HASH}
 rm -rf .git
@@ -31,7 +34,7 @@ sed -i "s/TEST_DRIVER/BCE_DRIVER/g" bce/Kconfig
 sed -i 's/obj-m/obj-$(CONFIG_BCE)/g' bce/Makefile
 
 ### apple-ib
-git clone --single-branch --branch ${APPLE_IB_DRIVER_BRANCH_NAME} https://github.com/roadrunner2/macbook12-spi-driver.git touchbar
+git clone --single-branch --branch ${APPLE_IB_DRIVER_BRANCH_NAME} ${APPLE_IB_DRIVER_GIT_URL} touchbar
 cd touchbar
 git checkout ${APPLE_IB_DRIVER_COMMIT_HASH}
 rm -rf .git

@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
+FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
 FEDORA_KERNEL_VERSION=5.3.14
 FEDORA_KERNEL_BRANCH_NAME=f31
 FEDORA_KERNEL_COMMIT_HASH=da7e076b233966319134542bfbdda46388d420ba      # Linux v5.3.14 - https://src.fedoraproject.org/rpms/kernel/commits/f31
@@ -19,7 +20,7 @@ cat /proc/cpuinfo | grep 'model name' | uniq
 dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip
 
 ### Clone Fedora Kernel git repo
-git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME https://src.fedoraproject.org/rpms/kernel.git
+git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME ${FEDORA_KERNEL_GIT_URL}
 cd kernel
 ## Cleanup
 rm -rfv *.rpm
@@ -59,6 +60,9 @@ rpmbuild_exitcode=$?
 ### Copy artifacts to shared volume
 find ~/rpmbuild/ | grep '\.rpm'
 cp -rfv ~/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
+
+### Calculate sha256 sums of built RPMs
+sha256sum ~/rpmbuild/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 
 ### Add patches to artifacts
 cd ..
