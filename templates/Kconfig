@@ -1,4 +1,4 @@
-config TEST_DRIVER
+menuconfig TEST_DRIVER
 	tristate "TEST_DRIVER"
-	default y
-
+  depends on X86 || COMPILE_TEST
+	default m

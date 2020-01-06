@@ -26,15 +26,20 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 > Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1
 
+```
+Boot ROM Version:	220.270.99.0.0 (iBridge: 16.16.6571.0.0,0)
+MacOS Mojave: 10.14.6 (18G103)
+```
+
 ### Known issues
 
 - 5.2<= kernel random kernel panics - just disable thunderbolt driver
 
   ```
   ➜ cat /etc/modprobe.d/blacklist.conf
-  blacklist applesmc
   blacklist thunderbolt
   ```
+
   - it's working on 5.1, because 5.1 is failing to load thunderbolt firmware
 - Microphone (it's recognised with new apple t2 sound driver, but there is a low mic volume amp)
 - Dynamic audio outputs change (on connecting/disconnecting headphones jack)

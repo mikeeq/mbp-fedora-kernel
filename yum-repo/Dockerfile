@@ -12,15 +12,20 @@ RUN dnf -y install \
     gettext \
   && dnf clean all
 
-RUN wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/ \
-    && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/ \
-    && wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/ \
-    && chown -R nginx:nginx /var/repo
+RUN wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/ \
+    # && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/ \
+    # && wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/ \
+    && mv -f ./fedora-mbp-repo.herokuapp.com/*.rpm ./ \
+    # && mv -f ./fedora-mbp-repo.herokuapp.com/repodata ./ \
+    && rm -rfv fedora-mbp-repo.herokuapp.com \
+    ; rm -rfv *.1 \
+    ; chown -R nginx:nginx /var/repo
 
 RUN for rpm in $(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest -L | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1); do \
-      wget https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/$rpm; \
-    done && \
-    chown -R nginx:nginx /var/repo
+      wget --backups=1 https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/$rpm; \
+    done \
+    ; rm -rfv *.1 \
+    ; chown -R nginx:nginx /var/repo
 
 RUN createrepo /var/repo
 

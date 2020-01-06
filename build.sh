@@ -1,9 +1,10 @@
 #!/bin/sh
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
-FEDORA_KERNEL_VERSION=5.4
-FEDORA_KERNEL_BRANCH_NAME=master
-FEDORA_KERNEL_COMMIT_HASH=aa92e83bbbe79026d32233778371a7fb1ed6c5d1      # Linux v5.4 - https://src.fedoraproject.org/rpms/kernel/commits/master
+FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
+FEDORA_KERNEL_VERSION=5.4.7
+FEDORA_KERNEL_BRANCH_NAME=f31
+FEDORA_KERNEL_COMMIT_HASH=b787ad1672064b496bf250645a9d3e2403e40795      # Linux v5.4.7 - https://src.fedoraproject.org/rpms/kernel/commits/f31
 
 ### Debug commands
 echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
@@ -16,10 +17,10 @@ cat /proc/cpuinfo | grep 'model name' | uniq
 # git clone --depth 1 --single-branch --branch v5.1.19 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 
 ### Dependencies
-dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools
+dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip curl
 
 ### Clone Fedora Kernel git repo
-git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME https://src.fedoraproject.org/rpms/kernel.git
+git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME ${FEDORA_KERNEL_GIT_URL}
 cd kernel
 ## Cleanup
 rm -rfv *.rpm
@@ -59,5 +60,13 @@ rpmbuild_exitcode=$?
 ### Copy artifacts to shared volume
 find ~/rpmbuild/ | grep '\.rpm'
 cp -rfv ~/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
+
+### Calculate sha256 sums of built RPMs
+sha256sum ~/rpmbuild/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
+
+### Add patches to artifacts
+cd ..
+zip -r patches.zip patches/
+cp -rfv patches.zip /tmp/artifacts/
 
 exit $rpmbuild_exitcode
