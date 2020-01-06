@@ -68,5 +68,5 @@ echo -e "bce.ko\napple-ib-als.ko\napple-ib-tb.ko\napple-ibridge.ko" >> mod-extra
 echo 'inputdrvs="gameport tablet touchscreen bce touchbar"' >> filter-x86_64.sh
 
 ### Remove thunderbolt driver
-sed -i "s/CONFIG_THUNDERBOLT=m/CONFIG_THUNDERBOLT=n/g" kernel-x86_64*
-sed -i "s/CONFIG_THUNDERBOLT=m/CONFIG_THUNDERBOLT=n/g" configs/fedora/generic/x86/x86_64/CONFIG_THUNDERBOLT
+# sed -i "s/CONFIG_THUNDERBOLT=m/CONFIG_THUNDERBOLT=n/g" kernel-x86_64*
+# sed -i "s/CONFIG_THUNDERBOLT=m/CONFIG_THUNDERBOLT=n/g" configs/fedora/generic/x86/x86_64/CONFIG_THUNDERBOLT
