@@ -4,6 +4,7 @@
 KERNEL_VERSION=5.4.8-200.mbp.fc31.x86_64
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
+
 BCE_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-bridge-drv.git
 BCE_DRIVER_BRANCH_NAME=master
 BCE_DRIVER_COMMIT_HASH=7330e638b9a32b4ae9ea97857f33838b5613cad3
@@ -24,7 +25,7 @@ git clone --depth 1 --single-branch --branch ${BCE_DRIVER_BRANCH_NAME} ${BCE_DRI
 cd bce
 git checkout ${BCE_DRIVER_COMMIT_HASH}
 
-make
+make -C /lib/modules/${KERNEL_VERSION}/build/ M=$(pwd) modules
 cp -rfv ./bce.ko /lib/modules/${KERNEL_VERSION}/extra
 cd ..
 
@@ -32,7 +33,7 @@ git clone --single-branch --branch ${APPLE_IB_DRIVER_BRANCH_NAME} ${APPLE_IB_DRI
 cd touchbar
 git checkout ${APPLE_IB_DRIVER_COMMIT_HASH}
 
-make
+make -C /lib/modules/${KERNEL_VERSION}/build/ M=$(pwd) modules
 cp -rfv ./*.ko /lib/modules/${KERNEL_VERSION}/extra
 
 depmod -a ${KERNEL_VERSION}
