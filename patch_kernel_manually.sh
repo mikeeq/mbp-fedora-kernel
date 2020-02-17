@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ### Apple T2 drivers commit hashes
-KERNEL_VERSION=5.4.17E-200.mbp.fc31.x86_64
+KERNEL_VERSION=5.4.19-200.mbp.fc31.x86_64
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
 

@@ -2,9 +2,9 @@
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
-FEDORA_KERNEL_VERSION=5.4.17
+FEDORA_KERNEL_VERSION=5.4.19
 FEDORA_KERNEL_BRANCH_NAME=f31
-FEDORA_KERNEL_COMMIT_HASH=73e68cc29dba7d970d8b06dba11b4cf60edd6441      # https://src.fedoraproject.org/rpms/kernel/commits/f31
+FEDORA_KERNEL_COMMIT_HASH=5c8a69fccaafcd260b85fd29d8b6289ebdf817b7      # https://src.fedoraproject.org/rpms/kernel/commits/f31
 
 ### Debug commands
 echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
