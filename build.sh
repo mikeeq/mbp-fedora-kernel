@@ -1,12 +1,12 @@
 #!/bin/bash
 
-set -euf -o pipefail
+set -eu -o pipefail
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
-FEDORA_KERNEL_VERSION=5.4.19
+FEDORA_KERNEL_VERSION=5.4.20
 FEDORA_KERNEL_BRANCH_NAME=f31
-FEDORA_KERNEL_COMMIT_HASH=5c8a69fccaafcd260b85fd29d8b6289ebdf817b7      # https://src.fedoraproject.org/rpms/kernel/commits/f31
+FEDORA_KERNEL_COMMIT_HASH=8bc294d7d740ce009af5cb2a3e13604dc551bfe5      # https://src.fedoraproject.org/rpms/kernel/commits/f31
 
 ### Debug commands
 echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
@@ -70,11 +70,9 @@ echo >&2 "===]> Info: Bulding kernel ... ";
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
-find ~/rpmbuild/ | grep '\.rpm'
-cp -rfv ~/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
-
-### Calculate sha256 sums of built RPMs
-sha256sum ~/rpmbuild/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
+echo >&2 "===]> Info: Copying rpms and calculating SHA256 ... ";
+cp -rfv /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
+sha256sum /root/rpmbuild/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 
 ### Add patches to artifacts
 cd ..

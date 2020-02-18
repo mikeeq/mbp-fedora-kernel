@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euf -o pipefail
+set -eu -o pipefail
 
 ### Apple T2 drivers commit hashes
 KERNEL_VERSION=5.4.19-200.mbp.fc31.x86_64

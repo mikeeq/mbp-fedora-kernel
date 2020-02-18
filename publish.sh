@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euf -o pipefail
+set -eu -o pipefail
 
 # export HEROKU_API_KEY=
 LATEST_RELEASE=$(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | cut -d'v' -f2 | cut -d'"' -f1)

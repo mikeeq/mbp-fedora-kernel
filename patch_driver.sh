@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euf -o pipefail
+set -eu -o pipefail
 
 ### Apple T2 drivers commit hashes
 # BCE_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-bridge-drv.git
@@ -24,10 +24,7 @@ cd mbp2018-etc || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
 cd ..
 [ ! -d mbp2018-etc/applesmc/patches ] && { echo 'AppleSMC patches directory not found!'; exit 1; }
-while IFS= read -r file; do
-  echo "adding ${file}"
-  cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
-done < <(find mbp2018-etc/applesmc/patches/ -type f)
+cp -rfv mbp2018-etc/applesmc/patches/* "${REPO_PWD}"/../patches/
 
 ### Add custom drivers to kernel
 # echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > "${REPO_PWD}"/../patches/custom-drivers.patch

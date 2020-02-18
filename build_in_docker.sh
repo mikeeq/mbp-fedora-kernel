@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euf -o pipefail
+set -eu -o pipefail
 
 DOCKER_IMAGE=fedora:31
 RPMBUILD_HOST_PATH=/opt/rpmbuild
