@@ -3,28 +3,37 @@ kind: pipeline
 name: mbp-fedora-kernel
 
 steps:
-- name: build
-  image: fedora:31
-  pull: always
-  volumes:
-    - name: build-artifacts
-      path: /tmp/artifacts
-  commands:
-    - ./build.sh
+  - name: lint
+    image: alpine
+    pull: always
+    commands:
+      - apk add --no-cache shellcheck python3 bash
+      - pip3 install yamllint
+      - yamllint .
+      - shellcheck ./*.sh
 
-- name: publish-github
-  image: plugins/github-release
-  volumes:
-    - name: build-artifacts
-      path: /tmp/artifacts
-  settings:
-    api_key:
-      from_secret: github_token
-    files: /tmp/artifacts/*
-    prerelease: yes
-  when:
-    event: tag
+  - name: build
+    image: fedora:31
+    pull: always
+    volumes:
+      - name: build-artifacts
+        path: /tmp/artifacts
+    commands:
+      - ./build.sh
+
+  - name: publish-github
+    image: plugins/github-release
+    volumes:
+      - name: build-artifacts
+        path: /tmp/artifacts
+    settings:
+      api_key:
+        from_secret: github_token
+      files: /tmp/artifacts/*
+      prerelease: true
+    when:
+      event: tag
 
 volumes:
-- name: build-artifacts
-  temp: {}
+  - name: build-artifacts
+    temp: {}

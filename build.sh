@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -euf -o pipefail
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
@@ -13,7 +15,7 @@ echo "FEDORA_KERNEL_COMMIT_HASH=$FEDORA_KERNEL_COMMIT_HASH"
 pwd
 ls
 echo "CPU threads: $(nproc --all)"
-cat /proc/cpuinfo | grep 'model name' | uniq
+grep 'model name' /proc/cpuinfo | uniq
 # git clone --depth 1 --single-branch --branch v5.1.19 git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 
 ### Dependencies
@@ -23,11 +25,11 @@ dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkc
 git clone --single-branch --branch $FEDORA_KERNEL_BRANCH_NAME ${FEDORA_KERNEL_GIT_URL}
 cd kernel
 ## Cleanup
-rm -rfv *.rpm
+rm -rfv ./*.rpm
 rm -rf ~/rpmbuild/*
 git reset --hard $FEDORA_KERNEL_BRANCH_NAME
 git checkout $FEDORA_KERNEL_BRANCH_NAME
-git branch -d fedora_patch_src
+git branch -d fedora_patch_src &>/dev/null || true
 fedpkg clean
 ## Change branch
 git checkout $FEDORA_KERNEL_COMMIT_HASH
@@ -39,22 +41,32 @@ dnf -y builddep kernel.spec
 # sed -i "s/Patch509/Patch516/g" kernel.spec
 
 ### Create patch file with custom drivers
+echo >&2 "===]> Info: Creating patch file... ";
 FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} ../patch_driver.sh
 
 ### Apply patches
-for patch_file in $(ls ../patches)
+if [ ! -f scripts/newpatch.sh ]; then
+  cp -rf ../fedora/newpatch.sh scripts/newpatch.sh
+fi
+echo >&2 "===]> Info: Applying patches... ";
+[ ! -d ../patches ] && { echo 'Patches directory not found!'; exit 1; }
+while IFS= read -r file
 do
-  scripts/newpatch.sh ../patches/$patch_file
-done
+  echo "adding $file"
+  scripts/newpatch.sh "$file"
+done < <(find ../patches -type f -name "*.patch" | sort)
 
 ### Change buildid to mbp
+echo >&2 "===]> Info: Setting kernel name... ";
 sed -i 's/%define buildid.*/%define buildid .mbp/' ./kernel.spec
 
 ### Build src rpm
+echo >&2 "===]> Info: Bulding src.rpm ... ";
 fedpkg --release $FEDORA_KERNEL_BRANCH_NAME srpm
 
 ### Build non-debug rpms
-./scripts/fast-build.sh x86_64 $(ls | grep src.rpm)
+echo >&2 "===]> Info: Bulding kernel ... ";
+./scripts/fast-build.sh x86_64 "$(find . -type f -name "*.src.rpm")"
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume

@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -euf -o pipefail
 
 DOCKER_IMAGE=fedora:31
 RPMBUILD_HOST_PATH=/opt/rpmbuild
@@ -9,7 +11,7 @@ docker pull ${DOCKER_IMAGE}
 docker run \
   -t \
   --rm \
-  -v $(pwd):/repo \
+  -v "$(pwd)":/repo \
   -v ${RPMBUILD_HOST_PATH}:/root/rpmbuild \
   ${DOCKER_IMAGE} \
   /bin/bash -c 'cd /repo && ./build.sh'

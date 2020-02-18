@@ -5,7 +5,7 @@ diff --git a/drivers/input/mouse/bcm5974.c b/drivers/input/mouse/bcm5974.c
 index 59a14505b9cd..210019a0742a 100644
 --- a/drivers/input/mouse/bcm5974.c
 +++ b/drivers/input/mouse/bcm5974.c
-@@ -82,6 +82,15 @@
+@@ -82,6 +82,17 @@
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI	0x0272
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_ISO	0x0273
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_JIS	0x0274
@@ -19,11 +19,11 @@ index 59a14505b9cd..210019a0742a 100644
 +/* MacbookPro15,4 (2019) */
 +#define USB_DEVICE_ID_APPLE_WELLSPRING10_T2_D	0x027d
 +/* MacbookPro16,1 (2019)*/
-+#define USB_DEVICE_ID_APPLE_WELLSPRING10_T2_E 0x0340
++#define USB_DEVICE_ID_APPLE_WELLSPRING10_T2_E	0x0340
 
  #define BCM5974_DEVICE(prod) {					\
  	.match_flags = (USB_DEVICE_ID_MATCH_DEVICE |		\
-@@ -147,6 +156,14 @@ static const struct usb_device_id bcm5974_table[] = {
+@@ -147,6 +158,16 @@
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI),
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_ISO),
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
@@ -35,12 +35,12 @@ index 59a14505b9cd..210019a0742a 100644
 +	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING10_T2_C),
 +	/* MacbookPro15,4 */
 +	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING10_T2_D),
-+     /* MacbookPro16,1 */
-+     BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING10_T2_E),
++	/* MacbookPro16,1 */
++	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING10_T2_E),
  	/* Terminating entry */
  	{}
  };
-@@ -483,6 +500,58 @@ static const struct bcm5974_config bcm5974_config_table[] = {
+@@ -483,6 +504,71 @@
  		{ SN_COORD, -203, 6803 },
  		{ SN_ORIENT, -MAX_FINGER_ORIENTATION, MAX_FINGER_ORIENTATION }
  	},

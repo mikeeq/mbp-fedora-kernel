@@ -245,7 +245,7 @@ index 1cb4199..3f30d04 100644
  static const struct hid_device_id apple_devices[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MIGHTYMOUSE),
  		.driver_data = APPLE_MIGHTYMOUSE | APPLE_INVERT_HWHEEL },
-@@ -561,6 +724,14 @@
+@@ -561,6 +724,16 @@
  		.driver_data = APPLE_HAS_FN },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
  		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
