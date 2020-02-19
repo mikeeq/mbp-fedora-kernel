@@ -70,8 +70,9 @@ MacOS Mojave: 10.14.6 (18G103)
   - you need to manually extract firmware from MacOS
     - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517444300>
     - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-515401480>
+  - or download it from <https://packages.aunali1.com/apple/wifi-fw/18G2022>
 
-> The firmware files to use can be found by running `ioreg -l | grep C-4364` or `ioreg -l | grep RequestedFiles`, copy from `/usr/share/firmware/wifi` when being on MacOS
+> Firmware can be found by running `ioreg -l | grep C-4364` or `ioreg -l | grep RequestedFiles` under MacOS
 
 ```
 Put the firmware in the right place!
@@ -95,7 +96,8 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 
 ## Docs
 
-- Discord: <https://discord.gg/39Rmjh>
+- Discord: <https://discord.gg/Uw56rqW>
+- WiFi firmware: <https://packages.aunali1.com/apple/wifi-fw/18G2022>
 
 ### Fedora
 
