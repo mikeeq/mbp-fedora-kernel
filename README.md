@@ -11,6 +11,20 @@ There are multiple version of the kernel maintained on seperate branches (all co
 - 5.3-f30 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.3-f30>
 - 5.1-f30 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.1>
 
+## How to update kernel-mbp
+
+```
+### First run
+sudo -i
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.4-f31/update_kernel_mbp.sh -o /usr/local/bin/update_kernel_mbp
+chmod +x /usr/local/bin/update_kernel_mbp
+update_kernel_mbp
+
+### Next ones
+sudo -i
+update_kernel_mbp
+```
+
 ## CI status
 
 Drone kernel build status:
@@ -21,7 +35,7 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 ## TODO
 
-- integrate `roadrunner2/macbook12-spi-driver` and `MCMrARM/mbp2018-bridge-drv` drivers
+- integrate `roadrunner2/macbook12-spi-driver` and `MCMrARM/mbp2018-bridge-drv` drivers into kernel
 - add `kernel-headers` rpm generation
 
 > Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1
@@ -33,14 +47,6 @@ MacOS Mojave: 10.14.6 (18G103)
 
 ### Known issues
 
-- 5.2<= kernel random kernel panics - just disable thunderbolt driver
-
-  ```
-  ➜ cat /etc/modprobe.d/blacklist.conf
-  blacklist thunderbolt
-  ```
-
-  - it's working on 5.1, because 5.1 is failing to load thunderbolt firmware
 - Microphone (it's recognised with new apple t2 sound driver, but there is a low mic volume amp)
 - Dynamic audio outputs change (on connecting/disconnecting headphones jack)
 - Suspend/Resume (sleep mode)
