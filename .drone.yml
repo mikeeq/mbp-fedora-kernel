@@ -2,6 +2,11 @@
 kind: pipeline
 name: mbp-fedora-kernel
 
+trigger:
+  event:
+    exclude:
+      - pull_request
+
 steps:
   - name: lint
     image: alpine
