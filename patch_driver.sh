@@ -9,22 +9,35 @@ set -eu -o pipefail
 # APPLE_IB_DRIVER_GIT_URL=https://github.com/roadrunner2/macbook12-spi-driver.git
 # APPLE_IB_DRIVER_BRANCH_NAME=mbp15
 # APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-etc
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
 APPLE_SMC_DRIVER_BRANCH_NAME=master
-APPLE_SMC_DRIVER_COMMIT_HASH=cf42289ad637d3073e2fd348af71ad43dd31b8b4
+APPLE_SMC_DRIVER_COMMIT_HASH=092a4b6ca2f0894cefcb416b6b7c9a744a74c5f4
 
 REPO_PWD=$(pwd)
 
 mkdir -p /root/temp
 cd /root/temp || exit
 
-### AppleSMC
+### AppleSMC mrarm
+# git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
+# cd mbp2018-etc || exit
+# git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
+# cd ..
+# [ ! -d mbp2018-etc/applesmc/patches ] && { echo 'AppleSMC patches directory not found!'; exit 1; }
+# while IFS= read -r file; do
+#   echo "adding ${file}"
+#   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
+# done < <(find mbp2018-etc/applesmc/patches/ -type f | sort)
+
+### AppleSMC aunali fixes
 git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
-cd mbp2018-etc || exit
+cd linux-mbp-arch || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
 cd ..
-[ ! -d mbp2018-etc/applesmc/patches ] && { echo 'AppleSMC patches directory not found!'; exit 1; }
-cp -rfv mbp2018-etc/applesmc/patches/* "${REPO_PWD}"/../patches/
+while IFS= read -r file; do
+  echo "adding ${file}"
+  cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
+done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
 
 ### Add custom drivers to kernel
 # echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > "${REPO_PWD}"/../patches/custom-drivers.patch
