@@ -12,8 +12,8 @@ APPLE_IB_DRIVER_GIT_URL=https://github.com/roadrunner2/macbook12-spi-driver.git
 APPLE_IB_DRIVER_BRANCH_NAME=mbp15
 APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root --> sudo -i; update_kernel_mbp"
+if [ "$EUID" -ne 0 ]; then
+  echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
   exit
 fi
 
@@ -40,6 +40,8 @@ for i in $(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/latest 
 done
 
 dnf install -y ./*.rpm
+
+[ -x "$(command -v gcc)" ] || dnf install -y gcc
 
 ### Install custom drivers
 ## BCE - Apple T2
