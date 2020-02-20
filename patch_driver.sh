@@ -11,7 +11,7 @@ set -eu -o pipefail
 # APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
 APPLE_SMC_DRIVER_BRANCH_NAME=master
-APPLE_SMC_DRIVER_COMMIT_HASH=092a4b6ca2f0894cefcb416b6b7c9a744a74c5f4
+APPLE_SMC_DRIVER_COMMIT_HASH=3dace5f75390c8845deb57537bf1805c8f265d58
 
 REPO_PWD=$(pwd)
 
@@ -29,7 +29,7 @@ cd /root/temp || exit
 #   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
 # done < <(find mbp2018-etc/applesmc/patches/ -type f | sort)
 
-### AppleSMC aunali fixes
+### AppleSMC and BT aunali fixes
 git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
 cd linux-mbp-arch || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
@@ -38,6 +38,7 @@ while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
 done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
+cp -rfv ./linux-mbp-arch/2001-Revert-serdev-Add-ACPI-devices-by-ResourceSource-fie.patch "${REPO_PWD}"/../patches/
 
 ### Add custom drivers to kernel
 # echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > "${REPO_PWD}"/../patches/custom-drivers.patch

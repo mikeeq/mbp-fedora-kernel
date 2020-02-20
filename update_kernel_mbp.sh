@@ -23,7 +23,7 @@ cd ${KERNEL_PATCH_PATH} || exit
 
 ### Update update_kernel_mbp script
 echo >&2 "===]> Info: Updating update_kernel_mbp script... ";
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.4-f31/update_kernel_mbp.sh -o /usr/local/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.5-f31/update_kernel_mbp.sh -o /usr/local/bin/update_kernel_mbp
 chmod +x /usr/local/bin/update_kernel_mbp
 
 ### Download latest kernel
