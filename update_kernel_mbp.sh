@@ -21,10 +21,25 @@ rm -rf ${KERNEL_PATCH_PATH}
 mkdir -p ${KERNEL_PATCH_PATH}
 cd ${KERNEL_PATCH_PATH} || exit
 
-### Update update_kernel_mbp script
-echo >&2 "===]> Info: Updating update_kernel_mbp script... ";
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.5-f31/update_kernel_mbp.sh -o /usr/local/bin/update_kernel_mbp
-chmod +x /usr/local/bin/update_kernel_mbp
+### Downloading update_kernel_mbp script
+echo >&2 "===]> Info: Downloading update_kernel_mbp script... ";
+rm -rf /usr/local/bin/update_kernel_mbp
+if [ -f /usr/bin/update_kernel_mbp ]; then
+  cp -rf /usr/bin/update_kernel_mbp ${KERNEL_PATCH_PATH}/
+  ORG_SCRIPT_SHA=$(sha256sum ${KERNEL_PATCH_PATH}/update_kernel_mbp | awk '{print $1}')
+fi
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.5-f31/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+chmod +x /usr/bin/update_kernel_mbp
+if [ -f /usr/bin/update_kernel_mbp ]; then
+  NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
+  if [[ "$ORG_SCRIPT_SHA" != "$NEW_SCRIPT_SHA" ]]; then
+    echo >&2 "===]> Info: update_kernel_mbp script was updated please rerun!" && exit
+  else
+    echo >&2 "===]> Info: update_kernel_mbp script is in the latest version proceeding..."
+  fi
+else
+   echo >&2 "===]> Info: update_kernel_mbp script was installed..."
+fi
 
 ### Download latest kernel
 echo >&2 "===]> Info: Downloading latest kernel... ";
@@ -39,7 +54,7 @@ for i in $(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/latest 
   curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${KERNEL_VERSION}"-f"${OS_VERSION}"/"${i}"
 done
 
-dnf install -y ./*.rpm
+rpm --force -i ./*.rpm
 
 [ -x "$(command -v gcc)" ] || dnf install -y gcc
 
@@ -77,7 +92,7 @@ for i in efi=noruntime pcie_ports=compat modprobe.blacklist=thunderbolt; do
   fi
 done
 
-sed -i "s/^GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\"/g" /etc/default/grub
+sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g" /etc/default/grub
 
 echo >&2 "===]> Info: Rebuilding initramfs with custom drivers... ";
 depmod -a "${KERNEL_FULL_VERSION}"
