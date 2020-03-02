@@ -4,20 +4,13 @@ Fedora kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
 
 Fedora ISO (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
 
-There are multiple version of the kernel maintained on seperate branches (all compiled versions could be found in releases section):
-
-- 5.4-f31 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.4-f31>
-- 5.3-f31 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.3-f31>
-- 5.3-f30 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.3-f30>
-- 5.1-f30 - <https://github.com/mikeeq/mbp-fedora-kernel/tree/v5.1>
-
 ## How to update kernel-mbp
 
 ```
 ### First run
 sudo -i
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.4-f31/update_kernel_mbp.sh -o /usr/local/bin/update_kernel_mbp
-chmod +x /usr/local/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.5-f31/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+chmod +x /usr/bin/update_kernel_mbp
 update_kernel_mbp
 
 ### Next ones
@@ -42,7 +35,7 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 ```
 Boot ROM Version:	220.270.99.0.0 (iBridge: 16.16.6571.0.0,0)
-MacOS Mojave: 10.14.6 (18G103)
+macOS Mojave: 10.14.6 (18G103)
 ```
 
 ### Known issues
@@ -67,12 +60,12 @@ MacOS Mojave: 10.14.6 (18G103)
 - keyboard
 - touchpad (scroll, right click)
 - wifi
-  - you need to manually extract firmware from MacOS
+  - you need to manually extract firmware from macOS
     - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517444300>
     - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-515401480>
   - or download it from <https://packages.aunali1.com/apple/wifi-fw/18G2022>
 
-> Firmware can be found by running `ioreg -l | grep C-4364` or `ioreg -l | grep RequestedFiles` under MacOS
+> Firmware can be found by running `ioreg -l | grep C-4364` or `ioreg -l | grep RequestedFiles` under macOS
 
 ```
 Put the firmware in the right place!
@@ -98,6 +91,7 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 
 - Discord: <https://discord.gg/Uw56rqW>
 - WiFi firmware: <https://packages.aunali1.com/apple/wifi-fw/18G2022>
+- blog `Installing Fedora 31 on a 2018 Mac mini`: <https://linuxwit.ch/blog/2020/01/installing-fedora-on-mac-mini/>
 
 ### Fedora
 
@@ -114,6 +108,7 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 - TouchBar driver: <https://github.com/roadrunner2/macbook12-spi-driver/tree/mbp15>
 - Kernel patches (all are mentioned in github issue above): <https://github.com/aunali1/linux-mbp-arch>
 - ArchLinux kernel patches: <https://github.com/ppaulweber/linux-mba>
+- hid-apple-patched module for changing mappings of ctrl, fn, option keys: <https://github.com/free5lot/hid-apple-patched>
 
 ## Credits
 
