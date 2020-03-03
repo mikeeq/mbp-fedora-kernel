@@ -99,7 +99,8 @@ depmod -a "${KERNEL_FULL_VERSION}"
 dracut -f /boot/initramfs-"${KERNEL_FULL_VERSION}".img "${KERNEL_FULL_VERSION}"
 
 ### Grub
-rm -rf /etc/grub.d/30_os-prober
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/f31/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
+chmod 755 /etc/grub.d/30_os-prober
 grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
 ### Cleanup
