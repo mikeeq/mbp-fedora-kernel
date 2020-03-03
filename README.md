@@ -4,6 +4,12 @@ Fedora kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
 
 Fedora ISO (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
 
+Drivers:
+
+- Apple T2 (audio, keyboard, touchpad) - <https://github.com/MCMrARM/mbp2018-bridge-drv>
+- Apple SMC - <https://github.com/MCMrARM/mbp2018-etc>
+- Touchbar - <https://github.com/roadrunner2/macbook12-spi-driver/tree/mbp15>
+
 ## How to update kernel-mbp
 
 ```
@@ -40,10 +46,10 @@ macOS Mojave: 10.14.6 (18G103)
 
 ### Known issues
 
+- Dynamic audio input/output change (on connecting/disconnecting headphones jack)
+- TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
+- Thunderbolt (is disabled, because driver was causing kernel panics (not tested with 5.5 kernel))
 - Microphone (it's recognised with new apple t2 sound driver, but there is a low mic volume amp)
-- Dynamic audio outputs change (on connecting/disconnecting headphones jack)
-- Suspend/Resume (sleep mode)
-- Thunderbolt
 
 #### Working with upstream stable kernel 5.1
 
@@ -74,6 +80,22 @@ the .clmb goes to /lib/firmware/brcm/brcmfmac4364-pcie.clm_blob
 and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-MacBookPro15,2.txt
 ```
 
+```
+# ls -l /lib/firmware/brcm | grep 4364
+-rw-r--r--. 1 root root   12860 Mar  1 12:44 brcmfmac4364-pcie.Apple Inc.-MacBookPro15,2.txt
+-rw-r--r--. 1 root root  922647 Mar  1 12:44 brcmfmac4364-pcie.bin
+-rw-r--r--. 1 root root   33226 Mar  1 12:44 brcmfmac4364-pcie.clm_blob
+```
+
+```
+# dmesg
+brcmfmac 0000:01:00.0: enabling device (0000 -> 0002)
+brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac4364-pcie for chip BCM4364/3
+brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac4364-pcie for chip BCM4364/3
+brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4364/3 wl0: Mar 28 2019 19:17:52 version 9.137.9.0.32.6.34 FWID 01-36f56c94
+brcmfmac 0000:01:00.0 wlp1s0: renamed from wlan0
+```
+
 #### Working with external drivers
 
 >> with @MCMrARM mbp2018-bridge-drv
@@ -86,6 +108,7 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 #### Not tested
 
 - eGPU
+- Thunderbolt
 
 ## Docs
 

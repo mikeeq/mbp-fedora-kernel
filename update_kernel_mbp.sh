@@ -99,11 +99,13 @@ depmod -a "${KERNEL_FULL_VERSION}"
 dracut -f /boot/initramfs-"${KERNEL_FULL_VERSION}".img "${KERNEL_FULL_VERSION}"
 
 ### Grub
+echo >&2 "===]> Info: Rebuilding GRUB config... ";
 curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/f31/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
 chmod 755 /etc/grub.d/30_os-prober
 grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
 ### Cleanup
+echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
 rm -rf ${KERNEL_PATCH_PATH}
 dnf autoremove -y
 dnf remove -y "$(dnf repoquery --installonly --latest-limit=-3 -q)"
