@@ -23,13 +23,13 @@ mkdir -p ${KERNEL_PATCH_PATH}
 cd ${KERNEL_PATCH_PATH} || exit
 
 ### Downloading update_kernel_mbp script
-echo >&2 "===]> Info: Downloading update_kernel_mbp script... ";
+echo >&2 "===]> Info: Downloading update_kernel_mbp ${UPDATE_SCRIPT_BRANCH} script... ";
 rm -rf /usr/local/bin/update_kernel_mbp
 if [ -f /usr/bin/update_kernel_mbp ]; then
   cp -rf /usr/bin/update_kernel_mbp ${KERNEL_PATCH_PATH}/
   ORG_SCRIPT_SHA=$(sha256sum ${KERNEL_PATCH_PATH}/update_kernel_mbp | awk '{print $1}')
 fi
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/"${UPDATE_SCRIPT_BRANCH}"/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 if [ -f /usr/bin/update_kernel_mbp ]; then
   NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
@@ -44,10 +44,10 @@ fi
 
 ### Download latest kernel
 KERNEL_PACKAGES=()
-if [[ $1 == "--rc" ]]; then
+if [[ ${1-} == "--rc" ]]; then
   echo >&2 "===]> Info: Downloading latest RC kernel... ";
   MBP_KERNEL_TAG=$(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/ | grep rpm | grep 'rc' | head -n 1 | cut -d'v' -f2 | cut -d'/' -f1)
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v${MBP_KERNEL_TAG} | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG} "| grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 else
   echo >&2 "===]> Info: Downloading latest stable kernel... ";
   MBP_KERNEL_TAG=$(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | cut -d'v' -f2 | cut -d'"' -f1)
@@ -55,14 +55,12 @@ else
 fi
 
 KERNEL_PACKAGE_NAME=${KERNEL_PACKAGES[0]}
-KERNEL_VERSION=$(echo "${KERNEL_PACKAGE_NAME}" | cut -d'-' -f2)
-OS_VERSION=$(echo "${KERNEL_PACKAGE_NAME}" | cut -d'.' -f5 | cut -d'c' -f2)
 TEMPVAR=${KERNEL_PACKAGE_NAME//kernel-}
 KERNEL_FULL_VERSION=${TEMPVAR//.rpm}
 echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG} ";
 
 for i in "${KERNEL_PACKAGES[@]}"; do
-  curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/"${i}"
+  curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
 done
 
 rpm --force -i ./*.rpm
