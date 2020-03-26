@@ -115,6 +115,10 @@ brcmfmac 0000:01:00.0 wlp1s0: renamed from wlan0
 - Discord: <https://discord.gg/Uw56rqW>
 - WiFi firmware: <https://packages.aunali1.com/apple/wifi-fw/18G2022>
 - blog `Installing Fedora 31 on a 2018 Mac mini`: <https://linuxwit.ch/blog/2020/01/installing-fedora-on-mac-mini/>
+- iwd:
+  - <https://iwd.wiki.kernel.org/networkconfigurationsettings>
+  - <https://wiki.archlinux.org/index.php/Iwd>
+  - <https://www.vocal.com/secure-communication/eap-types/>
 
 ### Fedora
 
