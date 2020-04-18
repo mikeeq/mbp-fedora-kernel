@@ -5,7 +5,7 @@ set -eu -o pipefail
 ### Apple T2 drivers commit hashes
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.5-f31}
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.6-f31}
 BCE_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-bridge-drv.git
 BCE_DRIVER_BRANCH_NAME=master
 BCE_DRIVER_COMMIT_HASH=b43fcc069da73e051072fde24af4014c9c487286
