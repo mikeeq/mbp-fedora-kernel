@@ -15,7 +15,7 @@ Drivers:
 ```
 ### First run
 sudo -i
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.5-f31/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.6-f31/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 update_kernel_mbp
 
@@ -70,6 +70,18 @@ macOS Mojave: 10.14.6 (18G103)
     - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-517444300>
     - <https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-515401480>
   - or download it from <https://packages.aunali1.com/apple/wifi-fw/18G2022>
+  - every version of Broadcom MBP >=2018 have different value of rambase_addr, so the one defined in wifi patch doesn't need to match your one, to find out what suits your version of the chip and load it at boot - you need to:
+
+    ```
+    ## dynamically reload brcmfmac kernel module with different rambase_addr values and check dmesg if the module is correctly loading FW. The most probable values: 0x160000, 0x180000, 0x198000, 0x200000
+
+    modprobe -r brcmfmac; modprobe brcmfmac rambase_addr=0x160000
+
+    ## To load correct rambase_addr at boot please add kernel arg to grub and reload grub cfg
+    # /etc/default/grub
+      GRUB_CMDLINE_LINUX=" brcmfmac.rambase_addr=0x160000"
+    grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+    ```
 
 > Firmware can be found by running `ioreg -l | grep C-4364` or `ioreg -l | grep RequestedFiles` under macOS
 
@@ -88,6 +100,7 @@ and the .txt to something like /lib/firmware/brcm/brcmfmac4364-pcie.Apple Inc.-M
 ```
 
 ```
+## How correct brcmfmac FW load should look like in dmesg
 # dmesg
 brcmfmac 0000:01:00.0: enabling device (0000 -> 0002)
 brcmfmac: brcmf_fw_alloc_request: using brcm/brcmfmac4364-pcie for chip BCM4364/3
@@ -115,6 +128,10 @@ brcmfmac 0000:01:00.0 wlp1s0: renamed from wlan0
 - Discord: <https://discord.gg/Uw56rqW>
 - WiFi firmware: <https://packages.aunali1.com/apple/wifi-fw/18G2022>
 - blog `Installing Fedora 31 on a 2018 Mac mini`: <https://linuxwit.ch/blog/2020/01/installing-fedora-on-mac-mini/>
+- iwd:
+  - <https://iwd.wiki.kernel.org/networkconfigurationsettings>
+  - <https://wiki.archlinux.org/index.php/Iwd>
+  - <https://www.vocal.com/secure-communication/eap-types/>
 
 ### Fedora
 

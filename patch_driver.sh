@@ -12,7 +12,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
 APPLE_SMC_DRIVER_BRANCH_NAME=master
 APPLE_SMC_DRIVER_COMMIT_HASH=9f126dac0c297996611913b58ff50824c9c42efb
-BT_PATCH_NAME="2001-serdev-Fix-detection-of-UART-devices-on-Apple-machin.patch"
+# BT_PATCH_NAME="2001-serdev-Fix-detection-of-UART-devices-on-Apple-machin.patch"
 
 REPO_PWD=$(pwd)
 
@@ -39,7 +39,7 @@ while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
 done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
-cp -rfv ./linux-mbp-arch/"$BT_PATCH_NAME" "${REPO_PWD}"/../patches/
+# cp -rfv ./linux-mbp-arch/"$BT_PATCH_NAME" "${REPO_PWD}"/../patches/
 
 ### Add custom drivers to kernel
 # echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > "${REPO_PWD}"/../patches/custom-drivers.patch
