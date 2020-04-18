@@ -28,7 +28,7 @@ if [ -f /usr/bin/update_kernel_mbp ]; then
   cp -rf /usr/bin/update_kernel_mbp ${KERNEL_PATCH_PATH}/
   ORG_SCRIPT_SHA=$(sha256sum ${KERNEL_PATCH_PATH}/update_kernel_mbp | awk '{print $1}')
 fi
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.5-f31/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.6-f31/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 if [ -f /usr/bin/update_kernel_mbp ]; then
   NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
