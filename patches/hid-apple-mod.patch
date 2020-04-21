@@ -13,14 +13,6 @@ index 1cb4199..3f30d04 100644
   */
 
  /*
- @@ -16,6 +17,7 @@
-
- #include <linux/device.h>
- #include <linux/hid.h>
-+#include <linux/leds.h>
- #include <linux/module.h>
- #include <linux/slab.h>
-
 @@ -30,6 +31,7 @@
  #define APPLE_INVERT_HWHEEL	0x0040
  #define APPLE_IGNORE_HIDINPUT	0x0080
