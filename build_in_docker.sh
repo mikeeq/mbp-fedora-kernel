@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-DOCKER_IMAGE=fedora:31
+DOCKER_IMAGE=fedora:32
 RPMBUILD_HOST_PATH=/opt/rpmbuild
 
 mkdir -p ${RPMBUILD_HOST_PATH}

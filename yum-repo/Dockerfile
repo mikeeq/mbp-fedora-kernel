@@ -1,6 +1,6 @@
-FROM fedora:31
+FROM fedora:32
 
-ARG RELEASE_VERSION=5.3.11-f31
+ARG RELEASE_VERSION=5.6.7-f32
 
 WORKDIR /var/repo
 
