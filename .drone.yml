@@ -9,10 +9,10 @@ trigger:
 
 steps:
   - name: lint
-    image: alpine
+    image: alpine:3.12
     pull: always
     commands:
-      - apk add --no-cache shellcheck python3 bash
+      - apk add --no-cache shellcheck py-pip python3 bash
       - pip3 install yamllint
       - yamllint .
       - shellcheck ./*.sh
