@@ -107,3 +107,6 @@ index 839980da9..da0bc47bb 100644
  #define BRCM_PCIE_4371_DEVICE_ID	0x440d
 +#define BRCM_PCIE_4377_DEVICE_ID	0x4488	/* MacBookPro15,4 */
 
+
+ /* brcmsmac IDs */
+
