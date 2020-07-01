@@ -57,12 +57,12 @@ fi
 KERNEL_PACKAGE_NAME=${KERNEL_PACKAGES[0]}
 TEMPVAR=${KERNEL_PACKAGE_NAME//kernel-}
 KERNEL_FULL_VERSION=${TEMPVAR//.rpm}
-echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG} ";
 
 for i in "${KERNEL_PACKAGES[@]}"; do
   curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
 done
 
+echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG} ";
 rpm --force -i ./*.rpm
 
 [ -x "$(command -v gcc)" ] || dnf install -y gcc
