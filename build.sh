@@ -6,7 +6,7 @@ set -eu -o pipefail
 FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
 FEDORA_KERNEL_VERSION=5.7.6
 FEDORA_KERNEL_BRANCH_NAME=f32
-FEDORA_KERNEL_COMMIT_HASH=43bd09fbb8c0d213f57173222fa0132636f78403      # https://src.fedoraproject.org/rpms/kernel/commits/f32
+FEDORA_KERNEL_COMMIT_HASH=5cf98f40dbc59815372e055584672ae021eec571      # https://src.fedoraproject.org/rpms/kernel/commits/f32
 
 ### Debug commands
 echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
