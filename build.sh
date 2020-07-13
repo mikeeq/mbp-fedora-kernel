@@ -4,9 +4,9 @@ set -eu -o pipefail
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
-FEDORA_KERNEL_VERSION=5.7.6
+FEDORA_KERNEL_VERSION=5.7.8
 FEDORA_KERNEL_BRANCH_NAME=f32
-FEDORA_KERNEL_COMMIT_HASH=5cf98f40dbc59815372e055584672ae021eec571      # https://src.fedoraproject.org/rpms/kernel/commits/f32
+FEDORA_KERNEL_COMMIT_HASH=e6fc315293820bc53857634588302f951d1442f9      # https://src.fedoraproject.org/rpms/kernel/commits/f32
 
 ### Debug commands
 echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
