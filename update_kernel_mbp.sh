@@ -45,12 +45,12 @@ fi
 ### Download latest kernel
 KERNEL_PACKAGES=()
 if [[ ${1-} == "--rc" ]]; then
-  echo >&2 "===]> Info: Downloading latest RC kernel... ";
   MBP_KERNEL_TAG=$(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/ | grep rpm | grep 'rc' | head -n 1 | cut -d'v' -f2 | cut -d'/' -f1)
+  echo >&2 "===]> Info: Downloading latest RC kernel: ${MBP_KERNEL_TAG}";
   while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG} "| grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 else
-  echo >&2 "===]> Info: Downloading latest stable kernel... ";
   MBP_KERNEL_TAG=$(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | cut -d'v' -f2 | cut -d'"' -f1)
+  echo >&2 "===]> Info: Downloading latest stable kernel: ${MBP_KERNEL_TAG}";
   while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 fi
 
@@ -62,7 +62,7 @@ for i in "${KERNEL_PACKAGES[@]}"; do
   curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
 done
 
-echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG} ";
+echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
 rpm --force -i ./*.rpm
 
 [ -x "$(command -v gcc)" ] || dnf install -y gcc
