@@ -10,11 +10,11 @@ set -eu -o pipefail
 # APPLE_IB_DRIVER_BRANCH_NAME=mbp15
 # APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
 
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
-APPLE_SMC_DRIVER_BRANCH_NAME=master
-APPLE_SMC_DRIVER_COMMIT_HASH=9257e2ba804f2dd6deba158233af9dfef24fe994
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/marcosfad/linux-mbp-arch
+APPLE_SMC_DRIVER_BRANCH_NAME=feature/kernel-5.8
+APPLE_SMC_DRIVER_COMMIT_HASH=13a0aff189d5c70a9b570e69cbf8b13b2887ba19
 DP_PATCH_NAME="2001-drm-amd-display-Force-link_rate-as-LINK_RATE_RBR2-fo.patch"
-
+HID_PATCH_NAME="4002-keyboard-backlight.patch"
 REPO_PWD=$(pwd)
 
 mkdir -p /root/temp
@@ -36,13 +36,16 @@ git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_D
 cd linux-mbp-arch || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
 cd ..
-# while IFS= read -r file; do
-#   echo "adding ${file}"
-#   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
-# done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
+while IFS= read -r file; do
+  echo "adding ${file}"
+  cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
+done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
 
-### Apple DP patch
+## Apple DP patch
 cp -rfv ./linux-mbp-arch/"$DP_PATCH_NAME" "${REPO_PWD}"/../patches/
+
+## Apple HID patch
+cp -rfv ./linux-mbp-arch/"$HID_PATCH_NAME" "${REPO_PWD}"/../patches/
 
 ### Add custom drivers to kernel
 # echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > "${REPO_PWD}"/../patches/custom-drivers.patch
