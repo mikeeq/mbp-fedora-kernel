@@ -9,9 +9,10 @@ set -eu -o pipefail
 # APPLE_IB_DRIVER_GIT_URL=https://github.com/roadrunner2/macbook12-spi-driver.git
 # APPLE_IB_DRIVER_BRANCH_NAME=mbp15
 # APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
-APPLE_SMC_DRIVER_BRANCH_NAME=master
-APPLE_SMC_DRIVER_COMMIT_HASH=9257e2ba804f2dd6deba158233af9dfef24fe994
+
+# APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
+# APPLE_SMC_DRIVER_BRANCH_NAME=master
+# APPLE_SMC_DRIVER_COMMIT_HASH=9257e2ba804f2dd6deba158233af9dfef24fe994
 DP_PATCH_NAME="2001-drm-amd-display-Force-link_rate-as-LINK_RATE_RBR2-fo.patch"
 
 REPO_PWD=$(pwd)
