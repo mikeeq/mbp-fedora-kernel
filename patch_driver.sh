@@ -10,9 +10,9 @@ set -eu -o pipefail
 # APPLE_IB_DRIVER_BRANCH_NAME=mbp15
 # APPLE_IB_DRIVER_COMMIT_HASH=90cea3e8e32db60147df8d39836bd1d2a5161871
 
-# APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
-# APPLE_SMC_DRIVER_BRANCH_NAME=master
-# APPLE_SMC_DRIVER_COMMIT_HASH=9257e2ba804f2dd6deba158233af9dfef24fe994
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
+APPLE_SMC_DRIVER_BRANCH_NAME=master
+APPLE_SMC_DRIVER_COMMIT_HASH=9257e2ba804f2dd6deba158233af9dfef24fe994
 DP_PATCH_NAME="2001-drm-amd-display-Force-link_rate-as-LINK_RATE_RBR2-fo.patch"
 
 REPO_PWD=$(pwd)
@@ -32,10 +32,10 @@ cd /root/temp || exit
 # done < <(find mbp2018-etc/applesmc/patches/ -type f | sort)
 
 ### AppleSMC and BT aunali fixes
-# git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
-# cd linux-mbp-arch || exit
-# git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
-# cd ..
+git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
+cd linux-mbp-arch || exit
+git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
+cd ..
 # while IFS= read -r file; do
 #   echo "adding ${file}"
 #   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
