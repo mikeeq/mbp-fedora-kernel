@@ -14,7 +14,7 @@ APPLE_SMC_DRIVER_GIT_URL=https://github.com/marcosfad/linux-mbp-arch
 APPLE_SMC_DRIVER_BRANCH_NAME=feature/kernel-5.8
 APPLE_SMC_DRIVER_COMMIT_HASH=13a0aff189d5c70a9b570e69cbf8b13b2887ba19
 DP_PATCH_NAME="2001-drm-amd-display-Force-link_rate-as-LINK_RATE_RBR2-fo.patch"
-HID_PATCH_NAME="4002-keyboard-backlight.patch"
+# HID_PATCH_NAME="4002-keyboard-backlight.patch"
 REPO_PWD=$(pwd)
 
 mkdir -p /root/temp
@@ -45,7 +45,7 @@ done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
 cp -rfv ./linux-mbp-arch/"$DP_PATCH_NAME" "${REPO_PWD}"/../patches/
 
 ## Apple HID patch
-cp -rfv ./linux-mbp-arch/"$HID_PATCH_NAME" "${REPO_PWD}"/../patches/
+# cp -rfv ./linux-mbp-arch/"$HID_PATCH_NAME" "${REPO_PWD}"/../patches/
 
 ### Add custom drivers to kernel
 # echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > "${REPO_PWD}"/../patches/custom-drivers.patch
