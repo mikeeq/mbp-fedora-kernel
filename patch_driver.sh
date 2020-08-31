@@ -31,14 +31,16 @@ cd /root/temp || exit
 # done < <(find mbp2018-etc/applesmc/patches/ -type f | sort)
 
 ### AppleSMC and BT aunali fixes
-git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
-cd linux-mbp-arch || exit
-git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
-cd ..
-while IFS= read -r file; do
-  echo "adding ${file}"
-  cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
-done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
+# git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
+# cd linux-mbp-arch || exit
+# git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
+# cd ..
+# while IFS= read -r file; do
+#   echo "adding ${file}"
+#   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
+# done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
+
+### Apple DP patch
 cp -rfv ./linux-mbp-arch/"$DP_PATCH_NAME" "${REPO_PWD}"/../patches/
 
 ### Add custom drivers to kernel
