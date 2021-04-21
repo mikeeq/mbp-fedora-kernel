@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-set -x
+# set -x
 
 ### Apple T2 drivers commit hashes
 # BCE_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-bridge-drv.git
@@ -22,6 +22,8 @@ REPO_PWD=$(pwd)
 
 mkdir -p ${TMP_DIR}
 cd ${TMP_DIR} || exit
+
+mkdir -p "${REPO_PWD}"/../patches/
 
 ### AppleSMC mrarm
 # git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
