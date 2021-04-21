@@ -2,6 +2,8 @@
 
 set -eu -o pipefail
 
+set -x
+
 ### Apple T2 drivers commit hashes
 # BCE_DRIVER_GIT_URL=https://github.com/MCMrARM/mbp2018-bridge-drv.git
 # BCE_DRIVER_BRANCH_NAME=master
@@ -12,12 +14,13 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
 APPLE_SMC_DRIVER_BRANCH_NAME=master
 APPLE_SMC_DRIVER_COMMIT_HASH=60cef373c14ba6a7b35d0af67d04dce7eb604f2e
-DP_PATCH_NAME="2001-drm-amd-display-Force-link_rate-as-LINK_RATE_RBR2-fo.patch"
+# DP_PATCH_NAME="2001-drm-amd-display-Force-link_rate-as-LINK_RATE_RBR2-fo.patch"
+TMP_DIR=~/temp_dir
 
 REPO_PWD=$(pwd)
 
-mkdir -p /root/temp
-cd /root/temp || exit
+mkdir -p ${TMP_DIR}
+cd ${TMP_DIR} || exit
 
 ### AppleSMC mrarm
 # git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
@@ -31,15 +34,15 @@ cd /root/temp || exit
 # done < <(find mbp2018-etc/applesmc/patches/ -type f | sort)
 
 ### AppleSMC and BT aunali fixes
-git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
+# git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
 cd linux-mbp-arch || exit
-git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
+# git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
 cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${REPO_PWD}"/../patches/"${file##*/}"
-done < <(find linux-mbp-arch -type f -name "*applesmc*" | sort)
-cp -rfv ./linux-mbp-arch/"$DP_PATCH_NAME" "${REPO_PWD}"/../patches/
+done < <(find linux-mbp-arch -type f -name "*patch" | sort)
+# cp -rfv ./linux-mbp-arch/"$DP_PATCH_NAME" "${REPO_PWD}"/../patches/
 
 ### Add custom drivers to kernel
 # echo -e "From: fedora kernel <fedora@kernel.org>\nSubject: patch custom drivers\n" > "${REPO_PWD}"/../patches/custom-drivers.patch
