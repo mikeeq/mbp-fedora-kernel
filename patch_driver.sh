@@ -16,7 +16,7 @@ APPLE_SMC_DRIVER_BRANCH_NAME=master
 APPLE_SMC_DRIVER_COMMIT_HASH=60cef373c14ba6a7b35d0af67d04dce7eb604f2e
 # DP_PATCH_NAME="2001-drm-amd-display-Force-link_rate-as-LINK_RATE_RBR2-fo.patch"
 APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH=06140ecd2ef1849758f34c4a21b29b27df9fa679        # https://github.com/jamlam/mbp-16.1-linux-wifi
-APPLE_WIFI_BIGSUR_PATCH_GIT_URL=https://github.com/jamlam/mbp-16.1-linux-wifi/blob/${APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH}/wifi-bigsur.patch
+APPLE_WIFI_BIGSUR_PATCH_GIT_URL=https://raw.githubusercontent.com/jamlam/mbp-16.1-linux-wifi/${APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH}/wifi-bigsur.patch
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
 
