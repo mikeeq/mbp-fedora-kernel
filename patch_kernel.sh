@@ -3,7 +3,7 @@
 # Base directory is relative to where the script is.
 # BASEDIR="$(dirname "$(cd $(dirname $BASH_SOURCE[0]) && pwd)")"
 # pushd $BASEDIR > /dev/null
-set -x
+# set -x
 
 RPMBUILD_PATH=${RPMBUILD_PATH:-/root/rpmbuild}
 SOURCES_PATH=${RPMBUILD_PATH}/SOURCES
@@ -44,6 +44,6 @@ NPATCH_ID=$(($LPATCH_ID + 1 ))
 sed -i "/^Patch$LPATCH_ID:\ /a#\ $DESC\nPatch$NPATCH_ID:\ $PATCH" $SPECFILE
 
 # Add it to git
-git add $PATCH
+# git add $PATCH
 
 # popd > /dev/null
