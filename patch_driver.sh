@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-set -x
+# set -x
 
 ### Apple T2 drivers commit hashes
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
@@ -31,6 +31,6 @@ while IFS= read -r file; do
 done < <(find linux-mbp-arch -type f -name "*patch" | grep -v iwlwifi | grep -v brcmfmac | sort)
 
 ### WiFi 16.2 Patch
-curl -L ${APPLE_WIFI_BIGSUR_PATCH_GIT_URL} -o ${PATCHES_DIR}/wifi-bigsur.patch
+# curl -L ${APPLE_WIFI_BIGSUR_PATCH_GIT_URL} -o ${PATCHES_DIR}/wifi-bigsur.patch
 
 rm -rf ${TMP_DIR}
