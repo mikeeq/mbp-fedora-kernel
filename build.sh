@@ -11,7 +11,6 @@ REPO_PWD=$(pwd)
 echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
 
 pwd
-ls
 echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
@@ -27,7 +26,7 @@ koji download-build --arch=src kernel-${FEDORA_KERNEL_VERSION}
 rpm -Uvh kernel-${FEDORA_KERNEL_VERSION}.src.rpm
 
 cd ${RPMBUILD_PATH}/SPECS
-dnf builddep kernel.spec
+dnf -y builddep kernel.spec
 
 ### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file... ";
