@@ -34,7 +34,7 @@ FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} ${REPO_PWD}/patch_driver.sh
 
 ### Apply patches
 echo >&2 "===]> Info: Applying patches... ";
-[ ! -d ${REPO_PWD}/patches ] && { echo 'Patches directory not found!'; exit 1; }
+mkdir -p ${REPO_PWD}/patches
 while IFS= read -r file
 do
   echo "adding $file"
