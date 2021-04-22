@@ -76,7 +76,7 @@ cd bce || exit
 git checkout "${BCE_DRIVER_COMMIT_HASH}"
 
 make -C /lib/modules/"${KERNEL_FULL_VERSION}"/build/ M="$(pwd)" modules
-cp -rfv ./bce.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
+cp -rfv ./*.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
 cd ..
 
 ## Touchbar
