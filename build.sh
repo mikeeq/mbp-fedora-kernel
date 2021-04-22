@@ -63,5 +63,6 @@ sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 cd ${REPO_PWD}
 zip -r patches.zip patches/
 cp -rfv patches.zip /tmp/artifacts/
+du -h /tmp/artifacts/
 
 exit $rpmbuild_exitcode
