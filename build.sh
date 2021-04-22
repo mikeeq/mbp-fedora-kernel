@@ -47,8 +47,10 @@ sed -i 's/%define buildid.*/%define buildid .mbp/' ${RPMBUILD_PATH}/SPECS/kernel
 
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ... ";
-# ./scripts/fast-build.sh x86_64 "$(find . -type f -name "*.src.rpm")"
+cd ${RPMBUILD_PATH}/SOURCES
 rpmbuild --target x86_64 --without debug --without debuginfo --without perf --without tools --rebuild kernel-${FEDORA_KERNEL_VERSION}.src.rpm
+# cd ${RPMBUILD_PATH}/SPECS
+# rpmbuild --target x86_64 --without debug --without debuginfo --without perf --without tools --rebuild kernel.spec
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
