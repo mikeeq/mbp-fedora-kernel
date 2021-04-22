@@ -53,11 +53,11 @@ rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying rpms and calculating SHA256 ... ";
-cp -rfv /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/artifacts/
-sha256sum /root/rpmbuild/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
+cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm /tmp/artifacts/
+sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 
 ### Add patches to artifacts
-cd ..
+cd ${REPO_PWD}
 zip -r patches.zip patches/
 cp -rfv patches.zip /tmp/artifacts/
 
