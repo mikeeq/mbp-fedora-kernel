@@ -92,7 +92,7 @@ cp -rfv ./*.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
 echo >&2 "===]> Info: Setting up GRUB to load custom drivers at boot... ";
 echo -e 'hid-apple\nbcm5974\nsnd-seq\nbce\napple_ibridge\napple_ib_tb' > /etc/modules-load.d/bce.conf
 echo -e 'blacklist thunderbolt' > /etc/modprobe.d/blacklist.conf
-echo -e 'add_drivers+=" hid_apple snd-seq bce "\nforce_drivers+=" hid_apple snd-seq bce "' > /etc/dracut.conf
+echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > /etc/dracut.conf
 
 GRUB_CMDLINE_VALUE=$(grep -v '#' /etc/default/grub | grep -w GRUB_CMDLINE_LINUX | cut -d'"' -f2)
 
