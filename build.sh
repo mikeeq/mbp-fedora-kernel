@@ -50,7 +50,8 @@ echo >&2 "===]> Info: Bulding kernel ... ";
 cd ${RPMBUILD_PATH}/SOURCES
 rpmbuild --target x86_64 --without debug --without debuginfo --without perf --without tools --rebuild kernel-${FEDORA_KERNEL_VERSION}.src.rpm
 # cd ${RPMBUILD_PATH}/SPECS
-# rpmbuild --target x86_64 --without debug --without debuginfo --without perf --without tools --rebuild kernel.spec
+# rpmbuild -bb --without debug --target=x86_64 kernel.spec
+# rpmbuild -bb --without debug --without debuginfo --without perf --without tools --target=x86_64 kernel.spec
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
