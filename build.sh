@@ -11,7 +11,6 @@ REPO_PWD=$(pwd)
 echo "FEDORA_KERNEL_VERSION=$FEDORA_KERNEL_VERSION"
 
 pwd
-free -m
 echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
