@@ -4,7 +4,7 @@ set -eu -o pipefail
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
-FEDORA_KERNEL_VERSION=5.10.23-200.fc33      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F33
+FEDORA_KERNEL_VERSION=5.11.18-300.fc34      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F34
 REPO_PWD=$(pwd)
 
 ### Debug commands
