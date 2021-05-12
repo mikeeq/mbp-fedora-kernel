@@ -43,7 +43,7 @@ done < <(find ${REPO_PWD}/patches -type f -name "*.patch" | sort)
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name... ";
-sed -i 's/%define buildid.*/%define buildid .mbp/' ${RPMBUILD_PATH}/SPECS/kernel.spec
+sed -i 's/# define buildid.*/%define buildid .mbp/' ${RPMBUILD_PATH}/SPECS/kernel.spec
 
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ... ";
