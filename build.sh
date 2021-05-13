@@ -44,6 +44,8 @@ dnf -y builddep kernel.spec
 echo >&2 "===]> Info: Creating patch file... ";
 FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} ../patch_driver.sh
 
+mkdir -p scripts
+
 ### Apply patches
 if [ ! -f scripts/newpatch.sh ]; then
   cp -rf ../fedora/newpatch.sh scripts/newpatch.sh
