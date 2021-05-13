@@ -68,7 +68,7 @@ fedpkg --release $FEDORA_KERNEL_BRANCH_NAME srpm
 
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ... ";
-./scripts/fast-build.sh x86_64 "$(find . -type f -name "*.src.rpm")"
+rpmbuild --target x86_64 --without debug --without debuginfo --without perf --without tools --rebuild "$(find . -type f -name "*.src.rpm")"
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
