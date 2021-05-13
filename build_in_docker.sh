@@ -2,12 +2,13 @@
 
 set -eu -o pipefail
 
-DOCKER_IMAGE=fedora:32
-RPMBUILD_HOST_PATH=/opt/rpmbuild
+# DOCKER_IMAGE=fedora:34
+DOCKER_IMAGE=fedora_build:34
+RPMBUILD_HOST_PATH=~/rpmbuild
 
 mkdir -p ${RPMBUILD_HOST_PATH}
 
-docker pull ${DOCKER_IMAGE}
+# docker pull ${DOCKER_IMAGE}
 docker run \
   -t \
   --rm \
