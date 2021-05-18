@@ -6,13 +6,13 @@ set -eu -o pipefail
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
 UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.11-f34}
-MBP_FEDORA_BRANCH=f33
+MBP_FEDORA_BRANCH=f34
 BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
 BCE_DRIVER_BRANCH_NAME=aur
-BCE_DRIVER_COMMIT_HASH=c884d9ca731f2118a58c28bb78202a0007935998
+BCE_DRIVER_COMMIT_HASH=f93c6566f98b3c95677de8010f7445fa19f75091
 APPLE_IB_DRIVER_GIT_URL=https://github.com/t2linux/apple-ib-drv
 APPLE_IB_DRIVER_BRANCH_NAME=mbp15
-APPLE_IB_DRIVER_COMMIT_HASH=fc9aefa5a564e6f2f2bb0326bffb0cef0446dc05    # https://github.com/roadrunner2/macbook12-spi-driver/commits/mbp15
+APPLE_IB_DRIVER_COMMIT_HASH=fc9aefa5a564e6f2f2bb0326bffb0cef0446dc05
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
@@ -45,9 +45,9 @@ fi
 
 ### Download latest kernel
 KERNEL_PACKAGES=()
-if [[ ${1-} == "--rc" ]]; then
-  MBP_KERNEL_TAG=$(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/ | grep rpm | grep 'rc' | head -n 1 | cut -d'v' -f2 | cut -d'/' -f1)
-  echo >&2 "===]> Info: Downloading latest RC kernel: ${MBP_KERNEL_TAG}";
+if [[ -n "${KERNEL_VERSION:-}" ]]; then
+  MBP_KERNEL_TAG=${KERNEL_VERSION}
+  echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
   while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG} "| grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 else
   MBP_KERNEL_TAG=$(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | cut -d'v' -f2 | cut -d'"' -f1)
