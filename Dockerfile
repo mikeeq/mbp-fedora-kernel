@@ -1,9 +1,9 @@
-FROM fedora:33
+FROM fedora:34
 
 ARG FEDORA_KERNEL_GIT_URL=https://src.fedoraproject.org/rpms/kernel.git
-ARG FEDORA_KERNEL_VERSION=5.10.21
-ARG FEDORA_KERNEL_BRANCH_NAME=f33
-ARG FEDORA_KERNEL_COMMIT_HASH=180211693ce55550e6601c73d3f5a76fd4364693      # https://src.fedoraproject.org/rpms/kernel/commits/f33
+ARG FEDORA_KERNEL_VERSION=5.11.21
+ARG FEDORA_KERNEL_BRANCH_NAME=f34
+ARG FEDORA_KERNEL_COMMIT_HASH=8b43a43382cabcf6d64266565ccc052c6e5d58a6      # https://src.fedoraproject.org/rpms/kernel/commits/f34
 
 RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip curl
 
