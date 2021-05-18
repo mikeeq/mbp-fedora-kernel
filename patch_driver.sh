@@ -8,8 +8,8 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
 APPLE_SMC_DRIVER_BRANCH_NAME=master
 APPLE_SMC_DRIVER_COMMIT_HASH=24bd246dd14c8e21decaa6e6e6644fe82490592e
-APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH=c0d492b15c227d3dfc06fbcad3335e1a5aa00ca4        # https://github.com/jamlam/mbp-16.1-linux-wifi
-APPLE_WIFI_BIGSUR_PATCH_GIT_URL=https://raw.githubusercontent.com/jamlam/mbp-16.1-linux-wifi/${APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH}/wifi-bigsur.patch
+# APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH=c0d492b15c227d3dfc06fbcad3335e1a5aa00ca4        # https://github.com/jamlam/mbp-16.1-linux-wifi
+# APPLE_WIFI_BIGSUR_PATCH_GIT_URL=https://raw.githubusercontent.com/jamlam/mbp-16.1-linux-wifi/${APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH}/wifi-bigsur.patch
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
 REPO_PWD=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -28,9 +28,9 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" ${PATCHES_DIR}/"${file##*/}"
-done < <(find linux-mbp-arch -type f -name "*patch" | grep -v iwlwifi | grep -v brcmfmac | grep -v ZEN | sort)
+done < <(find linux-mbp-arch -type f -name "*patch" | grep -v iwlwifi | grep -v ZEN | sort)
 
-### WiFi 16.2 Patch
-curl -L ${APPLE_WIFI_BIGSUR_PATCH_GIT_URL} -o ${PATCHES_DIR}/wifi-bigsur.patch
+# ### WiFi 16.2 Patch
+# curl -L ${APPLE_WIFI_BIGSUR_PATCH_GIT_URL} -o ${PATCHES_DIR}/wifi-bigsur.patch
 
 rm -rf ${TMP_DIR}
