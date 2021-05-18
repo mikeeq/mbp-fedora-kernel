@@ -7,7 +7,7 @@ set -eu -o pipefail
 ### Apple T2 drivers commit hashes
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
 APPLE_SMC_DRIVER_BRANCH_NAME=master
-APPLE_SMC_DRIVER_COMMIT_HASH=24bd246dd14c8e21decaa6e6e6644fe82490592e
+APPLE_SMC_DRIVER_COMMIT_HASH=1faa37d704798bc04104a88f620e4f55b3466de0
 APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH=c0d492b15c227d3dfc06fbcad3335e1a5aa00ca4        # https://github.com/jamlam/mbp-16.1-linux-wifi
 APPLE_WIFI_BIGSUR_PATCH_GIT_URL=https://raw.githubusercontent.com/jamlam/mbp-16.1-linux-wifi/${APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH}/wifi-bigsur.patch
 # TMP_DIR=~/temp_dir
