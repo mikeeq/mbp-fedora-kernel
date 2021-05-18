@@ -1,4 +1,4 @@
-FROM fedora:32
+FROM fedora:33
 
 ARG RELEASE_VERSION=5.6.7-f32
 
