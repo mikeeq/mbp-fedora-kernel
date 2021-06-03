@@ -31,6 +31,6 @@ while IFS= read -r file; do
 done < <(find linux-mbp-arch -type f -name "*patch" | grep -v iwlwifi | grep -v brcmfmac | grep -v ZEN | sort)
 
 ### WiFi 16.2 Patch
-curl -L ${APPLE_WIFI_BIGSUR_PATCH_GIT_URL} -o ${PATCHES_DIR}/wifi-bigsur.patch
+# curl -L ${APPLE_WIFI_BIGSUR_PATCH_GIT_URL} -o ${PATCHES_DIR}/wifi-bigsur.patch
 
 rm -rf ${TMP_DIR}
