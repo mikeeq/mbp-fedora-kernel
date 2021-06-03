@@ -35,13 +35,14 @@ then
 fi
 
 # ID number of the last patch in kernel.spec
-LPATCH_ID=$(grep ^Patch $SPECFILE | tail -n1 | awk '{ print $1 }' | sed s/Patch// | sed s/://)
+LPATCH_ID=$(grep ^Patch $SPECFILE | tail -n2 | head -n1 | awk '{ print $1 }' | sed s/Patch// | sed s/://)
 
 # ID of the next patch to be added to kernel.spec
 NPATCH_ID=$(($LPATCH_ID + 1 ))
 
 # Add patch with new id at the end of the list of patches
 sed -i "/^Patch$LPATCH_ID:\ /a#\ $DESC\nPatch$NPATCH_ID:\ $PATCH" $SPECFILE
+sed -i '/^ApplyOptionalPatch[[:space:]]p/a ApplyOptionalPatch:\ $PATCH' $SPECFILE
 
 # Add it to git
 # git add $PATCH
