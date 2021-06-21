@@ -8,14 +8,14 @@ trigger:
       - pull_request
 
 steps:
-  # - name: lint
-  #   image: alpine:3.13
-  #   pull: always
-  #   commands:
-  #     - apk add --no-cache shellcheck py-pip python3 bash
-  #     - pip3 install yamllint
-  #     - yamllint .
-  #     - shellcheck ./*.sh
+  - name: lint
+    image: alpine:3.13
+    pull: always
+    commands:
+      - apk add --no-cache shellcheck py-pip python3 bash
+      - pip3 install yamllint
+      - yamllint .
+      - shellcheck ./*.sh
 
   - name: build
     image: fedora:33

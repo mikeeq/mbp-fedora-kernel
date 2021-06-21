@@ -30,26 +30,26 @@ dnf -y builddep kernel.spec
 
 ### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file... ";
-FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} ${REPO_PWD}/patch_driver.sh
+FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/patch_driver.sh
 
 ### Apply patches
 echo >&2 "===]> Info: Applying patches... ";
-mkdir -p ${REPO_PWD}/patches
+mkdir -p "${REPO_PWD}"/patches
 while IFS= read -r file
 do
   echo "adding $file"
-  ${REPO_PWD}/patch_kernel.sh "$file"
-done < <(find ${REPO_PWD}/patches -type f -name "*.patch" | sort)
+  "${REPO_PWD}"/patch_kernel.sh "$file"
+done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name... ";
-sed -i 's/# define buildid.*/%define buildid .mbp/' ${RPMBUILD_PATH}/SPECS/kernel.spec
+sed -i 's/# define buildid.*/%define buildid .mbp/' "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ... ";
 # cd ${RPMBUILD_PATH}/SOURCES
 # rpmbuild --target x86_64 --without debug --without debuginfo --without perf --without tools --rebuild kernel-${FEDORA_KERNEL_VERSION}.src.rpm
-cd ${RPMBUILD_PATH}/SPECS
+cd "${RPMBUILD_PATH}"/SPECS
 # rpmbuild -bb --without debug --target=x86_64 kernel.spec
 rpmbuild -bb --without debug --without debuginfo --without perf --without tools --target=x86_64 kernel.spec
 rpmbuild_exitcode=$?
@@ -60,7 +60,7 @@ cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm /tmp/artifacts/
 sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 
 ### Add patches to artifacts
-cd ${REPO_PWD}
+cd "${REPO_PWD}" | exit
 zip -r patches.zip patches/
 cp -rfv patches.zip /tmp/artifacts/
 du -h /tmp/artifacts/
