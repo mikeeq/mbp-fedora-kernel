@@ -24,7 +24,8 @@ PATCH="$(basename "$PATCHDIR")"
 cd "${SOURCES_PATH}" || exit
 
 # If adding patch from outside the source tree move it to the source tree
-if ! ls ./*"$PATCH"*; then
+# shellcheck disable=SC2010
+if ! ls | grep -q "$PATCH"; then
   cp "$PATCHDIR" "$SOURCES_PATH"/
 fi
 
