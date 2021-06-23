@@ -4,13 +4,10 @@ set -eu -o pipefail
 
 cd /var/repo
 
-### Download previous versions of kernel
+### Download previous versions of kernel from running yum repo
 # wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/
-# # && wget -A xml -r http://fedora-mbp-repo.herokuapp.com/
-# # && wget -A xml.gz -r http://fedora-mbp-repo.herokuapp.com/
-# && mv -f ./fedora-mbp-repo.herokuapp.com/*.rpm ./
-# # && mv -f ./fedora-mbp-repo.herokuapp.com/repodata ./
-# && rm -rfv fedora-mbp-repo.herokuapp.com
+# mv -f ./fedora-mbp-repo.herokuapp.com/*.rpm ./
+# rm -rfv fedora-mbp-repo.herokuapp.com
 
 ### Download older version of shim
 ## shim 15.4-4 or -5 is not working on MBP 16,2
