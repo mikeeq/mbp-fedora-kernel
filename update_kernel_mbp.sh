@@ -63,7 +63,7 @@ for i in "${KERNEL_PACKAGES[@]}"; do
   curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
 done
 
-echo >&2 "===]> Info: Installing dependencies";
+echo >&2 "===]> Info: Installing dependencies...";
 dnf install -y bison elfutils-libelf-devel flex gcc openssl-devel
 
 echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
@@ -122,3 +122,5 @@ echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
 rm -rf ${KERNEL_PATCH_PATH}
 dnf autoremove -y
 dnf remove -y "$(dnf repoquery --installonly --latest-limit=-3 -q)"
+
+echo >&2 "===]> Info: Kernel update to ${MBP_KERNEL_TAG} finished successfully! ";
