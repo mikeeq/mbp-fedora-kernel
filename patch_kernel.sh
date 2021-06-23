@@ -1,14 +1,8 @@
 #!/bin/bash
 
-# Base directory is relative to where the script is.
-# BASEDIR="$(dirname "$(cd $(dirname $BASH_SOURCE[0]) && pwd)")"
-# pushd $BASEDIR > /dev/null
-# set -x
-
 RPMBUILD_PATH=${RPMBUILD_PATH:-/root/rpmbuild}
 SOURCES_PATH=${RPMBUILD_PATH}/SOURCES
 SPECS_PATH=${RPMBUILD_PATH}/SPECS
-# Kernel.spec file in the current tree
 SPECFILE="${SPECS_PATH}/kernel.spec"
 
 # Check for at least patch
@@ -18,7 +12,6 @@ if [ "$#" -lt 1 ]; then
 fi
 PATCHDIR=$1
 
-# DESC=$2
 PATCH="$(basename "$PATCHDIR")"
 
 cd "${SOURCES_PATH}" || exit
@@ -44,8 +37,3 @@ NPATCH_ID=$((LPATCH_ID + 1 ))
 sed -i "/^Patch$LPATCH_ID:\ /a#\ $DESC\nPatch$NPATCH_ID:\ $PATCH" "$SPECFILE"
 sed -i "/^ApplyOptionalPatch[[:space:]]p/i ApplyOptionalPatch\ $PATCH" "$SPECFILE"
 sed -i "s/patch_command='patch -p1 -F1 -s'/patch_command='patch -p1 -F2 -s'/g" "$SPECFILE"
-
-# Add it to git
-# git add $PATCH
-
-# popd > /dev/null

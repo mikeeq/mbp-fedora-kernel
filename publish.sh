@@ -15,7 +15,3 @@ curl https://cli-assets.heroku.com/install.sh | sh
 heroku container:login
 heroku container:push -a fedora-mbp-repo web --arg RELEASE_VERSION="${LATEST_RELEASE}"
 heroku container:release -a fedora-mbp-repo web
-
-# Docker build
-# docker build -t fedora-mbp-repo --build-arg RELEASE_VERSION=${LATEST_RELEASE} .
-# docker build -t fedora-mbp-repo  .

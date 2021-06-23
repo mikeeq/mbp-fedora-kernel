@@ -15,7 +15,7 @@ Drivers:
 ```
 ### First run
 sudo -i
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.6-f32/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.12-f34/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 update_kernel_mbp
 
@@ -37,7 +37,7 @@ Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 - integrate `roadrunner2/macbook12-spi-driver` and `MCMrARM/mbp2018-bridge-drv` drivers into kernel
 - add `kernel-headers` rpm generation
 
-> Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1
+> Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1 && Macbook Pro 16,2 13" 2020 i5
 
 ```
 Boot ROM Version:	220.270.99.0.0 (iBridge: 16.16.6571.0.0,0)

@@ -47,10 +47,7 @@ sed -i 's/# define buildid.*/%define buildid .mbp/' "${RPMBUILD_PATH}"/SPECS/ker
 
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ... ";
-# cd ${RPMBUILD_PATH}/SOURCES
-# rpmbuild --target x86_64 --without debug --without debuginfo --without perf --without tools --rebuild kernel-${FEDORA_KERNEL_VERSION}.src.rpm
 cd "${RPMBUILD_PATH}"/SPECS
-# rpmbuild -bb --without debug --target=x86_64 kernel.spec
 rpmbuild -bb --without debug --without debuginfo --without perf --without tools --target=x86_64 kernel.spec
 rpmbuild_exitcode=$?
 
@@ -60,7 +57,7 @@ cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm /tmp/artifacts/
 sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 
 ### Add patches to artifacts
-cd "${REPO_PWD}" | exit
+cd "${REPO_PWD}"
 zip -r patches.zip patches/
 cp -rfv patches.zip /tmp/artifacts/
 du -h /tmp/artifacts/
