@@ -57,7 +57,7 @@ cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm /tmp/artifacts/
 sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 
 ### Add patches to artifacts
-cd "${REPO_PWD}" | exit
+cd "${REPO_PWD}"
 zip -r patches.zip patches/
 cp -rfv patches.zip /tmp/artifacts/
 du -h /tmp/artifacts/
