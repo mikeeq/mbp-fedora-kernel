@@ -105,7 +105,7 @@ for i in efi=noruntime pcie_ports=compat modprobe.blacklist=thunderbolt; do
 done
 
 sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g" /etc/default/grub
-sed -i '/GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
+sed -i '/^GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
 
 echo >&2 "===]> Info: Rebuilding initramfs with custom drivers... ";
 depmod -a "${KERNEL_FULL_VERSION}"
