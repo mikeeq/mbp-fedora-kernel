@@ -6,7 +6,7 @@ cd /var/repo
 
 # https://koji.fedoraproject.org/koji/packageinfo?packageID=6684
 GRUB_MAIN_VERSION=2.04
-GRUB_SUFFIX_VERSION=37
+GRUB_SUFFIX_VERSION=35
 GRUB_FEDORA_VERSION=fc34
 
 ### Download previous versions of kernel
@@ -42,6 +42,9 @@ done
 for i in "${grub_pkgs_noarch[@]}"; do
   curl -Ls https://kojipkgs.fedoraproject.org//packages/grub2/"${GRUB_MAIN_VERSION}"/"${GRUB_SUFFIX_VERSION}"."${GRUB_FEDORA_VERSION}"/noarch/"${i}"-"${GRUB_MAIN_VERSION}"-"${GRUB_SUFFIX_VERSION}"."${GRUB_FEDORA_VERSION}".noarch.rpm -O
 done
+
+curl -Ls https://kojipkgs.fedoraproject.org//packages/shim/15/8/x86_64/shim-ia32-15-8.x86_64.rpm -O
+curl -Ls https://kojipkgs.fedoraproject.org//packages/shim/15/8/x86_64/shim-x64-15-8.x86_64.rpm -O
 
 ### Download RELEASE_VERSION of kernel
 for rpm in $(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/v"${RELEASE_VERSION}" -L | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1); do
