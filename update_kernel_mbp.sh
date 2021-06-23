@@ -63,10 +63,11 @@ for i in "${KERNEL_PACKAGES[@]}"; do
   curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
 done
 
+echo >&2 "===]> Info: Installing dependencies";
+dnf install -y bison elfutils-libelf-devel flex gcc openssl-devel
+
 echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
 rpm --force -i ./*.rpm
-
-[ -x "$(command -v gcc)" ] || dnf install -y gcc
 
 ### Install custom drivers
 ## BCE - Apple T2
@@ -104,6 +105,7 @@ for i in efi=noruntime pcie_ports=compat modprobe.blacklist=thunderbolt; do
 done
 
 sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g" /etc/default/grub
+sed -i '/GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
 
 echo >&2 "===]> Info: Rebuilding initramfs with custom drivers... ";
 depmod -a "${KERNEL_FULL_VERSION}"
@@ -113,7 +115,7 @@ dracut -f /boot/initramfs-"${KERNEL_FULL_VERSION}".img "${KERNEL_FULL_VERSION}"
 echo >&2 "===]> Info: Rebuilding GRUB config... ";
 curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
 chmod 755 /etc/grub.d/30_os-prober
-grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+grub2-mkconfig -o /boot/grub2/grub.cfg
 
 ### Cleanup
 echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
