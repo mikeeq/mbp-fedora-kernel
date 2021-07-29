@@ -113,7 +113,7 @@ dracut -f /boot/initramfs-"${KERNEL_FULL_VERSION}".img "${KERNEL_FULL_VERSION}"
 
 ### Suspend fix
 echo >&2 "===]> Info: Adding suspend fix... ";
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/"${UPDATE_SCRIPT_BRANCH}"/update_kernel_mbp.sh -o /lib/systemd/system-sleep/rmmod_tb.sh
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/suspend/rmmod_tb.sh -o /lib/systemd/system-sleep/rmmod_tb.sh
 chmod +x /lib/systemd/system-sleep/rmmod_tb.sh
 
 ### Grub
