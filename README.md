@@ -12,7 +12,7 @@ Drivers:
 
 ## How to update kernel-mbp
 
-```
+```bash
 ### First run
 sudo -i
 curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.13-f34-mbp16/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
@@ -22,6 +22,16 @@ update_kernel_mbp
 ### Next ones
 sudo -i
 update_kernel_mbp
+
+### Update to specific version
+#mbp 15,1/15,2
+sudo -i
+KERNEL_VERSION="5.11.20-f34-mbp15" update_kernel_mbp
+
+### Update to specific version using specific version of update script (usually don't needed, because scripts are shared between branches)
+#mbp 16,1/16,2 (differs in wifi patch)
+sudo -i
+KERNEL_VERSION="5.11.20-f34-mbp16" UPDATE_SCRIPT_BRANCH="v5.13-f34-mbp16" update_kernel_mbp
 ```
 
 ## CI status
