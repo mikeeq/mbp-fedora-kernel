@@ -28,7 +28,7 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find linux-mbp-arch -type f -name "*patch" | grep -v iwlwifi | grep -v brcmfmac | grep -v i915 | grep -v ZEN | sort)
+done < <(find linux-mbp-arch -type f -name "*patch" | grep -v iwlwifi | grep -v brcmfmac | grep -v i915 | grep -v ZEN | grep -v x86 | sort)
 
 ### WiFi 16.2 Patch
 curl -sL "${APPLE_WIFI_BIGSUR_PATCH_GIT_URL}" -o "${PATCHES_DIR}"/wifi-bigsur.patch
