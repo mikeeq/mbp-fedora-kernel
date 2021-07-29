@@ -7,6 +7,7 @@ KERNEL_PATCH_PATH=/tmp/kernel_patch
 
 [ -x "$(command -v jq)" ] || dnf install -y jq
 
+# Github API ratelimit...
 DEFAULT_BRANCH_MBP_FEDORA=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora | jq -r ".default_branch")
 DEFAULT_BRANCH_MBP_FEDORA_KERNEL=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel | jq -r ".default_branch")
 LATEST_MBP_FEDORA_KERNEL_RELEASE=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/latest | jq -r ".name")
