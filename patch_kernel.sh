@@ -36,4 +36,4 @@ NPATCH_ID=$((LPATCH_ID + 1 ))
 # Add patch with new id at the end of the list of patches
 sed -i "/^Patch$LPATCH_ID:\ /a#\ $DESC\nPatch$NPATCH_ID:\ $PATCH" "$SPECFILE"
 sed -i "/^ApplyOptionalPatch[[:space:]]p/i ApplyOptionalPatch\ $PATCH" "$SPECFILE"
-sed -i "s/patch_command='patch -p1 -F1 -s'/patch_command='patch -p1 -F2 -s'/g" "$SPECFILE"
+sed -i "s/patch_command='patch -p1 -F1 -s'/patch_command='patch -p1 -F4 -s'/g" "$SPECFILE"
