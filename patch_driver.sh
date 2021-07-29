@@ -5,11 +5,15 @@ set -eu -o pipefail
 # set -x
 
 ### Apple T2 drivers commit hashes
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
-APPLE_SMC_DRIVER_BRANCH_NAME=master
-APPLE_SMC_DRIVER_COMMIT_HASH=199a1512d80e228587852d5789e083cec281f223
-APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH=dd219cf1626bf61a91ce61377a27052562ba930e        # https://github.com/jamlam/mbp-16.1-linux-wifi
-APPLE_WIFI_BIGSUR_PATCH_GIT_URL=https://raw.githubusercontent.com/jamlam/mbp-16.1-linux-wifi/${APPLE_WIFI_BIGSUR_PATCH_GIT_COMMIT_HASH}/wifi-bigsur.patch
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/jamlam/mbp-16.1-linux-wifi
+APPLE_SMC_REPO_NAME=mbp-16.1-linux-wifi
+APPLE_SMC_DRIVER_BRANCH_NAME=main
+APPLE_SMC_DRIVER_COMMIT_HASH=46e4665e286862d76d29701a334515a77734c58f
+APPLE_WIFI_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
+APPLE_WIFI_REPO_NAME=linux-mbp-arch
+APPLE_WIFI_DRIVER_BRANCH_NAME=master
+APPLE_WIFI_DRIVER_COMMIT_HASH=199a1512d80e228587852d5789e083cec281f223
+
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
 REPO_PWD=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -22,15 +26,22 @@ mkdir -p "${PATCHES_DIR}"
 
 ### AppleSMC and BT aunali fixes
 git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
-cd linux-mbp-arch || exit
+cd "${APPLE_SMC_REPO_NAME}" || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
 cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find linux-mbp-arch -type f -name "*patch" | grep -v iwlwifi | grep -v brcmfmac | grep -v i915 | grep -v ZEN | sort)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | grep -v wifi-bigsur | sort)
 
-### WiFi 16.2 Patch
-curl -sL "${APPLE_WIFI_BIGSUR_PATCH_GIT_URL}" -o "${PATCHES_DIR}"/wifi-bigsur.patch
+### Apple WIFI fixes
+git clone --single-branch --branch ${APPLE_WIFI_DRIVER_BRANCH_NAME} ${APPLE_WIFI_DRIVER_GIT_URL}
+cd "${APPLE_WIFI_REPO_NAME}" || exit
+git checkout ${APPLE_WIFI_DRIVER_COMMIT_HASH}
+cd ..
+while IFS= read -r file; do
+  echo "adding ${file}"
+  cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
+done < <(find "${APPLE_WIFI_REPO_NAME}" -type f -name "*patch" | grep brcmfmac | sort)
 
 rm -rf "${TMP_DIR}"
