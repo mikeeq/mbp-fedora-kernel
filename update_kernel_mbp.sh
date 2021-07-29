@@ -5,7 +5,7 @@ set -eu -o pipefail
 ### Apple T2 drivers commit hashes
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.12-f34}
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.13-f34-mbp16}
 MBP_FEDORA_BRANCH=f34
 BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
 BCE_DRIVER_BRANCH_NAME=aur
@@ -110,6 +110,11 @@ sed -i '/^GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
 echo >&2 "===]> Info: Rebuilding initramfs with custom drivers... ";
 depmod -a "${KERNEL_FULL_VERSION}"
 dracut -f /boot/initramfs-"${KERNEL_FULL_VERSION}".img "${KERNEL_FULL_VERSION}"
+
+### Suspend fix
+echo >&2 "===]> Info: Adding suspend fix... ";
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/suspend/rmmod_tb.sh -o /lib/systemd/system-sleep/rmmod_tb.sh
+chmod +x /lib/systemd/system-sleep/rmmod_tb.sh
 
 ### Grub
 echo >&2 "===]> Info: Rebuilding GRUB config... ";
