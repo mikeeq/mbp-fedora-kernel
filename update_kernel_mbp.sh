@@ -5,8 +5,13 @@ set -eu -o pipefail
 ### Apple T2 drivers commit hashes
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.13-f34-mbp16}
-MBP_FEDORA_BRANCH=f34
+[ -x "$(command -v jq)" ] || dnf install -y jq
+
+DEFAULT_BRANCH_MBP_FEDORA=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora | jq -r ".default_branch")
+DEFAULT_BRANCH_MBP_FEDORA_KERNEL=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel | jq -r ".default_branch")
+LATEST_MBP_FEDORA_KERNEL_RELEASE=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/latest | jq -r ".name")
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-$DEFAULT_BRANCH_MBP_FEDORA_KERNEL}
+MBP_FEDORA_BRANCH=${MBP_FEDORA_BRANCH:-$DEFAULT_BRANCH_MBP_FEDORA}
 BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
 BCE_DRIVER_BRANCH_NAME=aur
 BCE_DRIVER_COMMIT_HASH=f93c6566f98b3c95677de8010f7445fa19f75091
@@ -48,11 +53,11 @@ KERNEL_PACKAGES=()
 if [[ -n "${KERNEL_VERSION:-}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
   echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/tags/v5.13.5-f34-mbp16 | jq -r ".assets[].name" | grep kernel)
 else
-  MBP_KERNEL_TAG=$(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | cut -d'v' -f2 | cut -d'"' -f1)
+  MBP_KERNEL_TAG=$LATEST_MBP_FEDORA_KERNEL_RELEASE
   echo >&2 "===]> Info: Downloading latest stable kernel: ${MBP_KERNEL_TAG}";
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/latest | jq -r ".assets[].name" | grep kernel)
 fi
 
 KERNEL_PACKAGE_NAME=${KERNEL_PACKAGES[0]}
@@ -60,7 +65,7 @@ TEMPVAR=${KERNEL_PACKAGE_NAME//kernel-}
 KERNEL_FULL_VERSION=${TEMPVAR//.rpm}
 
 for i in "${KERNEL_PACKAGES[@]}"; do
-  curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
+  curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/"${MBP_KERNEL_TAG}"/"${i}"
 done
 
 echo >&2 "===]> Info: Installing dependencies...";
