@@ -4,6 +4,7 @@ set -eu -o pipefail
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
+MBP_VERSION=mbp16
 FEDORA_KERNEL_VERSION=5.13.5-200.fc34      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F34
 REPO_PWD=$(pwd)
 
@@ -43,7 +44,7 @@ done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name... ";
-sed -i 's/# define buildid.*/%define buildid .mbp/' "${RPMBUILD_PATH}"/SPECS/kernel.spec
+sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ... ";
