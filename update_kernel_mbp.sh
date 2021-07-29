@@ -10,8 +10,9 @@ KERNEL_PATCH_PATH=/tmp/kernel_patch
 DEFAULT_BRANCH_MBP_FEDORA=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora | jq -r ".default_branch")
 DEFAULT_BRANCH_MBP_FEDORA_KERNEL=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel | jq -r ".default_branch")
 LATEST_MBP_FEDORA_KERNEL_RELEASE=$(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/latest | jq -r ".name")
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-$DEFAULT_BRANCH_MBP_FEDORA_KERNEL}
 MBP_FEDORA_BRANCH=${MBP_FEDORA_BRANCH:-$DEFAULT_BRANCH_MBP_FEDORA}
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-$DEFAULT_BRANCH_MBP_FEDORA_KERNEL}
+KERNEL_VERSION=${KERNEL_VERSION:-DEFAULT_BRANCH_MBP_FEDORA_KERNEL}
 BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
 BCE_DRIVER_BRANCH_NAME=aur
 BCE_DRIVER_COMMIT_HASH=f93c6566f98b3c95677de8010f7445fa19f75091
@@ -48,30 +49,23 @@ else
    echo >&2 "===]> Info: update_kernel_mbp script was installed..."
 fi
 
-### Download latest kernel
-KERNEL_PACKAGES=()
-if [[ -n "${KERNEL_VERSION:-}" ]]; then
-  MBP_KERNEL_TAG=${KERNEL_VERSION}
-  echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/tags/v5.13.5-f34-mbp16 | jq -r ".assets[].name" | grep kernel)
-else
-  MBP_KERNEL_TAG=$LATEST_MBP_FEDORA_KERNEL_RELEASE
-  echo >&2 "===]> Info: Downloading latest stable kernel: ${MBP_KERNEL_TAG}";
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/latest | jq -r ".assets[].name" | grep kernel)
-fi
+### Download kernel packages
+echo >&2 "===]> Info: Downloading mbp-fedora-kernel: ${KERNEL_VERSION}";
+KERNEL_PACKAGES=($(curl -Ls https://api.github.com/repos/mikeeq/mbp-fedora-kernel/releases/tags/${KERNEL_VERSION} | jq -r ".assets[].name" | grep kernel))
 
-KERNEL_PACKAGE_NAME=${KERNEL_PACKAGES[0]}
-TEMPVAR=${KERNEL_PACKAGE_NAME//kernel-}
+KERNEL_CORE=$(echo "${KERNEL_PACKAGES[*]}" | tr ' ' '\n' | grep kernel-core)
+KERNEL_FULL_VERSION_TEMPVAR=${KERNEL_CORE//kernel-core-}
 KERNEL_FULL_VERSION=${TEMPVAR//.rpm}
 
 for i in "${KERNEL_PACKAGES[@]}"; do
-  curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/"${MBP_KERNEL_TAG}"/"${i}"
+  echo >&2 "===]> Info: Downloading rpm: ${i}";
+  curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/"${KERNEL_VERSION}"/"${i}"
 done
 
 echo >&2 "===]> Info: Installing dependencies...";
 dnf install -y bison elfutils-libelf-devel flex gcc openssl-devel
 
-echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
+echo >&2 "===]> Info: Installing kernel version: ${KERNEL_VERSION}";
 rpm --force -i ./*.rpm
 
 ### Install custom drivers
@@ -133,4 +127,4 @@ rm -rf ${KERNEL_PATCH_PATH}
 dnf autoremove -y
 dnf remove -y "$(dnf repoquery --installonly --latest-limit=-3 -q)"
 
-echo >&2 "===]> Info: Kernel update to ${MBP_KERNEL_TAG} finished successfully! ";
+echo >&2 "===]> Info: Kernel update to ${KERNEL_VERSION} finished successfully! ";
