@@ -9,6 +9,10 @@ APPLE_SMC_DRIVER_GIT_URL=https://github.com/jamlam/mbp-16.1-linux-wifi
 APPLE_SMC_REPO_NAME=mbp-16.1-linux-wifi
 APPLE_SMC_DRIVER_BRANCH_NAME=main
 APPLE_SMC_DRIVER_COMMIT_HASH=4521ec74b7c2671d4597450d3334206b292408e9
+APPLE_WIFI_DRIVER_GIT_URL=https://github.com/aunali1/linux-mbp-arch
+APPLE_WIFI_REPO_NAME=linux-mbp-arch
+APPLE_WIFI_DRIVER_BRANCH_NAME=master
+APPLE_WIFI_DRIVER_COMMIT_HASH=9511d5ed2ae0e851dd6a82843daefb2be7d5e212
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
@@ -28,6 +32,16 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | sort)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | grep -v wifi-bigsur | grep -v brcmfmac | sort)
+
+### Apple WIFI fixes
+git clone --single-branch --branch ${APPLE_WIFI_DRIVER_BRANCH_NAME} ${APPLE_WIFI_DRIVER_GIT_URL}
+cd "${APPLE_WIFI_REPO_NAME}" || exit
+git checkout ${APPLE_WIFI_DRIVER_COMMIT_HASH}
+cd ..
+while IFS= read -r file; do
+  echo "adding ${file}"
+  cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
+done < <(find "${APPLE_WIFI_REPO_NAME}" -type f -name "*patch" | grep brcmfmac | sort)
 
 rm -rf "${TMP_DIR}"
