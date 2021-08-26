@@ -43,17 +43,26 @@ else
    echo >&2 "===]> Info: update_kernel_mbp script was installed..."
 fi
 
-### Download latest kernel
+### Download kernel packages
 KERNEL_PACKAGES=()
-if [[ -n "${KERNEL_VERSION:-}" ]]; then
+
+CURRENT_KERNEL_VERSION=$(uname -r)
+echo >&2 "===]> Info: Current kernel version: ${CURRENT_KERNEL_VERSION}";
+
+if [[ -n "${KERNEL_VERSION}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
   echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 else
-  MBP_KERNEL_TAG=$(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | cut -d'v' -f2 | cut -d'"' -f1)
-  echo >&2 "===]> Info: Downloading latest stable kernel: ${MBP_KERNEL_TAG}";
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+  if echo "${CURRENT_KERNEL_VERSION}" | grep mbp15; then
+    MBP_VERSION=mbp15
+  else
+    MBP_VERSION=mbp16
+  fi
+  MBP_KERNEL_TAG=$(curl -Ls https://github.com/mikeeq/mbp-fedora-kernel/releases/ | grep rpm | grep download | grep "${MBP_VERSION}" | cut -d'/' -f6 | head -n1 | cut -d'v' -f2)
+  echo >&2 "===]> Info: Downloading latest ${MBP_VERSION} kernel: ${MBP_KERNEL_TAG}";
 fi
+
+while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 
 KERNEL_PACKAGE_NAME=${KERNEL_PACKAGES[0]}
 TEMPVAR=${KERNEL_PACKAGE_NAME//kernel-}
