@@ -42,8 +42,8 @@ KERNEL_VERSION="5.13.10-f34-mbp16" UPDATE_SCRIPT_BRANCH="v5.13-f34-mbp16" update
 Drone kernel build status:
 [![Build Status](https://cloud.drone.io/api/badges/mikeeq/mbp-fedora-kernel/status.svg)](https://cloud.drone.io/mikeeq/mbp-fedora-kernel)
 
-Travis kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
-[![Publish Status](https://travis-ci.com/mikeeq/mbp-fedora-kernel.svg?branch=master)](https://travis-ci.com/mikeeq/mbp-fedora-kernel)
+Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
+[![Publish Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml)
 
 ## TODO
 
