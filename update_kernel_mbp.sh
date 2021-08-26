@@ -50,7 +50,7 @@ CURRENT_KERNEL_VERSION=$(uname -r)
 echo >&2 "===]> Info: Current kernel version: ${CURRENT_KERNEL_VERSION}";
 
 if [[ -n "${KERNEL_VERSION:-}" ]]; then
-  MBP_KERNEL_TAG=${KERNEL_VERSION}
+  MBP_KERNEL_TAG=${KERNEL_VERSION:-}
   echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
 else
   if echo "${CURRENT_KERNEL_VERSION}" | grep mbp15; then
