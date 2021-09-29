@@ -34,6 +34,6 @@ while IFS= read -r file; do
 done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | sort)
 
 ### BT Patch
-curl -sL "${APPLE_BT_PATCH_GIT_URL}" -o "${PATCHES_DIR}"/wifi-bigsur.patch
+curl -sL "${APPLE_BT_PATCH_GIT_URL}" -o "${PATCHES_DIR}"/"${APPLE_BT_PATCH_GIT_FILENAME}"
 
 rm -rf "${TMP_DIR}"
