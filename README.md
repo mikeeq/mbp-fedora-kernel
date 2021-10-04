@@ -26,15 +26,15 @@ update_kernel_mbp
 ### Update to specific version of kernel
 # mbp 15,1/15,2
 sudo -i
-KERNEL_VERSION="5.13.10-f34-mbp15" update_kernel_mbp
+KERNEL_VERSION="5.14.9-f34-mbp15" update_kernel_mbp
 # mbp 16,1/16,2 (differs in wifi patch)
 sudo -i
-KERNEL_VERSION="5.13.10-f34-mbp16" update_kernel_mbp
+KERNEL_VERSION="5.14.9-f34-mbp16" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 sudo -i
-KERNEL_VERSION="5.13.10-f34-mbp16" UPDATE_SCRIPT_BRANCH="v5.13-f34-mbp16" update_kernel_mbp
+KERNEL_VERSION="5.14.9-f34-mbp16" UPDATE_SCRIPT_BRANCH="v5.14-f34-mbp16" update_kernel_mbp
 ```
 
 ## CI status
