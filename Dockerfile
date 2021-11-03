@@ -1,4 +1,4 @@
-FROM fedora:33
+FROM fedora:35
 
 ARG RPMBUILD_PATH=/root/rpmbuild
 ARG FEDORA_KERNEL_VERSION=5.14.14-300.fc35      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F35
