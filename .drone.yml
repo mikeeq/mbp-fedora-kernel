@@ -9,7 +9,7 @@ trigger:
 
 steps:
   - name: lint
-    image: alpine:3.13
+    image: alpine:3.14
     pull: always
     commands:
       - apk add --no-cache shellcheck py-pip python3 bash

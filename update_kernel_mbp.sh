@@ -5,14 +5,14 @@ set -eu -o pipefail
 ### Apple T2 drivers commit hashes
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.13-f34-mbp16}
-MBP_FEDORA_BRANCH=f34
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.14-f35}
+MBP_FEDORA_BRANCH=f35
 BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
 BCE_DRIVER_BRANCH_NAME=aur
 BCE_DRIVER_COMMIT_HASH=f93c6566f98b3c95677de8010f7445fa19f75091
 APPLE_IB_DRIVER_GIT_URL=https://github.com/t2linux/apple-ib-drv
 APPLE_IB_DRIVER_BRANCH_NAME=mbp15
-APPLE_IB_DRIVER_COMMIT_HASH=fc9aefa5a564e6f2f2bb0326bffb0cef0446dc05
+APPLE_IB_DRIVER_COMMIT_HASH=d8411ad1d87db8491e53887e36c3d37f445203eb
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
@@ -53,11 +53,7 @@ if [[ -n "${KERNEL_VERSION:-}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
   echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
 else
-  if echo "${CURRENT_KERNEL_VERSION}" | grep mbp15; then
-    MBP_VERSION=mbp15
-  else
-    MBP_VERSION=mbp16
-  fi
+  MBP_VERSION=mbp
   MBP_KERNEL_TAG=$(curl -Ls https://github.com/mikeeq/mbp-fedora-kernel/releases/ | grep rpm | grep download | grep "${MBP_VERSION}" | cut -d'/' -f6 | head -n1 | cut -d'v' -f2)
   echo >&2 "===]> Info: Downloading latest ${MBP_VERSION} kernel: ${MBP_KERNEL_TAG}";
 fi
