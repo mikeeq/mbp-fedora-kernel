@@ -25,12 +25,12 @@ update_kernel_mbp
 
 ### Update to specific version of kernel
 sudo -i
-KERNEL_VERSION="5.14.14-f35" update_kernel_mbp
+KERNEL_VERSION="5.15.5-f35" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 sudo -i
-KERNEL_VERSION="5.14.14-f35" UPDATE_SCRIPT_BRANCH="v5.14-f35" update_kernel_mbp
+KERNEL_VERSION="5.15.5-f35" UPDATE_SCRIPT_BRANCH="v5.15-f35" update_kernel_mbp
 ```
 
 ## CI status
