@@ -8,7 +8,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/jamlam/mbp-16.1-linux-wifi
 APPLE_SMC_REPO_NAME=mbp-16.1-linux-wifi
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=911efd340fd956e927f480d9b565c29f4f947d5b
+APPLE_SMC_DRIVER_COMMIT_HASH=edeb47a4363d3647ea543738b27f3962ff245197
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
