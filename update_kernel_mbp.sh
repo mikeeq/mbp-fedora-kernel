@@ -100,6 +100,15 @@ rm -rf /etc/modules-load.d/bce.conf
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce\napple_ibridge\napple_ib_tb' > /etc/modules-load.d/apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > /etc/dracut.conf
 
+GRUB_CMDLINE_VALUE=$(grep -v '#' /etc/default/grub | grep -w GRUB_CMDLINE_LINUX | cut -d'"' -f2)
+
+for i in efi=noruntime pcie_ports=compat; do
+  if ! echo "$GRUB_CMDLINE_VALUE" | grep -w $i; then
+   GRUB_CMDLINE_VALUE="$GRUB_CMDLINE_VALUE $i"
+  fi
+done
+
+sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g" /etc/default/grub
 sed -i '/^GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
 
 echo >&2 "===]> Info: Rebuilding initramfs with custom drivers... ";
