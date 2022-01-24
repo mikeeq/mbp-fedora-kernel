@@ -2,6 +2,7 @@
 name: Update yum repo on heroku
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
