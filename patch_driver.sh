@@ -28,7 +28,7 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | grep -v 900 | grep -v intel-lpss.patch | sort)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | grep -v 9001 | grep -v intel-lpss.patch | sort)
 
 ### Download EFI NVRAM patch
 curl -L https://raw.githubusercontent.com/jamlam/mbp-16.1-linux-wifi/main/efi.patch -o "${PATCHES_DIR}"/efi.patch
