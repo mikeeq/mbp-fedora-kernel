@@ -28,6 +28,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | grep -v 9001 | grep -v intel-lpss.patch | sort)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | grep -v efi | sort)
 
 rm -rf "${TMP_DIR}"
