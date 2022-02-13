@@ -8,7 +8,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/jamlam/mbp-16.1-linux-wifi
 APPLE_SMC_REPO_NAME=mbp-16.1-linux-wifi
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=edeb47a4363d3647ea543738b27f3962ff245197
+APPLE_SMC_DRIVER_COMMIT_HASH=6ca55fd96abf9fb47338f52cdd44659c0b3ef935
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
@@ -30,8 +30,4 @@ while IFS= read -r file; do
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
 done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v ZEN | grep -v 9001 | grep -v intel-lpss.patch | sort)
 
-# Add EFI NVRAM patch from newer commit
-curl -L https://raw.githubusercontent.com/jamlam/mbp-16.1-linux-wifi/6ca55fd96abf9fb47338f52cdd44659c0b3ef935/efi.patch -o "${PATCHES_DIR}"/efi.patch
-# Add 4010-HID-apple-Add-ability-to-use-numbers-as-function-key.patch from @Redecorating
-curl -L https://raw.githubusercontent.com/Redecorating/mbp-16.1-linux-wifi/62f304f30baa1975ac8623aaf00e6847bfa4f249/4010-HID-apple-Add-ability-to-use-numbers-as-function-key.patch -o "${PATCHES_DIR}"/4010-tb.patch
 rm -rf "${TMP_DIR}"
