@@ -97,7 +97,7 @@ cp -rfv ./*.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
 ### Add custom drivers to be loaded at boot
 echo >&2 "===]> Info: Setting up GRUB to load custom drivers at boot... ";
 rm -rf /etc/modules-load.d/bce.conf
-echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce\napple_ibridge\napple_ib_tb' > /etc/modules-load.d/apple_bce.conf
+echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > /etc/modules-load.d/apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > /etc/dracut.conf
 
 GRUB_CMDLINE_VALUE=$(grep -v '#' /etc/default/grub | grep -w GRUB_CMDLINE_LINUX | cut -d'"' -f2)
