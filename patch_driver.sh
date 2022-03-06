@@ -8,7 +8,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/AdityaGarg8/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=61c18f18bd1628ec6178993bf85ff288002f092f
+APPLE_SMC_DRIVER_COMMIT_HASH=67c47fa05cc07a64e5f83f93ca837e7011ba79d9
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
