@@ -10,9 +10,6 @@ MBP_FEDORA_BRANCH=f35
 BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
 BCE_DRIVER_BRANCH_NAME=aur
 BCE_DRIVER_COMMIT_HASH=f93c6566f98b3c95677de8010f7445fa19f75091
-APPLE_IB_DRIVER_GIT_URL=https://github.com/Redecorating/apple-ib-drv
-APPLE_IB_DRIVER_BRANCH_NAME=mbp15
-APPLE_IB_DRIVER_COMMIT_HASH=467df9b11cb55456f0365f40dd11c9e666623bf3
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
