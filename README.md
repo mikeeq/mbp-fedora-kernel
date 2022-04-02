@@ -25,13 +25,13 @@ update_kernel_mbp
 
 ### Update to specific version of kernel
 sudo -i
-KERNEL_VERSION="5.16.8-f35" update_kernel_mbp
+KERNEL_VERSION="5.17.1-f35" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
-KERNEL_VERSION="5.16.8-f35" UPDATE_SCRIPT_BRANCH="v5.16-f35" update_kernel_mbp
+KERNEL_VERSION="5.17.1-f35" UPDATE_SCRIPT_BRANCH="v5.17-f35" update_kernel_mbp
 ```
 
 ## CI status
@@ -58,8 +58,7 @@ macOS Mojave: 10.14.6 (18G103)
 
 - Dynamic audio input/output change (on connecting/disconnecting headphones jack)
 - TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
-- Thunderbolt (is disabled, because driver was causing kernel panics (not tested with 5.5 kernel))
-- Microphone (it's recognised with new apple t2 sound driver, but there is a low mic volume amp)
+- Microphone (it's recognized with new apple t2 sound driver, but there is a low mic volume amp)
 
 #### Working with upstream stable kernel 5.1
 
