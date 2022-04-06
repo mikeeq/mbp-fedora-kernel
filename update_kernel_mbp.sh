@@ -130,6 +130,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
 rm -rf ${KERNEL_PATCH_PATH}
 dnf autoremove -y
-dnf remove -y "$(dnf repoquery --installonly --latest-limit=-3 -q)"
+# shellcheck disable=SC2046
+dnf remove -y $(dnf repoquery --installonly --latest-limit=-3 -q)
 
 echo >&2 "===]> Info: Kernel update to ${MBP_KERNEL_TAG} finished successfully! ";
