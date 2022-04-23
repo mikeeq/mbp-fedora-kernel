@@ -47,7 +47,7 @@ echo >&2 "===]> Info: Setting kernel name... ";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
 ### Import rpm siging keys
-cat $RPM_SIGING_KEY > ./rpm_siging_key
+cat $RPM_SIGNING_KEY > ./rpm_signing_key
 sudo rpm --import ./rpm_signing_key
 
 ### Build non-debug rpms
