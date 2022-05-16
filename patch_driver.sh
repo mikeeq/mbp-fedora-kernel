@@ -8,7 +8,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/AdityaGarg8/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=4c5599994a8e05f6c935862b1b18bac9a2a86c5a
+APPLE_SMC_DRIVER_COMMIT_HASH=7618e312f014de761fe35940f24097ab3b962d8d
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
@@ -28,6 +28,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v 1001 | grep -v 1002 | sort)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | sort)
 
 rm -rf "${TMP_DIR}"

@@ -7,12 +7,12 @@ KERNEL_PATCH_PATH=/tmp/kernel_patch
 
 UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.17-f36}
 MBP_FEDORA_BRANCH=f36
-BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
-BCE_DRIVER_BRANCH_NAME=aur
-BCE_DRIVER_COMMIT_HASH=f93c6566f98b3c95677de8010f7445fa19f75091
-APPLE_IB_DRIVER_GIT_URL=https://github.com/Redecorating/apple-ib-drv
-APPLE_IB_DRIVER_BRANCH_NAME=mbp15
-APPLE_IB_DRIVER_COMMIT_HASH=467df9b11cb55456f0365f40dd11c9e666623bf3
+# BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
+# BCE_DRIVER_BRANCH_NAME=aur
+# BCE_DRIVER_COMMIT_HASH=f93c6566f98b3c95677de8010f7445fa19f75091
+# APPLE_IB_DRIVER_GIT_URL=https://github.com/Redecorating/apple-ib-drv
+# APPLE_IB_DRIVER_BRANCH_NAME=mbp15
+# APPLE_IB_DRIVER_COMMIT_HASH=467df9b11cb55456f0365f40dd11c9e666623bf3
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
@@ -74,25 +74,25 @@ dnf install -y bison elfutils-libelf-devel flex gcc openssl-devel
 echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
 rpm --force -i ./*.rpm
 
-### Install custom drivers
-## BCE - Apple T2
-echo >&2 "===]> Info: Downloading BCE driver... ";
-git clone --depth 1 --single-branch --branch "${BCE_DRIVER_BRANCH_NAME}" "${BCE_DRIVER_GIT_URL}" ./bce
-cd bce || exit
-git checkout "${BCE_DRIVER_COMMIT_HASH}"
+# ### Install custom drivers
+# ## BCE - Apple T2
+# echo >&2 "===]> Info: Downloading BCE driver... ";
+# git clone --depth 1 --single-branch --branch "${BCE_DRIVER_BRANCH_NAME}" "${BCE_DRIVER_GIT_URL}" ./bce
+# cd bce || exit
+# git checkout "${BCE_DRIVER_COMMIT_HASH}"
 
-make -C /lib/modules/"${KERNEL_FULL_VERSION}"/build/ M="$(pwd)" modules
-cp -rfv ./*.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
-cd ..
+# make -C /lib/modules/"${KERNEL_FULL_VERSION}"/build/ M="$(pwd)" modules
+# cp -rfv ./*.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
+# cd ..
 
-## Touchbar
-echo >&2 "===]> Info: Downloading Touchbar driver... ";
-git clone --single-branch --branch ${APPLE_IB_DRIVER_BRANCH_NAME} ${APPLE_IB_DRIVER_GIT_URL} ./touchbar
-cd touchbar || exit
-git checkout ${APPLE_IB_DRIVER_COMMIT_HASH}
+# ## Touchbar
+# echo >&2 "===]> Info: Downloading Touchbar driver... ";
+# git clone --single-branch --branch ${APPLE_IB_DRIVER_BRANCH_NAME} ${APPLE_IB_DRIVER_GIT_URL} ./touchbar
+# cd touchbar || exit
+# git checkout ${APPLE_IB_DRIVER_COMMIT_HASH}
 
-make -C /lib/modules/"${KERNEL_FULL_VERSION}"/build/ M="$(pwd)" modules
-cp -rfv ./*.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
+# make -C /lib/modules/"${KERNEL_FULL_VERSION}"/build/ M="$(pwd)" modules
+# cp -rfv ./*.ko /lib/modules/"${KERNEL_FULL_VERSION}"/extra
 
 ### Add custom drivers to be loaded at boot
 echo >&2 "===]> Info: Setting up GRUB to load custom drivers at boot... ";
