@@ -5,7 +5,7 @@ set -eu -o pipefail
 ### Apple T2 drivers commit hashes
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.17-f36}
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.18-f36}
 MBP_FEDORA_BRANCH=f36
 BCE_DRIVER_GIT_URL=https://github.com/t2linux/apple-bce-drv
 BCE_DRIVER_BRANCH_NAME=aur
