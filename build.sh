@@ -38,7 +38,7 @@ echo >&2 "===]> Info: Applying patches...";
 mkdir -p "${REPO_PWD}"/patches
 while IFS= read -r file
 do
-  echo "adding $file"
+  echo >&2 "===]> Info: Applying patch: $file"
   "${REPO_PWD}"/patch_kernel.sh "$file"
 done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 

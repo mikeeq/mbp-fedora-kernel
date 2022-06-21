@@ -1,4 +1,4 @@
-FROM fedora:33
+FROM fedora:36
 
 ARG RPMBUILD_PATH=/root/rpmbuild
 ARG FEDORA_KERNEL_VERSION=5.18.5-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
