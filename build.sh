@@ -36,11 +36,12 @@ FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/patch_driver.sh
 ### Apply patches
 echo >&2 "===]> Info: Applying patches... ";
 mkdir -p "${REPO_PWD}"/patches
-while IFS= read -r file
-do
-  echo "adding $file"
-  "${REPO_PWD}"/patch_kernel.sh "$file"
-done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
+
+while IFS= read -r file; do
+  echo "==> Adding $file"
+  patch -p1 <"$file"
+  echo "done!"
+done < <(find "${WORKING_PATH}/patches" -type f -name "*.patch" | sort)
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name... ";

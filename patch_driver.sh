@@ -24,10 +24,11 @@ mkdir -p "${PATCHES_DIR}"
 git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
 cd "${APPLE_SMC_REPO_NAME}" || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
+
 cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | grep -vE '000[0-9]')
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
 
 rm -rf "${TMP_DIR}"
