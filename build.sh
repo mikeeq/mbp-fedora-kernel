@@ -30,11 +30,11 @@ cd ${RPMBUILD_PATH}/SPECS
 dnf -y builddep kernel.spec
 
 ### Create patch file with custom drivers
-echo >&2 "===]> Info: Creating patch file... ";
+echo >&2 "===]> Info: Creating patch file...";
 FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/patch_driver.sh
 
 ### Apply patches
-echo >&2 "===]> Info: Applying patches... ";
+echo >&2 "===]> Info: Applying patches...";
 mkdir -p "${REPO_PWD}"/patches
 while IFS= read -r file
 do
@@ -42,18 +42,22 @@ do
   "${REPO_PWD}"/patch_kernel.sh "$file"
 done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 
+echo >&2 "===]> Info: Applying kconfig changes... ";
+echo "CONFIG_APPLE_BCE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
+echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
+
 ### Change buildid to mbp
-echo >&2 "===]> Info: Setting kernel name... ";
+echo >&2 "===]> Info: Setting kernel name...";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
 ### Build non-debug rpms
-echo >&2 "===]> Info: Bulding kernel ... ";
+echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
 rpmbuild -bb --without debug --without debuginfo --without perf --without tools --target=x86_64 kernel.spec
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
-echo >&2 "===]> Info: Copying rpms and calculating SHA256 ... ";
+echo >&2 "===]> Info: Copying rpms and calculating SHA256 ...";
 cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm /tmp/artifacts/
 sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > /tmp/artifacts/sha256
 
