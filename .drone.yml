@@ -9,7 +9,8 @@ trigger:
 
 steps:
   - name: lint
-    image: alpine:3.14
+    # https://hub.docker.com/_/alpine
+    image: alpine:3.16
     pull: always
     commands:
       - apk add --no-cache shellcheck py-pip python3 bash
@@ -18,7 +19,7 @@ steps:
       - shellcheck ./*.sh
 
   - name: build
-    image: fedora:33
+    image: fedora:36
     pull: always
     volumes:
       - name: build-artifacts
