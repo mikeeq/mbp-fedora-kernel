@@ -5,10 +5,10 @@ set -eu -o pipefail
 # set -x
 
 ### Apple T2 drivers commit hashes
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/AdityaGarg8/linux-t2-patches
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/zeroday0619/linux-t2-patches.git
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=5a8e5727ad1deaacc27b0b0936c0d8f05c91179e
+APPLE_SMC_DRIVER_COMMIT_HASH=8fc5876637f79fbe20db09c95cb0300d75ed4475
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
@@ -28,6 +28,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*patch" | grep -v 1001 | grep -v 1002 | greep -v 1003 | sort)
+done < <(find "${APPLE_SMC_REPO_NAME}"-type f -name "*.patch" | grep -vE '000[0-9]')
 
 rm -rf "${TMP_DIR}"
