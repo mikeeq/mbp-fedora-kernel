@@ -41,7 +41,7 @@ while IFS= read -r file; do
   echo "==> Adding $file"
   patch -p1 <"$file"
   echo "done!"
-done < <(find "${WORKING_PATH}/patches" -type f -name "*.patch" | sort)
+done < <(find "${REPO_PWD}/patches" -type f -name "*.patch" | sort)
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name... ";
