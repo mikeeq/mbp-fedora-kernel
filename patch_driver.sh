@@ -24,7 +24,7 @@ mkdir -p "${PATCHES_DIR}"
 git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
 cd "${APPLE_SMC_REPO_NAME}" || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
-
+rm 100*
 cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
