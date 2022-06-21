@@ -54,10 +54,6 @@ fi
 
 while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 
-KERNEL_PACKAGE_NAME=${KERNEL_PACKAGES[0]}
-TEMPVAR=${KERNEL_PACKAGE_NAME//kernel-}
-KERNEL_FULL_VERSION=${TEMPVAR//.rpm}
-
 for i in "${KERNEL_PACKAGES[@]}"; do
   curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
 done

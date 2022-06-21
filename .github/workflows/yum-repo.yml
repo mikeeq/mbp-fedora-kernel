@@ -1,6 +1,7 @@
 ---
 name: Update yum repo on heroku
 
+# yamllint disable-line rule:truthy
 on:
   workflow_dispatch:
   push:
