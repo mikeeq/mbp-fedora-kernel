@@ -37,3 +37,6 @@ NPATCH_ID=$((LPATCH_ID + 1 ))
 sed -i "/^Patch$LPATCH_ID:\ /a#\ $DESC\nPatch$NPATCH_ID:\ $PATCH" "$SPECFILE"
 sed -i "/^ApplyOptionalPatch[[:space:]]p/i ApplyOptionalPatch\ $PATCH" "$SPECFILE"
 sed -i "s/patch_command='patch -p1 -F1 -s'/patch_command='patch -p1 -F2 -s'/g" "$SPECFILE"
+
+echo "CONFIG_APPLE_BCE=m" > "${SPECS_PATH}/kernel.local"
+echo "CONFIG_APPLE_IBRIDGE=m" > "${SPECS_PATH}/kernel.local"
