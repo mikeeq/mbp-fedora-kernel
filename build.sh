@@ -39,7 +39,7 @@ mkdir -p "${REPO_PWD}"/patches
 
 while IFS= read -r file; do
   echo "==> Adding $file"
-  patch -Np1 <"$file"
+  patch -Np0 <"$file"
   echo "done!"
 done < <(find "${REPO_PWD}/patches" -type f -name "*.patch" | sort)
 
