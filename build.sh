@@ -58,14 +58,14 @@ rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying rpms and calculating SHA256 ...";
+cd "${REPO_PWD}"
 mkdir -p ./output_zip
 cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm ./output_zip/
 sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > ./output_zip/sha256
 
 ### Add patches to artifacts
-cd "${REPO_PWD}"
 zip -r patches.zip patches/
-cp -rfv patches.zip ./output_zip/patches.zip
+cp -rfv patches.zip ./output_zip/
 du -h ./output_zip/
 
 exit $rpmbuild_exitcode
