@@ -1,6 +1,7 @@
 ---
 name: Build Fedora Kernel
 
+# yamllint disable-line rule:truthy
 on: [push]
 
 jobs:
