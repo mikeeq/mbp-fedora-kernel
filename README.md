@@ -2,13 +2,10 @@
 
 Fedora kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
 
-Fedora ISO (with mbp-fedora-kernel builtin) - <https://github.com/mikeeq/mbp-fedora>
+Fedora ISO (with mbp-fedora-kernel builtin): <https://github.com/mikeeq/mbp-fedora>
 
-Drivers:
+Kernel patches: <https://github.com/AdityaGarg8/linux-t2-patches>
 
-- Apple T2 (audio, keyboard, touchpad) - <https://github.com/MCMrARM/mbp2018-bridge-drv>
-- Apple SMC - <https://github.com/MCMrARM/mbp2018-etc>
-- Touchbar - <https://github.com/roadrunner2/macbook12-spi-driver/tree/mbp15>
 
 ## How to update kernel-mbp
 
@@ -44,7 +41,6 @@ Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 ## TODO
 
-- integrate `roadrunner2/macbook12-spi-driver` and `MCMrARM/mbp2018-bridge-drv` drivers into kernel
 - add `kernel-headers` rpm generation
 
 > Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1 && Macbook Pro 16,2 13" 2020 i5
@@ -56,34 +52,32 @@ macOS Mojave: 10.14.6 (18G103)
 
 ### Known issues
 
-- Dynamic audio input/output change (on connecting/disconnecting headphones jack)
 - TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
-- Microphone (it's recognized with new apple t2 sound driver, but there is a low mic volume amp)
+- Audio
+  - Dynamic audio input/output change (on connecting/disconnecting headphones jack)
+    - manual switch works, see here: <https://github.com/mikeeq/mbp-fedora#todo>
+  - Microphone (it's recognized with new apple t2 sound driver, but there is a low mic volume amp)
 
-#### Working with upstream stable kernel 5.1
+#### Working with upstream stable kernel 5.18
 
 - Display/Screen
 - USB-C
 - Battery/AC
 - Ethernet/Video USB-C adapters
 - Bluetooth
+- NVMe
+- Camera
 
 #### Working with mbp-fedora-kernel
 
-- NVMe
-- Camera
-- keyboard
-- touchpad (scroll, right click)
-- wifi (see <https://wiki.t2linux.org/guides/wifi/>)
-
-#### Working with external drivers
-
->> with @MCMrARM mbp2018-bridge-drv
-
-- keyboard
-- touchpad
-- touchbar
-- audio
+- with builtin BCE driver
+  - Audio
+  - Keyboard
+  - Touchpad (scroll, right click)
+- with builtin iBridge driver
+  - MacBook Pro Touch Bar
+    - If there's an issue with Touch Bar startup on Linux I recommend to install Win10 and boot it once a while to initialize Touch Bar using BootCamp driver, it seems to fix the issue
+- WiFi (see <https://wiki.t2linux.org/guides/wifi/>)
 
 #### Not tested
 
@@ -116,6 +110,7 @@ macOS Mojave: 10.14.6 (18G103)
 - Kernel patches (all are mentioned in github issue above): <https://github.com/aunali1/linux-mbp-arch>
 - ArchLinux kernel patches: <https://github.com/ppaulweber/linux-mba>
 - hid-apple-patched module for changing mappings of ctrl, fn, option keys: <https://github.com/free5lot/hid-apple-patched>
+- AdityaGarg8 kernel patches: <https://github.com/AdityaGarg8/linux-t2-patches>
 
 ## Credits
 
@@ -124,3 +119,4 @@ macOS Mojave: 10.14.6 (18G103)
 - @roadrunner2 - thanks for SPI (touchbar) driver
 - @aunali1 - thanks for ArchLinux Kernel CI
 - @ppaulweber - thanks for keyboard and Macbook Air patches
+- @AdityaGarg8 - thanks for support and upkeeping kernel patches
