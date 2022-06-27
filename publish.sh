@@ -3,7 +3,7 @@
 set -eu -o pipefail
 
 # export HEROKU_API_KEY=
-LATEST_RELEASE=$(curl -s https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | cut -d'v' -f2 | cut -d'"' -f1)
+LATEST_RELEASE=$(curl -Is https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i 'location:' | cut -f2 -d'v' | cut -f1 -d'"' | tr '\r' '\n')
 
 echo "Release: ${LATEST_RELEASE}"
 
