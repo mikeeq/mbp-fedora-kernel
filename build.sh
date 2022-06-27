@@ -42,9 +42,9 @@ do
   "${REPO_PWD}"/patch_kernel.sh "$file"
 done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 
-# echo >&2 "===]> Info: Applying kconfig changes... ";
-# echo "CONFIG_APPLE_BCE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
-# echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
+echo >&2 "===]> Info: Applying kconfig changes... ";
+echo "CONFIG_APPLE_BCE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
+echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name...";
@@ -66,6 +66,6 @@ sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > ./output_zip/sha256
 ### Add patches to artifacts
 zip -r patches.zip patches/
 cp -rfv patches.zip ./output_zip/
-du -h ./output_zip/
+du -sh ./output_zip/*.rpm
 
 exit $rpmbuild_exitcode
