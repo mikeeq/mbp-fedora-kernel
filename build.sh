@@ -53,7 +53,7 @@ sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
-rpmbuild -bb --without debug --without debuginfo --without perf --without tools --target=x86_64 kernel.spec
+rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
