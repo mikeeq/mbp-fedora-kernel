@@ -77,7 +77,8 @@ macOS Mojave: 10.14.6 (18G103)
 - with builtin iBridge driver
   - MacBook Pro Touch Bar
     - If there's an issue with Touch Bar startup on Linux I recommend to install Win10 and boot it once a while to initialize Touch Bar using BootCamp driver, it seems to fix the issue
-- WiFi (see <https://wiki.t2linux.org/guides/wifi/>)
+- WiFi
+  - to make it working, you need to grab closed source Broadcom WiFi firmware from MacOS and put it under `/lib/firmware/brcm/` in Linux OS, see <https://wiki.t2linux.org/guides/wifi/>
 
 #### Not tested
 
