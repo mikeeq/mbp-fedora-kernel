@@ -66,6 +66,9 @@ sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > ./output_zip/sha256
 ### Add patches to artifacts
 zip -r patches.zip patches/
 cp -rfv patches.zip ./output_zip/
+echo
+du -sh ./output_zip
+echo
 du -sh ./output_zip/*.rpm
 
 exit $rpmbuild_exitcode
