@@ -1,2 +1,4 @@
 kernel
-patches/custom-drivers.patch
+patches
+output_zip
+patches.zip
