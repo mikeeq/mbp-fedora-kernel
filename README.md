@@ -6,6 +6,12 @@ Fedora ISO (with mbp-fedora-kernel builtin): <https://github.com/mikeeq/mbp-fedo
 
 Kernel patches: <https://github.com/AdityaGarg8/linux-t2-patches>
 
+> Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1 && Macbook Pro 16,2 13" 2020 i5
+
+```
+Boot ROM Version:	220.270.99.0.0 (iBridge: 16.16.6571.0.0,0)
+macOS Mojave: 10.14.6 (18G103)
+```
 
 ## How to update kernel-mbp
 
@@ -41,14 +47,10 @@ Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 ## TODO
 
-- add `kernel-headers` rpm generation
-
-> Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1 && Macbook Pro 16,2 13" 2020 i5
-
-```
-Boot ROM Version:	220.270.99.0.0 (iBridge: 16.16.6571.0.0,0)
-macOS Mojave: 10.14.6 (18G103)
-```
+- add `kernel-headers` RPM generation
+- remove a need for update_kernel_mbp script
+  - revert `GRUB_ENABLE_BLSCFG=false` change
+- add RPM packages signing
 
 ### Known issues
 
@@ -84,6 +86,12 @@ macOS Mojave: 10.14.6 (18G103)
 
 - eGPU
 - Thunderbolt
+
+## How to build mbp-fedora-kernel
+
+1. Make sure that Docker is installed and running correctly on your machine
+2. Clone repo
+3. Run `./build_in_docker.sh`
 
 ## Docs
 
