@@ -54,6 +54,7 @@ sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}
 echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
 rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
+rpmbuild -bb --without debug --without debuginfo --target=x86_64 t2linux.spec
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
