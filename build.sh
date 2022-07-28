@@ -16,7 +16,7 @@ echo "CPU threads: $(nproc --all)"
 grep 'model name' /proc/cpuinfo | uniq
 
 ### Dependencies
-dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip curl dwarves libbpf
+dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip curl dwarves libbpf rpm-sign
 
 ## Set home build directory
 rpmdev-setuptree
@@ -50,17 +50,33 @@ echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 echo >&2 "===]> Info: Setting kernel name...";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
-### Import rpm siging keys
-echo "$RPM_SIGNING_KEY" | base64 -d > ./rpm_signing_key
-rpm --import ./rpm_signing_key
-rm -rfv ./rpm_signing_key
-
-### Build non-debug rpms
+### Build non-debug kernel rpms
 echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
-rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 --sign kernel.spec
+rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
 rpmbuild_exitcode=$?
-# rpmbuild -bb --without debug --without debuginfo --target=x86_64 --sign yum-repo/mbp-fedora-t2-config.spec
+
+### Build non-debug mbp-fedora-t2-config rpms
+cp -rfv ${REPO_PWD}/yum-repo/mbp-fedora-t2-config/rpm.spec ./
+cp -rfv ${REPO_PWD}/yum-repo/mbp-fedora-t2-config/suspend/rmmod_tb.sh ${RPMBUILD_PATH}/SOURCES
+find .
+pwd
+rpmbuild -bb --without debug --without debuginfo --target=x86_64 rpm.spec
+
+### Import rpm siging keys
+cat <<EOT >> ~/.rpmmacros
+%_signature gpg
+%_gpg_path /root/.gnupg
+%_gpg_name mbp-fedora
+%_gpgbin /usr/bin/gpg
+EOT
+
+echo "$RPM_SIGNING_KEY" | base64 -d > ./rpm_signing_key
+gpg --import ./rpm_signing_key
+rpm --import ${REPO_PWD}/yum-repo/fedora-mbp.gpg
+rm -rfv ./rpm_signing_key
+
+rpm --addsign ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm
 
 ### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying rpms and calculating SHA256 ...";

@@ -8,6 +8,8 @@ RPMBUILD_HOST_PATH=~/rpmbuild
 
 mkdir -p ${RPMBUILD_HOST_PATH}
 
+RPM_SIGNING_KEY=${RPM_SIGNING_KEY:-$(gpg --export-secret-keys -a 'mbp-fedora' | base64)}
+
 # docker pull ${DOCKER_IMAGE}
 docker run \
   -t \
