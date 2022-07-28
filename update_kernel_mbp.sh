@@ -24,7 +24,7 @@ if [ -f /usr/bin/update_kernel_mbp ]; then
   cp -rf /usr/bin/update_kernel_mbp ${KERNEL_PATCH_PATH}/
   ORG_SCRIPT_SHA=$(sha256sum ${KERNEL_PATCH_PATH}/update_kernel_mbp | awk '{print $1}')
 fi
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/"${UPDATE_SCRIPT_BRANCH}"/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh" -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 if [ -f /usr/bin/update_kernel_mbp ]; then
   NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
@@ -52,10 +52,10 @@ else
   echo >&2 "===]> Info: Downloading latest ${MBP_VERSION} kernel: ${MBP_KERNEL_TAG}";
 fi
 
-while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v"${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 
 for i in "${KERNEL_PACKAGES[@]}"; do
-  curl -LO  https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v"${MBP_KERNEL_TAG}"/"${i}"
+  curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
 done
 
 ### Add custom drivers to be loaded at boot
@@ -76,7 +76,7 @@ sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g"
 sed -i '/^GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
 
 echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
-curl -sSL https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${MBP_FEDORA_BRANCH}/yum-repo/fedora-mbp.gpg > ./fedora-mbp.gpg
+curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
 rpm --import ./fedora-mbp.gpg
 rm -rfv ./fedora-mbp.gpg
 
