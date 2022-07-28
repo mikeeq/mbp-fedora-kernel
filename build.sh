@@ -59,6 +59,7 @@ echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
 rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 --sign kernel.spec
 rpmbuild_exitcode=$?
+rpmbuild -bb --without debug --without debuginfo --target=x86_64 --sign t2linux.spec
 
 ### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying rpms and calculating SHA256 ...";
