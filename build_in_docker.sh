@@ -12,6 +12,7 @@ mkdir -p ${RPMBUILD_HOST_PATH}
 docker run \
   -t \
   --rm \
+  -e RPM_SIGNING_KEY="$RPM_SIGNING_KEY" \
   -v "$(pwd)":/repo \
   -v ${RPMBUILD_HOST_PATH}:/root/rpmbuild \
   ${DOCKER_IMAGE} \
