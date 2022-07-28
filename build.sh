@@ -5,7 +5,7 @@ set -eu -o pipefail
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=5.18.6-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
+FEDORA_KERNEL_VERSION=5.18.11-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -50,12 +50,16 @@ echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 echo >&2 "===]> Info: Setting kernel name...";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
+### Import rpm siging keys
+cat $RPM_SIGNING_KEY > ./rpm_signing_key
+sudo rpm --import ./rpm_signing_key
+
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
-rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
-rpmbuild -bb --without debug --without debuginfo --target=x86_64 t2linux.spec
+rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 --sign kernel.spec
 rpmbuild_exitcode=$?
+rpmbuild -bb --without debug --without debuginfo --target=x86_64 --sign t2linux.spec
 
 ### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying rpms and calculating SHA256 ...";
