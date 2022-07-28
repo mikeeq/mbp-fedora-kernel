@@ -35,11 +35,6 @@ KERNEL_VERSION="5.18.6-f36" update_kernel_mbp
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
 KERNEL_VERSION="5.18.6-f36" UPDATE_SCRIPT_BRANCH="v5.18-f36" update_kernel_mbp
-
-### WIP
-curl -sSL https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.18-f36/yum-repo/fedora-mbp.gpg > ./fedora-mbp.gpg
-sudo rpm --import ./fedora-mbp.gpg
-rm -rfv ./fedora-mbp.gpg
 ```
 
 ## CI status

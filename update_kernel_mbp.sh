@@ -75,6 +75,11 @@ done
 sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g" /etc/default/grub
 sed -i '/^GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
 
+echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
+curl -sSL https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${MBP_FEDORA_BRANCH}/yum-repo/fedora-mbp.gpg > ./fedora-mbp.gpg
+rpm --import ./fedora-mbp.gpg
+rm -rfv ./fedora-mbp.gpg
+
 echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
 rpm --force -i ./*.rpm
 
