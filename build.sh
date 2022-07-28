@@ -50,10 +50,14 @@ echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 echo >&2 "===]> Info: Setting kernel name...";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
+### Import rpm siging keys
+cat $RPM_SIGNING_KEY > ./rpm_signing_key
+sudo rpm --import ./rpm_signing_key
+
 ### Build non-debug rpms
 echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
-rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
+rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 --sign kernel.spec
 rpmbuild_exitcode=$?
 
 ### Copy artifacts to shared volume
