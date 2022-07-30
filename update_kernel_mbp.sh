@@ -85,6 +85,7 @@ else
 fi
 
 echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
+# shellcheck disable=SC2046,SC2010
 rpm --force -i $(ls | grep -v -i 'mbp-fedora-t2-config')
 
 ### Suspend fix
