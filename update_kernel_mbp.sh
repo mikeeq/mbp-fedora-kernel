@@ -2,9 +2,7 @@
 
 set -eu -o pipefail
 
-### Apple T2 drivers commit hashes
 KERNEL_PATCH_PATH=/tmp/kernel_patch
-
 UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.18-f36}
 
 if [ "$EUID" -ne 0 ]; then
@@ -82,6 +80,8 @@ if [[ -n "${KERNEL_VERSION:-}" ]]; then
     curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
   done
 
+  echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
+  rpm --force -i ./*.rpm
 else
   echo >&2 "===]> Info: Installing latest kernel from repo";
   dnf update -y kernel kernel-core kernel-modules mbp-fedora-t2-config
