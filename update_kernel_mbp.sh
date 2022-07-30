@@ -48,6 +48,7 @@ else
   echo >&2 "===]> Exit: Wrong UPDATE_SCRIPT_BRANCH variable, or update_kernel_mbp.sh doesn't exist on default branch - please rerun!" && exit
 fi
 
+# Add yum repo gpg key
 if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
   echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
 else
@@ -57,6 +58,7 @@ else
   rm -rf ./fedora-mbp.gpg
 fi
 
+### Add yum repo
 if dnf repolist | grep -iq fedora-mbp; then
   echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
 else
