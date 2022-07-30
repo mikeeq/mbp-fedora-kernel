@@ -1,29 +1,28 @@
-Name: linux-t2
+Name: mbp-fedora-t2-config
 Version: 5.18
 Release: 1%{?dist}
-Summary: System configuration for linux on t2 macs.
+Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
-License: MIT
-URL: https://t2linux.org
-Source0: https://wiki.t2linux.org/tools/rmmod_tb.sh
+License: GPLv2+
+URL: https://github.com/mikeeq/mbp-fedora
+Source0: https://github.com/mikeeq/mbp-fedora-kernel
 
 %description
-Configuration files for linux on t2 macs. The linux-t2 kernel is necessary for this to work, and this must be installed to boot. Everything works except for TouchId, eGPU, and audio switching.
+Configuration files for mbp-fedora on Apple T2 Macs. The mbp-fedora-kernel is necessary for this to work, and this must be installed to boot. Everything works except for TouchId, eGPU, and audio switching.
 
 %prep
-cp %{_sourcedir}/* %{_builddir}
+cp %{_sourcedir}/rmmod_tb.sh %{_builddir}/
 
 %build
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
-
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > apple_bce_install.conf
 
 %install
 mkdir -p %{buildroot}/etc/dracut.conf.d/
-mv apple_bce_install.conf %{buildroot}/etc/dracut.conf.d/apple_bce_install.conf
+mv %{_builddir}/apple_bce_install.conf %{buildroot}/etc/dracut.conf.d/apple_bce_install.conf
 
 mkdir -p %{buildroot}/etc/modules-load.d/
-mv apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
+mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
 
 mkdir -p %{buildroot}/lib/systemd/system-sleep
 mv %{_builddir}/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
@@ -39,4 +38,3 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 /etc/modules-load.d/apple_bce.conf
 /lib/systemd/system-sleep/rmmod_tb.sh
 /etc/dracut.conf.d/apple_bce_install.conf
-
