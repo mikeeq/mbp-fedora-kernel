@@ -42,16 +42,12 @@ KERNEL_VERSION="5.18.6-f36" UPDATE_SCRIPT_BRANCH="v5.18-f36" update_kernel_mbp
 GitHub Actions kernel build status:
 [![Build Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml)
 
-Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
+Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> :
 [![Publish Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml)
 
 ## TODO
 
 - add `kernel-headers` RPM generation
-- remove a need for update_kernel_mbp script
-  - revert `GRUB_ENABLE_BLSCFG=false` change
-- add RPM packages signing
-
 ### Known issues
 
 - TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
@@ -91,7 +87,9 @@ Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 1. Make sure that Docker is installed and running correctly on your machine
 2. Clone repo
-3. Run `./build_in_docker.sh`
+3. Generate GPG key: `gpg --full-generate-key`, choose `RSA and RSA` and `Real name: mbp-fedora`
+4. Change version in `build.sh`, <https://bodhi.fedoraproject.org/updates/?search=&packages=kernel>
+5. Run `./build_in_docker.sh`
 
 ## Docs
 
