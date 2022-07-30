@@ -81,7 +81,7 @@ else
   echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
   curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
   rpm --import ./fedora-mbp.gpg
-  rm -rfv ./fedora-mbp.gpg
+  rm -rf ./fedora-mbp.gpg
 fi
 
 echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
