@@ -48,6 +48,22 @@ else
   echo >&2 "===]> Exit: Wrong UPDATE_SCRIPT_BRANCH variable, or update_kernel_mbp.sh doesn't exist on default branch - please rerun!" && exit
 fi
 
+if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
+  echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
+else
+  echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
+  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
+  rpm --import ./fedora-mbp.gpg
+  rm -rf ./fedora-mbp.gpg
+fi
+
+if dnf repolist | grep -iq fedora-mbp; then
+  echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
+else
+  echo >&2 "===]> Info: Adding fedora-mbp repo..."
+  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp-external.repo" > /etc/yum.repos.d/fedora-mbp.repo
+fi
+
 ### Download kernel packages
 KERNEL_PACKAGES=()
 
@@ -69,22 +85,6 @@ else
   dnf update -y kernel kernel-core kernel-modules mbp-fedora-t2-config
 fi
 
-if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
-  echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
-else
-  echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
-  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
-  rpm --import ./fedora-mbp.gpg
-  rm -rf ./fedora-mbp.gpg
-fi
-
-if dnf repolist | grep -iq fedora-mbp; then
-  echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
-else
-  echo >&2 "===]> Info: Adding fedora-mbp repo..."
-  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp-external.repo" > /etc/yum.repos.d/fedora-mbp.repo
-fi
-
 ### Cleanup
 echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
 rm -rf ${KERNEL_PATCH_PATH}
@@ -92,4 +92,4 @@ dnf autoremove -y
 # shellcheck disable=SC2046
 dnf remove -y $(dnf repoquery --installonly --latest-limit=-3 -q)
 
-echo >&2 "===]> Info: Kernel update to ${MBP_KERNEL_TAG} finished successfully! ";
+echo >&2 "===]> Info: Kernel update was finished successfully! ";
