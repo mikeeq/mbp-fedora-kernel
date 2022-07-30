@@ -31,7 +31,7 @@ install_update_kernel_mbp () {
   chmod +x /usr/bin/update_kernel_mbp
 }
 
-if curl -sf -LI "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh"; then
+if curl -sf -LI "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh" 1>/dev/null; then
   if [ -f /usr/bin/update_kernel_mbp ]; then
     install_update_kernel_mbp
     NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
