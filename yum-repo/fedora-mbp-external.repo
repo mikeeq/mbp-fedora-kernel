@@ -1,0 +1,7 @@
+[fedora-mbp]
+name=Fedora MBP
+baseurl=https://fedora-mbp-repo.herokuapp.com/
+gpgcheck=1
+enabled=1
+cost=998
+priority=98

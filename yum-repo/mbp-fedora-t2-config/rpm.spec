@@ -1,6 +1,6 @@
 Name: mbp-fedora-t2-config
 Version: 5.18
-Release: 1%{?dist}
+Release: 2
 Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
 License: GPLv2+
@@ -11,7 +11,8 @@ Source0: https://github.com/mikeeq/mbp-fedora-kernel
 Configuration files for mbp-fedora on Apple T2 Macs. The mbp-fedora-kernel is necessary for this to work, and this must be installed to boot. Everything works except for TouchId, eGPU, and audio switching.
 
 %prep
-cp %{_sourcedir}/rmmod_tb.sh %{_builddir}/
+cp %{_sourcedir}/suspend %{_builddir}/
+cp %{_sourcedir}/audio %{_builddir}/
 
 %build
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
@@ -27,6 +28,11 @@ mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
 mkdir -p %{buildroot}/lib/systemd/system-sleep
 mv %{_builddir}/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 chmod +x %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
+
+mkdir -p %{buildroot}/usr/share/alsa/cards/
+mv %{_builddir}/audio/AppleT2.conf ${buildroot}/usr/share/alsa/cards/AppleT2.conf
+mv %{_builddir}/audio/apple-t2.conf ${buildroot}/usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
+mv %{_builddir}/audio/91-pulseaudio-custom.rules ${buildroot}/usr/lib/udev/rules.d/91-pulseaudio-custom.rules
 
 %post
 grubby --remove-args="efi=noruntime pcie_ports=compat" --update-kernel=ALL
