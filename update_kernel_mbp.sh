@@ -31,7 +31,7 @@ install_update_kernel_mbp () {
   chmod +x /usr/bin/update_kernel_mbp
 }
 
-if curl -f -LI "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh"; then
+if curl -sf -LI "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh"; then
   if [ -f /usr/bin/update_kernel_mbp ]; then
     install_update_kernel_mbp
     NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
@@ -49,6 +49,26 @@ else
 fi
 
 ### Download kernel packages
+KERNEL_PACKAGES=()
+
+CURRENT_KERNEL_VERSION=$(uname -r)
+echo >&2 "===]> Info: Current kernel version: ${CURRENT_KERNEL_VERSION}";
+
+if [[ -n "${KERNEL_VERSION:-}" ]]; then
+  MBP_KERNEL_TAG=${KERNEL_VERSION}
+  echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
+
+  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+
+  for i in "${KERNEL_PACKAGES[@]}"; do
+    curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
+  done
+
+else
+  echo >&2 "===]> Info: Installing latest kernel from repo";
+  dnf update -y kernel kernel-core kernel-modules mbp-fedora-t2-config
+fi
+
 if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
   echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
 else
@@ -58,8 +78,12 @@ else
   rm -rf ./fedora-mbp.gpg
 fi
 
-# add yum repo, check if already added
-# install kernel, mbp-fedora-config
+if dnf repolist | grep -iq fedora-mbp; then
+  echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
+else
+  echo >&2 "===]> Info: Adding fedora-mbp repo..."
+  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp-external.repo" > /etc/yum.repos.d/fedora-mbp.repo
+fi
 
 ### Cleanup
 echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
