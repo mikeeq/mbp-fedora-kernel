@@ -23,17 +23,29 @@ if [ -f /usr/bin/update_kernel_mbp ]; then
   cp -rf /usr/bin/update_kernel_mbp ${KERNEL_PATCH_PATH}/
   ORG_SCRIPT_SHA=$(sha256sum ${KERNEL_PATCH_PATH}/update_kernel_mbp | awk '{print $1}')
 fi
-curl -L "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh" -o /usr/bin/update_kernel_mbp
-chmod +x /usr/bin/update_kernel_mbp
-if [ -f /usr/bin/update_kernel_mbp ]; then
-  NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
-  if [[ "$ORG_SCRIPT_SHA" != "$NEW_SCRIPT_SHA" ]]; then
-    echo >&2 "===]> Info: update_kernel_mbp script was updated please rerun!" && exit
+
+URL_UPDATE_SCRIPT="https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh"
+
+install_update_kernel_mbp () {
+  curl -L "$URL_UPDATE_SCRIPT" -o /usr/bin/update_kernel_mbp
+  chmod +x /usr/bin/update_kernel_mbp
+}
+
+if curl -f -LI "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh"; then
+  if [ -f /usr/bin/update_kernel_mbp ]; then
+    install_update_kernel_mbp
+    NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
+    if [[ "$ORG_SCRIPT_SHA" != "$NEW_SCRIPT_SHA" ]]; then
+      echo >&2 "===]> Exit: update_kernel_mbp script was updated please rerun!" && exit
+    else
+      echo >&2 "===]> Info: update_kernel_mbp script is in the latest version proceeding..."
+    fi
   else
-    echo >&2 "===]> Info: update_kernel_mbp script is in the latest version proceeding..."
+    install_update_kernel_mbp
+    echo >&2 "===]> Info: update_kernel_mbp script was installed..."
   fi
 else
-   echo >&2 "===]> Info: update_kernel_mbp script was installed..."
+  echo >&2 "===]> Exit: Wrong UPDATE_SCRIPT_BRANCH variable, or update_kernel_mbp.sh doesn't exist on default branch - please rerun!" && exit
 fi
 
 ### Download kernel packages
