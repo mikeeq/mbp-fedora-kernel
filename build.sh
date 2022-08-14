@@ -2,10 +2,12 @@
 
 set -eu -o pipefail
 
+[[ $(df -k --output=avail / | tail -1) -gt 19777111 ]] || echo "Free disk space is < 20 GB, build will fail, are you sure ?" && sleep 15
+
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=5.18.13-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
+FEDORA_KERNEL_VERSION=5.19.1-300.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -32,6 +34,9 @@ dnf -y builddep kernel.spec
 ### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file...";
 FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/patch_driver.sh
+
+echo >&2 "===]> Info: Overwriting few patches with to be kernel 5.19 compatible, TO BE REVIEWED...";
+cp -f /repo/*patch /repo/patches
 
 ### Apply patches
 echo >&2 "===]> Info: Applying patches...";

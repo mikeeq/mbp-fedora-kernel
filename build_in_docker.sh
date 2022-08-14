@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-DOCKER_IMAGE=fedora:34
+DOCKER_IMAGE=fedora:36
 # DOCKER_IMAGE=fedora_build:34
 RPMBUILD_HOST_PATH=~/rpmbuild
 
@@ -12,7 +12,7 @@ RPM_SIGNING_KEY=${RPM_SIGNING_KEY:-$(gpg --export-secret-keys -a 'mbp-fedora' | 
 
 # docker pull ${DOCKER_IMAGE}
 docker run \
-  -t \
+  -t --network=host \
   --rm \
   -e RPM_SIGNING_KEY="$RPM_SIGNING_KEY" \
   -v "$(pwd)":/repo \
