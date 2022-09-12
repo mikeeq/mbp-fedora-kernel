@@ -9,7 +9,7 @@ RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
 #FEDORA_KERNEL_VERSION=5.19.1-300.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 #FEDORA_KERNEL_VERSION=5.19.4-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
-FEDORA_KERNEL_VERSION=5.19.6-200.fc36
+FEDORA_KERNEL_VERSION=5.19.7-200.fc36
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -39,6 +39,7 @@ FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/patch_driver.sh
 
 echo >&2 "===]> Info: Overwriting few patches with to be kernel 5.19 compatible, TO BE REVIEWED...";
 cp -f /repo/*patch /repo/patches
+rm -f /repo/patches/5001-Fix-for-touchbar.patch  # TODO ? really ? whole patchfile ?
 
 ### Apply patches
 echo >&2 "===]> Info: Applying patches...";
