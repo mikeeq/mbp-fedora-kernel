@@ -46,7 +46,7 @@ echo >&2 "===]> Info: Applying kconfig changes... ";
 {
   echo "CONFIG_APPLE_BCE=m"
   echo "CONFIG_APPLE_IBRIDGE=m"
-  echo "CONFIG_BT_HCIBCM4377=y"
+  # echo "CONFIG_BT_HCIBCM4377=m"
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp

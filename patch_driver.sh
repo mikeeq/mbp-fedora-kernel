@@ -34,8 +34,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
-
-# curl -sL https://raw.githubusercontent.com/Redecorating/mbp-16.1-linux-wifi/main/8002-asahilinux-hci_bcm4377-patchset.patch -o "${PATCHES_DIR}"/9001-asahilinux-hci_bcm4377-patchset.patch
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v "9003-Bluetooth-hci_bcm4377-Add-new-driver-for-BCM4377-PCI-boards.patch")
 
 rm -rf "${TMP_DIR}"
