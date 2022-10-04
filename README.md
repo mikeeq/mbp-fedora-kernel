@@ -18,7 +18,7 @@ macOS Mojave: 10.14.6 (18G103)
 ```bash
 ### First run or if you want to update your copy of update_kernel_mbp script
 sudo -i
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.18-f36/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v5.19-f36/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 update_kernel_mbp
 
@@ -28,13 +28,13 @@ update_kernel_mbp
 
 ### Update to specific version of kernel
 sudo -i
-KERNEL_VERSION="5.18.6-f36" update_kernel_mbp
+KERNEL_VERSION="5.19.12-f36" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
-KERNEL_VERSION="5.18.6-f36" UPDATE_SCRIPT_BRANCH="v5.18-f36" update_kernel_mbp
+KERNEL_VERSION="5.19.12-f36" UPDATE_SCRIPT_BRANCH="v5.19-f36" update_kernel_mbp
 ```
 
 ## CI status
@@ -60,7 +60,7 @@ Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
     - manual switch works, see here: <https://github.com/mikeeq/mbp-fedora#todo>
   - Microphone (it's recognized with new apple t2 sound driver, but there is a low mic volume amp)
 
-#### Working with upstream stable kernel 5.18
+#### Working with upstream stable kernel 5.19
 
 - Display/Screen
 - USB-C
