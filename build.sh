@@ -50,8 +50,10 @@ echo >&2 "===]> Info: Applying kconfig changes... ";
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 # shellcheck disable=SC2010
-for i in $(ls "${RPMBUILD_PATH}/SOURCES/" | grep kernel | grep config | grep -v "x86_64"); do
+for i in $(ls "${RPMBUILD_PATH}/SOURCES/" | grep kernel | grep fedora | grep config | grep -v "x86_64"); do
   echo "CONFIG_BT_HCIBCM4377=n" >> "$i"
+  echo "$i"
+  cat "$i" | grep -i "CONFIG_BT_HCIBCM4377"
 done
 
 ### Change buildid to mbp
