@@ -1,5 +1,5 @@
 Name: mbp-fedora-t2-config
-Version: 5.18
+Version: 6.0
 Release: 1%{?dist}
 Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
