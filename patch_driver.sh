@@ -34,6 +34,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v "2001-fix-acpica-for-zero-arguments-acpi-calls.patch" | grep -v 3007)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v "2001-fix-acpica-for-zero-arguments-acpi-calls.patch" | grep -v "3007-applesmc-Add-iMacPro-to-applesmc_whitelist.patch" | grep -v "9003-Bluetooth-hci_bcm4377-Add-new-driver-for-BCM4377-PCI-boards.patch")
 
 rm -rf "${TMP_DIR}"
