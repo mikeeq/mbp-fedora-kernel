@@ -34,7 +34,7 @@ KERNEL_VERSION="6.0-f36" update_kernel_mbp
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
-KERNEL_VERSION="6.0-f36" UPDATE_SCRIPT_BRANCH="v6.0-f36" update_kernel_mbp
+KERNEL_VERSION="6.0.0-f36" UPDATE_SCRIPT_BRANCH="v6.0-f36" update_kernel_mbp
 ```
 
 ## CI status
@@ -45,19 +45,10 @@ GitHub Actions kernel build status:
 Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 [![Publish Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml)
 
-## TODO
-
-- add `kernel-headers` RPM generation
-- remove a need for update_kernel_mbp script
-  - revert `GRUB_ENABLE_BLSCFG=false` change
-- add RPM packages signing
-
 ### Known issues
 
 - TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
 - Audio
-  - Dynamic audio input/output change (on connecting/disconnecting headphones jack)
-    - manual switch works, see here: <https://github.com/mikeeq/mbp-fedora#todo>
   - Microphone (it's recognized with new apple t2 sound driver, but there is a low mic volume amp)
 
 #### Working with upstream stable kernel 6.0

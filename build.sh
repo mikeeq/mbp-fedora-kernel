@@ -61,7 +61,6 @@ rpmbuild_exitcode=$?
 
 ### Build non-debug mbp-fedora-t2-config rpms
 cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/rpm.spec ./
-cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/suspend/rmmod_tb.sh ${RPMBUILD_PATH}/SOURCES
 find .
 pwd
 rpmbuild -bb --without debug --without debuginfo --target=x86_64 rpm.spec
