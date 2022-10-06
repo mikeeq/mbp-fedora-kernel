@@ -1,7 +1,7 @@
 FROM fedora:34
 
 ARG RPMBUILD_PATH=/root/rpmbuild
-ARG FEDORA_KERNEL_VERSION=5.18.13-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
+ARG FEDORA_KERNEL_VERSION=5.19.13-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 
 RUN dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip curl dwarves libbpf rpm-sign \
     && rpmdev-setuptree \

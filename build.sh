@@ -5,7 +5,7 @@ set -eu -o pipefail
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=5.18.13-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
+FEDORA_KERNEL_VERSION=5.19.13-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -43,9 +43,11 @@ do
 done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 
 echo >&2 "===]> Info: Applying kconfig changes... ";
-echo "CONFIG_APPLE_BCE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
-echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
-# echo "CONFIG_BT_HCIBCM4377=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
+{
+  echo "CONFIG_APPLE_BCE=m"
+  echo "CONFIG_APPLE_IBRIDGE=m"
+  # echo "CONFIG_BT_HCIBCM4377=m"
+} >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name...";
@@ -59,7 +61,6 @@ rpmbuild_exitcode=$?
 
 ### Build non-debug mbp-fedora-t2-config rpms
 cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/rpm.spec ./
-cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/suspend/rmmod_tb.sh ${RPMBUILD_PATH}/SOURCES
 find .
 pwd
 rpmbuild -bb --without debug --without debuginfo --target=x86_64 rpm.spec
