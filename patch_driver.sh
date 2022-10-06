@@ -13,7 +13,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/AdityaGarg8/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=18d3466c7c6eba76743e65418847357f16e11a23
+APPLE_SMC_DRIVER_COMMIT_HASH=31a2fb5cb7e7f0188c1deb637773849b3b0c2417
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
@@ -34,6 +34,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v "9003-Bluetooth-hci_bcm4377-Add-new-driver-for-BCM4377-PCI-boards.patch" | grep -v 2001 | grep -v 3007)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
 
 rm -rf "${TMP_DIR}"
