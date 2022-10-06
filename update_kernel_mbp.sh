@@ -98,6 +98,25 @@ curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}
 chmod 755 /etc/grub.d/30_os-prober
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
+# Remove old audio confgs
+echo >&2 "===]> Info: Adding new T2 Audio configs... ";
+KEKRBY_AUDIO_CONFIGS=2d835c6e3d4fb0406d2933638d380c8b7fb92700
+curl -L https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
+tar -xf t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
+
+rm -f /usr/share/alsa/cards/AppleT2.conf
+rm -f /usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
+rm -f /usr/lib/udev/rules.d/91-pulseaudio-custom.rules
+
+mkdir -p /usr/lib/udev/rules.d/
+cp -rfv t2-better-audio-${KEKRBY_AUDIO_CONFIGS}/files/91-audio-custom.rules /usr/lib/udev/rules.d/
+
+for i in /usr/share/alsa-card-profile/mixer /usr/share/pulseaudio/alsa-mixer; do
+  mkdir -p $i
+  cp -rfv t2-better-audio-${KEKRBY_AUDIO_CONFIGS}/files/profile-sets $i
+  cp -rfv t2-better-audio-${KEKRBY_AUDIO_CONFIGS}/files/paths $i
+done
+
 ### Cleanup
 echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
 rm -rf ${KERNEL_PATCH_PATH}
