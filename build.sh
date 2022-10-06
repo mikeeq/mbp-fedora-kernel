@@ -49,6 +49,9 @@ echo >&2 "===]> Info: Applying kconfig changes... ";
   echo "CONFIG_BT_HCIBCM4377=m"
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
+# shellcheck disable=SC2046,SC2010
+echo "CONFIG_BT_HCIBCM4377=n" >> $(ls "${RPMBUILD_PATH}/SOURCES/" | grep kernel | grep config | grep -v "x86_64")
+
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name...";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
