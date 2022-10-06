@@ -49,8 +49,6 @@ Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 - TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
 - Audio
-  - Dynamic audio input/output change (on connecting/disconnecting headphones jack)
-    - manual switch works, see here: <https://github.com/mikeeq/mbp-fedora#todo>
   - Microphone (it's recognized with new apple t2 sound driver, but there is a low mic volume amp)
 
 #### Working with upstream stable kernel 5.19
