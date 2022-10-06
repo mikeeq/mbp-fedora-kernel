@@ -101,8 +101,8 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 # Remove old audio confgs
 echo >&2 "===]> Info: Adding new T2 Audio configs... ";
 KEKRBY_AUDIO_CONFIGS=2d835c6e3d4fb0406d2933638d380c8b7fb92700
-curl -L https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
-tar -xf t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
+curl -Ls https://github.com/kekrby/t2-better-audio/archive/${KEKRBY_AUDIO_CONFIGS}/t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz -o t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz
+tar -xf t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz
 
 rm -f /usr/share/alsa/cards/AppleT2.conf
 rm -f /usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
