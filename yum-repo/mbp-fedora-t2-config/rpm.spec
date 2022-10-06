@@ -5,10 +5,10 @@ Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
 License: GPLv2+
 URL: https://github.com/mikeeq/mbp-fedora
-Source0: https://github.com/mikeeq/mbp-fedora-kernel
 
 %global KEKRBY_AUDIO_CONFIGS 2d835c6e3d4fb0406d2933638d380c8b7fb92700
 
+Source0: https://wiki.t2linux.org/tools/rmmod_tb.sh
 Source1: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 # https://codeload.github.com/kekrby/t2-better-audio/tar.gz/%{KEKRBY_AUDIO_CONFIGS}
 
