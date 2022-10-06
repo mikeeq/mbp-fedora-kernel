@@ -48,11 +48,11 @@ if [[ -n "${KERNEL_VERSION:-}" ]]; then
   echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
 else
   MBP_VERSION=mbp
-  MBP_KERNEL_TAG=$(curl -Ls https://github.com/mikeeq/mbp-fedora-kernel/releases/ | grep rpm | grep download | grep "${MBP_VERSION}" | cut -d'/' -f6 | head -n1 | cut -d'v' -f2)
+  MBP_KERNEL_TAG=$(curl -sI https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i "location:" | cut -d'v' -f2)
   echo >&2 "===]> Info: Downloading latest ${MBP_VERSION} kernel: ${MBP_KERNEL_TAG}";
 fi
 
-while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v${MBP_KERNEL_TAG}" | grep rpm | grep span | grep -v -i 'mbp-fedora-t2-config' | cut -d'>' -f2 | cut -d'<' -f1)
+while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${MBP_KERNEL_TAG}" | grep rpm | grep span | grep -v -i 'mbp-fedora-t2-config' | cut -d'>' -f2 | cut -d'<' -f1)
 
 for i in "${KERNEL_PACKAGES[@]}"; do
   curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
