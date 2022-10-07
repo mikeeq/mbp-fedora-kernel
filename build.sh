@@ -8,8 +8,7 @@ set -eu -o pipefail
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
 #FEDORA_KERNEL_VERSION=5.19.1-300.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
-#FEDORA_KERNEL_VERSION=5.19.4-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
-FEDORA_KERNEL_VERSION=5.19.12-200.fc36
+FEDORA_KERNEL_VERSION=5.19.13-200.fc36
 REPO_PWD=$(pwd)
 
 ### Debug commands
