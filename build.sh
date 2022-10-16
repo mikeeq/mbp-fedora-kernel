@@ -8,7 +8,10 @@ set -eu -o pipefail
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
 #FEDORA_KERNEL_VERSION=5.19.1-300.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
-FEDORA_KERNEL_VERSION=5.19.15-200.fc36
+#FEDORA_KERNEL_VERSION=5.19.15-200.fc36
+# ?? https://fedoramagazine.org/contribute-at-the-fedora-linux-37-test-week-for-kernel-6-0/
+FEDORA_KERNEL_VERSION=6.0.2-300.fc36
+
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -36,9 +39,8 @@ dnf -y builddep kernel.spec
 echo >&2 "===]> Info: Creating patch file...";
 FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/patch_driver.sh
 
-echo >&2 "===]> Info: Overwriting few patches with to be kernel 5.19 compatible, TO BE REVIEWED...";
+echo >&2 "===]> Info: Overwriting few patches with to be kernel 6.0 compatible, TO BE REVIEWED...";
 cp -f /repo/*patch /repo/patches
-rm -f /repo/patches/5001-Fix-for-touchbar.patch  # TODO ? really ? whole patchfile ?
 
 ### Apply patches
 echo >&2 "===]> Info: Applying patches...";
@@ -52,19 +54,24 @@ done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 echo >&2 "===]> Info: Applying kconfig changes... ";
 echo "CONFIG_APPLE_BCE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 echo "CONFIG_APPLE_IBRIDGE=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
-# echo "CONFIG_BT_HCIBCM4377=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
+echo "CONFIG_BT_HCIBCM4377=m" >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name...";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
+
+# TODO check if needed: to avoid error with other arch configs missing CONFIG_BT_HCIBCM4377
+find /root/rpmbuild/SOURCES -type f | grep "config$" | grep -v x86_64 | xargs rm -r -f
 
 ### Build non-debug kernel rpms
 echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
 rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
 rpmbuild_exitcode=$?
+if [ $rpmbuild_exitcode -ne 0 ]; then echo "rpmbuild_exitcode=$rpmbuild_exitcode";fi
 
 ### Build non-debug mbp-fedora-t2-config rpms
+echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-config rpms ...";
 cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/rpm.spec ./
 cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/suspend/rmmod_tb.sh ${RPMBUILD_PATH}/SOURCES
 find .
@@ -72,6 +79,7 @@ pwd
 rpmbuild -bb --without debug --without debuginfo --target=x86_64 rpm.spec
 
 ### Import rpm siging keys
+echo >&2 "===]> Info: Signing keys ..."
 cat <<EOT >> ~/.rpmmacros
 %_signature gpg
 %_gpg_path /root/.gnupg

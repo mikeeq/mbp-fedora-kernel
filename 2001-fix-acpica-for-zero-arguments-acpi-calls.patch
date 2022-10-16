@@ -1,0 +1,26 @@
+From 72162ca3b78597606dba4d9a6035fe8095f33d36 Mon Sep 17 00:00:00 2001
+From: root <root@mypc.lan>
+Date: Sun, 16 Oct 2022 19:45:34 +0000
+Subject: [PATCH] 2001-fix-acpica-for-zero-arguments-acpi-calls
+
+---
+ drivers/acpi/acpica/dswexec.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/acpica/dswexec.c b/drivers/acpi/acpica/dswexec.c
+index e8ad41387..5a58f464a 100644
+--- a/drivers/acpi/acpica/dswexec.c
++++ b/drivers/acpi/acpica/dswexec.c
+@@ -391,7 +391,8 @@ acpi_status acpi_ds_exec_end_op(struct acpi_walk_state *walk_state)
+ 		 * All opcodes require operand resolution, with the only exceptions
+ 		 * being the object_type and size_of operators.
+ 		 */
+-		if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE)) {
++		if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE) &&
++			walk_state->num_operands > 0) {
+ 
+ 			/* Resolve all operands */
+ 
+-- 
+2.37.3
+

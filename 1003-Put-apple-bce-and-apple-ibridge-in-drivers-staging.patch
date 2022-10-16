@@ -18,9 +18,9 @@ diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
 index e03627a..fc121d5 100644
 --- a/drivers/staging/Kconfig
 +++ b/drivers/staging/Kconfig
-@@ -102,4 +102,8 @@ source "drivers/staging/qlge/Kconfig"
+@@ -102,4 +84,8 @@ source "drivers/staging/qlge/Kconfig"
  
- source "drivers/staging/wfx/Kconfig"
+ source "drivers/staging/vme_user/Kconfig"
  
 +source "drivers/staging/apple-bce/Kconfig"
 +

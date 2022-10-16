@@ -1,0 +1,27 @@
+From f714bd6598dddd5c2e05fd2411329c9dba5478a1 Mon Sep 17 00:00:00 2001
+From: root <root@mypc.lan>
+Date: Sun, 16 Oct 2022 19:47:12 +0000
+Subject: [PATCH] 3007-applesmc-Add-iMacPro-to-applesmc_whitelist
+
+---
+ drivers/hwmon/applesmc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index fc6d6a905..031286a72 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -1291,6 +1291,10 @@ static const struct dmi_system_id applesmc_whitelist[] __initconst = {
+ 	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
+ 	  DMI_MATCH(DMI_PRODUCT_NAME, "Macmini") },
+ 	},
++	{ applesmc_dmi_match, "Apple iMacPro", {
++	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
++	  DMI_MATCH(DMI_PRODUCT_NAME, "iMacPro") },
++	},
+ 	{ applesmc_dmi_match, "Apple MacPro", {
+ 	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
+ 	  DMI_MATCH(DMI_PRODUCT_NAME, "MacPro") },
+-- 
+2.37.3
+
