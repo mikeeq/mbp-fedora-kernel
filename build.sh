@@ -10,7 +10,7 @@ MBP_VERSION=mbp
 #FEDORA_KERNEL_VERSION=5.19.1-300.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 #FEDORA_KERNEL_VERSION=5.19.15-200.fc36
 # ?? https://fedoramagazine.org/contribute-at-the-fedora-linux-37-test-week-for-kernel-6-0/
-FEDORA_KERNEL_VERSION=6.0.2-300.fc36
+FEDORA_KERNEL_VERSION=6.0.3-300.fc36
 
 REPO_PWD=$(pwd)
 
