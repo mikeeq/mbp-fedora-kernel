@@ -2,7 +2,7 @@
 
 set -eu -o pipefail
 
-[[ $(df -k --output=avail / | tail -1) -gt 19777111 ]] || echo "Free disk space is < 20 GB, build will fail, are you sure ?" && sleep 15
+[[ $(df -k --output=avail / | tail -1) -gt 19777111 ]] || (echo "Free disk space is < 20 GB, build will fail, are you sure ?" && sleep 15)
 
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
@@ -10,7 +10,7 @@ MBP_VERSION=mbp
 #FEDORA_KERNEL_VERSION=5.19.1-300.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 #FEDORA_KERNEL_VERSION=5.19.15-200.fc36
 # ?? https://fedoramagazine.org/contribute-at-the-fedora-linux-37-test-week-for-kernel-6-0/
-FEDORA_KERNEL_VERSION=6.0.3-300.fc36
+FEDORA_KERNEL_VERSION=6.0.5-200.fc36
 
 REPO_PWD=$(pwd)
 
