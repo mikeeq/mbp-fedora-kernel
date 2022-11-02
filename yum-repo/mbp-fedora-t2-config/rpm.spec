@@ -3,10 +3,12 @@ Version: 6.0.5
 Release: 1%{?dist}
 Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
+%undefine _disable_source_fetch
+
 License: GPLv2+
 URL: https://github.com/mikeeq/mbp-fedora
 
-%global KEKRBY_AUDIO_CONFIGS 2d835c6e3d4fb0406d2933638d380c8b7fb92700
+%global KEKRBY_AUDIO_CONFIGS e46839a28963e2f7d364020518b9dac98236bcae
 
 Source0: https://wiki.t2linux.org/tools/rmmod_tb.sh
 Source1: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
@@ -22,6 +24,7 @@ tar -xf %{_sourcedir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 %build
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > apple_bce_install.conf
+echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"'
 
 %install
 mkdir -p %{buildroot}/etc/dracut.conf.d/

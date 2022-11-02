@@ -100,7 +100,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Remove old audio confgs
 echo >&2 "===]> Info: Adding new T2 Audio configs... ";
-KEKRBY_AUDIO_CONFIGS=2d835c6e3d4fb0406d2933638d380c8b7fb92700
+KEKRBY_AUDIO_CONFIGS=e46839a28963e2f7d364020518b9dac98236bcae
 curl -Ls https://github.com/kekrby/t2-better-audio/archive/${KEKRBY_AUDIO_CONFIGS}/t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz -o t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz
 tar -xf t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz
 
