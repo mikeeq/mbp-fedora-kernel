@@ -13,7 +13,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/AdityaGarg8/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=8fc5876637f79fbe20db09c95cb0300d75ed4475
+APPLE_SMC_DRIVER_COMMIT_HASH=31a2fb5cb7e7f0188c1deb637773849b3b0c2417
 
 # TMP_DIR=~/temp_dir
 TMP_DIR=/tmp/temp_dir
@@ -34,8 +34,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v "0001-arch-additions.patch")
-
-# curl -sL https://raw.githubusercontent.com/Redecorating/mbp-16.1-linux-wifi/main/8002-asahilinux-hci_bcm4377-patchset.patch -o "${PATCHES_DIR}"/9001-asahilinux-hci_bcm4377-patchset.patch
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v "2001-fix-acpica-for-zero-arguments-acpi-calls.patch" | grep -v "3007-applesmc-Add-iMacPro-to-applesmc_whitelist.patch" | grep -v "9003-Bluetooth-hci_bcm4377-Add-new-driver-for-BCM4377-PCI-boards.patch")
 
 rm -rf "${TMP_DIR}"
