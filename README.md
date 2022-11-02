@@ -34,7 +34,7 @@ KERNEL_VERSION="6.0-f36" update_kernel_mbp
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
-KERNEL_VERSION="6.0.0-f36" UPDATE_SCRIPT_BRANCH="v6.0-f36" update_kernel_mbp
+KERNEL_VERSION="6.0.5-f36" UPDATE_SCRIPT_BRANCH="v6.0-f36" update_kernel_mbp
 ```
 
 ## CI status
