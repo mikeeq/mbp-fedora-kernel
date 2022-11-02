@@ -55,7 +55,7 @@ sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}
 
 ### Disable process-configs.sh from running in kernel.spec (it fails for CONFIG_BT_HCIBCM4377)
 echo >&2 "===]> Info: Disable process_configs.sh...";
-sed '/RHJOBS=$RPM_BUILD_NCPUS PACKAGE_NAME=kernel \.\/process_configs.sh $OPTS ${specversion}/d' "${RPMBUILD_PATH}"/SPECS/kernel.spec
+sed -i '/RHJOBS=$RPM_BUILD_NCPUS PACKAGE_NAME=kernel \.\/process_configs.sh $OPTS ${specversion}/d' "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
 ### Build non-debug kernel rpms
 echo >&2 "===]> Info: Bulding kernel ...";
