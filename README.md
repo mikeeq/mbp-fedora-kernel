@@ -42,7 +42,7 @@ KERNEL_VERSION="6.0.5-f36" UPDATE_SCRIPT_BRANCH="v6.0-f36" update_kernel_mbp
 GitHub Actions kernel build status:
 [![Build Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml)
 
-Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
+Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> :
 [![Publish Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml)
 
 ### Known issues
@@ -82,7 +82,9 @@ Github Actions kernel publish status - <http://fedora-mbp-repo.herokuapp.com/> :
 
 1. Make sure that Docker is installed and running correctly on your machine
 2. Clone repo
-3. Run `./build_in_docker.sh`
+3. Generate GPG key: `gpg --full-generate-key`, choose `RSA and RSA` and `Real name: mbp-fedora`
+4. Change version in `build.sh`, <https://bodhi.fedoraproject.org/updates/?search=&packages=kernel>
+5. Run `./build_in_docker.sh`
 
 ## Docs
 
