@@ -2,8 +2,10 @@
 
 set -eu -o pipefail
 
+# DOCKER_IMAGE=fedora_build:36
+# docker build -t fedora_build:36 .
+
 DOCKER_IMAGE=fedora:36
-# DOCKER_IMAGE=fedora_build:34
 RPMBUILD_HOST_PATH=~/rpmbuild
 
 mkdir -p ${RPMBUILD_HOST_PATH}
@@ -20,3 +22,13 @@ docker run \
   -w /repo \
   ${DOCKER_IMAGE} \
   /bin/bash -c './build.sh'
+
+# docker run \
+#   -it \
+#   --rm \
+#   -e RPM_SIGNING_KEY="$RPM_SIGNING_KEY" \
+#   -v "$(pwd)":/repo \
+#   -v ${RPMBUILD_HOST_PATH}:/root/rpmbuild \
+#   -w /repo \
+#   ${DOCKER_IMAGE} \
+#   /bin/bash
