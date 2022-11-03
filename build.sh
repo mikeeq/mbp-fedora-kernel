@@ -73,14 +73,22 @@ rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64
 kernel_rpmbuild_exitcode=$?
 echo >&2 "===]> Info: kernel_rpmbuild_exitcode=$kernel_rpmbuild_exitcode"
 
+echo >&2 "===]> Info: Copy source files for other RPMs ...";
+cp -rfv "${REPO_PWD}"/yum-repo/sources/ ${RPMBUILD_PATH}/SOURCES/
+
 ### Build non-debug mbp-fedora-t2-config rpm
 echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-config RPM ...";
-cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/rpm.spec ./
-find .
-pwd
-rpmbuild -bb --without debug --without debuginfo --target=x86_64 rpm.spec
+cp -rfv "${REPO_PWD}"/yum-repo/specs/mbp-fedora-t2-config.spec ./
+rpmbuild -bb --without debug --without debuginfo --target=x86_64 mbp-fedora-t2-config.spec
 config_rpmbuild_exitcode=$?
 echo >&2 "===]> Info: mbp-fedora-t2-config config_rpmbuild_exitcode=$config_rpmbuild_exitcode"
+
+### Build non-debug mbp-fedora-t2-repo rpm
+echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-repo RPM ...";
+cp -rfv "${REPO_PWD}"/yum-repo/specs/mbp-fedora-t2-repo.spec ./
+rpmbuild -bb --without debug --without debuginfo --target=x86_64 mbp-fedora-t2-repo.spec
+repo_rpmbuild_exitcode=$?
+echo >&2 "===]> Info: mbp-fedora-t2-repo repo_rpmbuild_exitcode=$repo_rpmbuild_exitcode"
 
 ### Import rpm siging key
 echo >&2 "===]> Info: Importing RPM signing key ..."
@@ -93,7 +101,7 @@ EOT
 
 echo "$RPM_SIGNING_KEY" | base64 -d > ./rpm_signing_key
 gpg --import ./rpm_signing_key
-rpm --import "${REPO_PWD}"/yum-repo/fedora-mbp.gpg
+rpm --import "${REPO_PWD}"/yum-repo/sources/repo/fedora-mbp.gpg
 rm -rfv ./rpm_signing_key
 
 rpm --addsign ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm
