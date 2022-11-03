@@ -3,7 +3,9 @@
 set -eu -o pipefail
 
 KERNEL_PATCH_PATH=/tmp/kernel_patch
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v5.18-f36}
+
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v6.0-f36}
+MBP_FEDORA_BRANCH=f36
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"

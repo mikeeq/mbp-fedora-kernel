@@ -1,23 +1,31 @@
 Name: mbp-fedora-t2-config
-Version: 5.18
-Release: 2
+Version: 6.0.5
+Release: 1%{?dist}
 Summary: System configuration for mbp-fedora on Apple T2 Macs.
+
+%undefine _disable_source_fetch
 
 License: GPLv2+
 URL: https://github.com/mikeeq/mbp-fedora
-Source0: https://github.com/mikeeq/mbp-fedora-kernel
+
+%global KEKRBY_AUDIO_CONFIGS e46839a28963e2f7d364020518b9dac98236bcae
+
+Source0: https://wiki.t2linux.org/tools/rmmod_tb.sh
+Source1: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
+# https://codeload.github.com/kekrby/t2-better-audio/tar.gz/%{KEKRBY_AUDIO_CONFIGS}
 
 %description
-Configuration files for mbp-fedora on Apple T2 Macs. The mbp-fedora-kernel is necessary for this to work, and this must be installed to boot. Everything works except for TouchId, eGPU, and audio switching.
+Configuration files for mbp-fedora on Apple T2 Macs. The mbp-fedora-kernel is necessary for this to work, and this must be installed to boot. Everything works except for TouchID and eGPU.
 
 %prep
-cp -rf %{_sourcedir}/suspend %{_builddir}/
-cp -rf %{_sourcedir}/audio %{_builddir}/
-cp -rf %{_sourcedir}/grub %{_builddir}/
+cp %{_sourcedir}/rmmod_tb.sh %{_builddir}/
+tar -xf %{_sourcedir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 
 %build
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > apple_bce_install.conf
+# https://github.com/t2linux/wiki/pull/343/files
+echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"' > 90-backlight.rules
 
 %install
 mkdir -p %{buildroot}/etc/dracut.conf.d/
@@ -30,34 +38,36 @@ mkdir -p %{buildroot}/lib/systemd/system-sleep
 mv %{_builddir}/suspend/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 chmod +x %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 
-mkdir -p %{buildroot}/usr/share/alsa/cards/
-mv %{_builddir}/audio/AppleT2.conf %{buildroot}/usr/share/alsa/cards/AppleT2.conf
-
-mkdir -p %{buildroot}/usr/share/alsa-card-profile/mixer/profile-sets/
-mv %{_builddir}/audio/apple-t2.conf %{buildroot}/usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
+mkdir -p %{buildroot}/etc/udev/rules.d
+mv %{_builddir}/90-backlight.rules %{buildroot}/etc/udev/rules.d/90-backlight.rules
 
 mkdir -p %{buildroot}/usr/lib/udev/rules.d/
-mv %{_builddir}/audio/91-pulseaudio-custom.rules %{buildroot}/usr/lib/udev/rules.d/91-pulseaudio-custom.rules
+cp -r %{_builddir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}/files/91-audio-custom.rules %{buildroot}/usr/lib/udev/rules.d/
 
-%post
-GRUB_CMDLINE_VALUE=$(grep -v '#' /etc/default/grub | grep -w GRUB_CMDLINE_LINUX | cut -d'"' -f2)
-
-for i in efi=noruntime pcie_ports=compat; do
-  if ! echo "$GRUB_CMDLINE_VALUE" | grep -w $i; then
-   GRUB_CMDLINE_VALUE="$GRUB_CMDLINE_VALUE $i"
-  fi
+for i in %{buildroot}/usr/share/alsa-card-profile/mixer %{buildroot}/usr/share/pulseaudio/alsa-mixer
+do
+  mkdir -p $i
+  cp -r %{_builddir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}/files/profile-sets $i
+  cp -r %{_builddir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}/files/paths $i
 done
 
-sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g" /etc/default/grub
+%post
+grubby --remove-args="efi=noruntime" --update-kernel=ALL
+grubby --args="intel_iommu=on iommu=pt pcie_ports=compat" --update-kernel=ALL
+sed -i "/hid_apple/d" /etc/dracut.conf
 sed -i '/^GRUB_ENABLE_BLSCFG=false/c\GRUB_ENABLE_BLSCFG=true' /etc/default/grub
-grubby --remove-args="efi=noruntime pcie_ports=compat" --update-kernel=ALL
-grubby --args="efi=noruntime pcie_ports=compat" --update-kernel=ALL
 grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Remove old audio confgs
+rm -f /usr/share/alsa/cards/AppleT2.conf
+rm -f /usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
+rm -f /usr/lib/udev/rules.d/91-pulseaudio-custom.rules
 
 %files
 /etc/modules-load.d/apple_bce.conf
 /lib/systemd/system-sleep/rmmod_tb.sh
 /etc/dracut.conf.d/apple_bce_install.conf
-/usr/share/alsa/cards/AppleT2.conf
-/usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
-/usr/lib/udev/rules.d/91-pulseaudio-custom.rules
+/usr/share/alsa-card-profile/mixer
+/usr/share/pulseaudio/alsa-mixer
+/usr/lib/udev/rules.d/
+/etc/udev/rules.d/
