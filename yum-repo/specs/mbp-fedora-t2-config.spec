@@ -35,7 +35,7 @@ mkdir -p %{buildroot}/etc/modules-load.d/
 mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
 
 mkdir -p %{buildroot}/lib/systemd/system-sleep
-mv %{_builddir}/suspend/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
+mv %{_builddir}/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 chmod +x %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 
 mkdir -p %{buildroot}/etc/udev/rules.d
@@ -56,6 +56,7 @@ grubby --remove-args="efi=noruntime" --update-kernel=ALL
 grubby --args="intel_iommu=on iommu=pt pcie_ports=compat" --update-kernel=ALL
 sed -i "/hid_apple/d" /etc/dracut.conf
 sed -i '/^GRUB_ENABLE_BLSCFG=false/c\GRUB_ENABLE_BLSCFG=true' /etc/default/grub
+sed -i 's/,shim//g' /etc/yum.repos.d/fedora*.repo
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Remove old audio confgs
