@@ -2,10 +2,12 @@
 
 set -eu -o pipefail
 
+[[ $(df -k --output=avail / | tail -1) -gt 19777111 ]] || (echo "Free disk space is < 20 GB, build will fail, are you sure ?" && sleep 15)
+
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=6.0.0-54.fc38      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
+FEDORA_KERNEL_VERSION=6.0.5-200.fc36      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F36
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -46,26 +48,42 @@ echo >&2 "===]> Info: Applying kconfig changes... ";
 {
   echo "CONFIG_APPLE_BCE=m"
   echo "CONFIG_APPLE_IBRIDGE=m"
-  # echo "CONFIG_BT_HCIBCM4377=m"
+  echo "CONFIG_BT_HCIBCM4377=m"
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
 echo >&2 "===]> Info: Setting kernel name...";
 sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
+### Remove all non-x86_64 kernel config files to fix CONFIG_BT_HCIBCM4377
+echo >&2 "===]> Info: Removing non-x86_64 config files...";
+find /root/rpmbuild/SOURCES -type f | grep "config$" | grep kernel | grep -v x86_64 | while IFS='' read -r line
+do
+  rm -rfv "$line"
+done
+
+### Disable process-configs.sh from running in kernel.spec (it fails for CONFIG_BT_HCIBCM4377)
+# echo >&2 "===]> Info: Disable process_configs.sh...";
+# sed -i '/RHJOBS=$RPM_BUILD_NCPUS PACKAGE_NAME=kernel \.\/process_configs.sh $OPTS ${specversion}/d' "${RPMBUILD_PATH}"/SPECS/kernel.spec
+
 ### Build non-debug kernel rpms
 echo >&2 "===]> Info: Bulding kernel ...";
 cd "${RPMBUILD_PATH}"/SPECS
 rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
-rpmbuild_exitcode=$?
+kernel_rpmbuild_exitcode=$?
+echo >&2 "===]> Info: kernel_rpmbuild_exitcode=$kernel_rpmbuild_exitcode"
 
-### Build non-debug mbp-fedora-t2-config rpms
+### Build non-debug mbp-fedora-t2-config rpm
+echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-config RPM ...";
 cp -rfv "${REPO_PWD}"/yum-repo/mbp-fedora-t2-config/rpm.spec ./
 find .
 pwd
 rpmbuild -bb --without debug --without debuginfo --target=x86_64 rpm.spec
+config_rpmbuild_exitcode=$?
+echo >&2 "===]> Info: mbp-fedora-t2-config config_rpmbuild_exitcode=$config_rpmbuild_exitcode"
 
-### Import rpm siging keys
+### Import rpm siging key
+echo >&2 "===]> Info: Importing RPM signing key ..."
 cat <<EOT >> ~/.rpmmacros
 %_signature gpg
 %_gpg_path /root/.gnupg
@@ -95,4 +113,4 @@ du -sh ./output_zip
 echo
 du -sh ./output_zip/*.rpm
 
-exit $rpmbuild_exitcode
+exit $kernel_rpmbuild_exitcode
