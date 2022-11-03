@@ -25,5 +25,5 @@ mv %{_builddir}/repo/fedora-mbp-external.repo %{buildroot}/etc/yum.repos.d/fedor
 
 
 %files
-/etc/pki/rpm-gpg/fedora-mbp.gpg
+/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-mbp
 /etc/yum.repos.d/fedora-mbp.repo
