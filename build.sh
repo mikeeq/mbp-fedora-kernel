@@ -57,7 +57,7 @@ sed -i "s/# define buildid.*/%define buildid .${MBP_VERSION}/" "${RPMBUILD_PATH}
 
 ### Remove all non-x86_64 kernel config files to fix CONFIG_BT_HCIBCM4377
 echo >&2 "===]> Info: Removing non-x86_64 config files...";
-rm -rfv $(find /root/rpmbuild/SOURCES -type f | grep "config$" | grep kernel | grep -v x86_64 )
+rm -rfv $(find /root/rpmbuild/SOURCES -type f | grep "config$" | grep kernel | grep -v x86_64)
 
 ### Disable process-configs.sh from running in kernel.spec (it fails for CONFIG_BT_HCIBCM4377)
 # echo >&2 "===]> Info: Disable process_configs.sh...";

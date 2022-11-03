@@ -24,7 +24,7 @@ tar -xf %{_sourcedir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 %build
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > apple_bce_install.conf
-echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"'
+echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"' > 90-backlight.rules
 
 %install
 mkdir -p %{buildroot}/etc/dracut.conf.d/
@@ -36,6 +36,9 @@ mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
 mkdir -p %{buildroot}/lib/systemd/system-sleep
 mv %{_builddir}/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 chmod +x %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
+
+mkdir -p %{buildroot}/etc/udev/rules.d
+mv %{_builddir}/90-backlight.rules %{buildroot}/etc/udev/rules.d/90-backlight.rules
 
 mkdir -p %{buildroot}/usr/lib/udev/rules.d/
 cp -r %{_builddir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}/files/91-audio-custom.rules %{buildroot}/usr/lib/udev/rules.d/
@@ -66,3 +69,4 @@ rm -f /usr/lib/udev/rules.d/91-pulseaudio-custom.rules
 /usr/share/alsa-card-profile/mixer
 /usr/share/pulseaudio/alsa-mixer
 /usr/lib/udev/rules.d/
+/etc/udev/rules.d/
