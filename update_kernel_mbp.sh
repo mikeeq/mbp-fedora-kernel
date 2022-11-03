@@ -5,7 +5,6 @@ set -eu -o pipefail
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
 UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v6.0-f36}
-MBP_FEDORA_BRANCH=f36
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
@@ -48,22 +47,20 @@ else
   echo >&2 "===]> Exit: Wrong UPDATE_SCRIPT_BRANCH variable, or update_kernel_mbp.sh doesn't exist on default branch - please rerun!" && exit
 fi
 
-# Add yum repo gpg key
+### Check yum repo gpg key
 if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
   echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
 else
-  echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
-  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
-  rpm --import ./fedora-mbp.gpg
-  rm -rf ./fedora-mbp.gpg
+  echo >&2 "===]> Info: fedora-mbp yum repo gpg key not found, installing latest RPMs...";
+  INSTALL_LATEST=true
 fi
 
-### Add yum repo
+### Check yum repo
 if dnf repolist | grep -iq fedora-mbp; then
   echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
 else
-  echo >&2 "===]> Info: Adding fedora-mbp repo..."
-  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp-external.repo" > /etc/yum.repos.d/fedora-mbp.repo
+  echo >&2 "===]> Info: fedora-mbp repo not found, installing latest RPMs...";
+  INSTALL_LATEST=true
 fi
 
 ### Download kernel packages
@@ -75,18 +72,24 @@ echo >&2 "===]> Info: Current kernel version: ${CURRENT_KERNEL_VERSION}";
 if [[ -n "${KERNEL_VERSION:-}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
   echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
+else
+  MBP_VERSION=mbp
+  MBP_KERNEL_TAG=$(curl -sI https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i "location:" | cut -d'v' -f2 | tr -d '\r')
+  echo >&2 "===]> Info: Downloading latest ${MBP_VERSION} kernel: ${MBP_KERNEL_TAG}";
+fi
 
-  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/tag/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 
-  for i in "${KERNEL_PACKAGES[@]}"; do
-    curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
-  done
+for i in "${KERNEL_PACKAGES[@]}"; do
+  curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
+done
 
+if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST}" = true ]; then
   echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
   rpm --force -i ./*.rpm
 else
   echo >&2 "===]> Info: Installing latest kernel from repo";
-  dnf update -y kernel kernel-core kernel-modules mbp-fedora-t2-config
+  dnf update -y kernel kernel-core kernel-modules mbp-fedora-t2-config mbp-fedora-t2-repo
 fi
 
 ### Cleanup
