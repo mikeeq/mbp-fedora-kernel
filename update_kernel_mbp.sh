@@ -5,6 +5,7 @@ set -eu -o pipefail
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
 UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v6.0-f36}
+MBP_FEDORA_BRANCH=f37
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
@@ -62,6 +63,11 @@ else
   echo >&2 "===]> Info: fedora-mbp repo not found, installing latest RPMs...";
   INSTALL_LATEST=true
 fi
+
+### Copy grub config without finding macos partition to fix failure reading sector error
+echo >&2 "===]> Info: Rebuilding GRUB config... ";
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
+chmod 755 /etc/grub.d/30_os-prober
 
 ### Download kernel packages
 KERNEL_PACKAGES=()
