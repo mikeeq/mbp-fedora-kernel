@@ -8,7 +8,7 @@ on: [push]
 # https://hub.docker.com/_/alpine
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: "YamlLint"
@@ -41,11 +41,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-      - name: "AgentInfo before"
+      - name: "AgentInfo"
         run: ./.github/agent-info.sh
       - name: "Runner storage cleanup"
         run: ./.github/cleanup-runner.sh
-      - name: "AgentInfo after"
+      - name: "AgentInfo"
         run: ./.github/agent-info.sh
       - name: "Build Fedora Kernel"
         timeout-minutes: 1200
