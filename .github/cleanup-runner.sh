@@ -46,6 +46,7 @@ info "Removing swift..."
 rm -rf /usr/share/swift
 
 info "Removing all docker images..."
+# shellcheck disable=SC2046
 docker rmi $(docker images | awk '{print $3}')
 
 info "Cleaning up docker storage..."
