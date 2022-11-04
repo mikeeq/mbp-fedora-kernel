@@ -3,9 +3,6 @@ name: Check runner storage
 # yamllint disable-line rule:truthy
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - feature/update_script_removal
 
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
 # https://hub.docker.com/_/alpine
@@ -16,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: "AgentInfo before"
         run: ./.github/agent-info.sh
-      - name: "ShellCheck"
+      - name: "ncdu"
         run: |
           sudo apt-get update;
           sudo apt-get install -y ncdu;
@@ -35,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: "AgentInfo before"
         run: ./.github/agent-info.sh
-      - name: "ShellCheck"
+      - name: "ncdu"
         run: |
           sudo apt-get update;
           sudo apt-get install -y ncdu;
