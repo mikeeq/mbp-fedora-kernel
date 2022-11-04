@@ -2,11 +2,10 @@
 
 set -eu -o pipefail
 
-### Apple T2 drivers commit hashes
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v6.0-f36}
-MBP_FEDORA_BRANCH=f36
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v6.0-f37}
+MBP_FEDORA_BRANCH=f37
 
 if [ "$EUID" -ne 0 ]; then
   echo >&2 "===]> Please run as root --> sudo -i; update_kernel_mbp"
@@ -24,18 +23,35 @@ if [ -f /usr/bin/update_kernel_mbp ]; then
   cp -rf /usr/bin/update_kernel_mbp ${KERNEL_PATCH_PATH}/
   ORG_SCRIPT_SHA=$(sha256sum ${KERNEL_PATCH_PATH}/update_kernel_mbp | awk '{print $1}')
 fi
-curl -L "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh" -o /usr/bin/update_kernel_mbp
-chmod +x /usr/bin/update_kernel_mbp
-if [ -f /usr/bin/update_kernel_mbp ]; then
-  NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
-  if [[ "$ORG_SCRIPT_SHA" != "$NEW_SCRIPT_SHA" ]]; then
-    echo >&2 "===]> Info: update_kernel_mbp script was updated please rerun!" && exit
+
+URL_UPDATE_SCRIPT="https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/update_kernel_mbp.sh"
+
+install_update_kernel_mbp () {
+  curl -L "$URL_UPDATE_SCRIPT" -o /usr/bin/update_kernel_mbp
+  chmod +x /usr/bin/update_kernel_mbp
+}
+
+if curl -sf -LI "$URL_UPDATE_SCRIPT" 1>/dev/null; then
+  if [ -f /usr/bin/update_kernel_mbp ]; then
+    install_update_kernel_mbp
+    NEW_SCRIPT_SHA=$(sha256sum /usr/bin/update_kernel_mbp | awk '{print $1}')
+    if [[ "$ORG_SCRIPT_SHA" != "$NEW_SCRIPT_SHA" ]]; then
+      echo >&2 "===]> Exit: update_kernel_mbp script was updated please rerun!" && exit
+    else
+      echo >&2 "===]> Info: update_kernel_mbp script is in the latest version proceeding..."
+    fi
   else
-    echo >&2 "===]> Info: update_kernel_mbp script is in the latest version proceeding..."
+    install_update_kernel_mbp
+    echo >&2 "===]> Info: update_kernel_mbp script was installed..."
   fi
 else
-   echo >&2 "===]> Info: update_kernel_mbp script was installed..."
+  echo >&2 "===]> Exit: Wrong UPDATE_SCRIPT_BRANCH variable, or update_kernel_mbp.sh doesn't exist on default branch - please rerun!" && exit
 fi
+
+### Copy grub config without finding macos partition to fix failure reading sector error
+echo >&2 "===]> Info: Rebuilding GRUB config... ";
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
+chmod 755 /etc/grub.d/30_os-prober
 
 ### Download kernel packages
 KERNEL_PACKAGES=()
@@ -45,77 +61,42 @@ echo >&2 "===]> Info: Current kernel version: ${CURRENT_KERNEL_VERSION}";
 
 if [[ -n "${KERNEL_VERSION:-}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
-  echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
+  echo >&2 "===]> Info: Using specified kernel version: ${MBP_KERNEL_TAG}";
 else
-  MBP_VERSION=mbp
-  MBP_KERNEL_TAG=$(curl -sI https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i "location:" | cut -d'v' -f2 | tr -d '\r')
-  echo >&2 "===]> Info: Downloading latest ${MBP_VERSION} kernel: ${MBP_KERNEL_TAG}";
-fi
-
-while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${MBP_KERNEL_TAG}" | grep rpm | grep span | grep -v -i 'mbp-fedora-t2-config' | cut -d'>' -f2 | cut -d'<' -f1)
-
-for i in "${KERNEL_PACKAGES[@]}"; do
-  curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
-done
-
-### Add custom drivers to be loaded at boot
-echo >&2 "===]> Info: Setting up GRUB to load custom drivers at boot... ";
-rm -rf /etc/modules-load.d/bce.conf
-echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > /etc/modules-load.d/apple_bce.conf
-echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > /etc/dracut.conf
-
-GRUB_CMDLINE_VALUE=$(grep -v '#' /etc/default/grub | grep -w GRUB_CMDLINE_LINUX | cut -d'"' -f2)
-
-for i in efi=noruntime pcie_ports=compat; do
-  if ! echo "$GRUB_CMDLINE_VALUE" | grep -w $i; then
-   GRUB_CMDLINE_VALUE="$GRUB_CMDLINE_VALUE $i"
+  ### Check yum repo gpg key
+  if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
+    echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
+  else
+    echo >&2 "===]> Info: fedora-mbp yum repo gpg key not found, installing latest RPMs...";
+    INSTALL_LATEST=true
   fi
-done
 
-sed -i "s:^GRUB_CMDLINE_LINUX=.*:GRUB_CMDLINE_LINUX=\"${GRUB_CMDLINE_VALUE}\":g" /etc/default/grub
-sed -i '/^GRUB_ENABLE_BLSCFG=true/c\GRUB_ENABLE_BLSCFG=false' /etc/default/grub
-
-if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
-  echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
-else
-  echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
-  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/sources/repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
-  rpm --import ./fedora-mbp.gpg
-  rm -rf ./fedora-mbp.gpg
+  ### Check yum repo
+  if dnf repolist | grep -iq fedora-mbp; then
+    echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
+  else
+    echo >&2 "===]> Info: fedora-mbp repo not found, installing latest RPMs...";
+    INSTALL_LATEST=true
+  fi
+  MBP_KERNEL_TAG=$(curl -sI https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i "location:" | cut -d'v' -f2 | tr -d '\r')
+  echo >&2 "===]> Info: Using latest kernel version: ${MBP_KERNEL_TAG}";
 fi
 
-echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
-rpm --force -i ./*.rpm
+if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST:-false}" = true ] || [ "${1:-}" == "--github" ]; then
+  echo >&2 "===]> Info: Downloading kernel RPMs: ${MBP_KERNEL_TAG}";
 
-### Suspend fix
-echo >&2 "===]> Info: Adding suspend fix... ";
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/suspend/rmmod_tb.sh -o /lib/systemd/system-sleep/rmmod_tb.sh
-chmod +x /lib/systemd/system-sleep/rmmod_tb.sh
+  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 
-### Grub
-echo >&2 "===]> Info: Rebuilding GRUB config... ";
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
-chmod 755 /etc/grub.d/30_os-prober
-grub2-mkconfig -o /boot/grub2/grub.cfg
+  for i in "${KERNEL_PACKAGES[@]}"; do
+    curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
+  done
 
-# Remove old audio confgs
-echo >&2 "===]> Info: Adding new T2 Audio configs... ";
-KEKRBY_AUDIO_CONFIGS=e46839a28963e2f7d364020518b9dac98236bcae
-curl -Ls https://github.com/kekrby/t2-better-audio/archive/${KEKRBY_AUDIO_CONFIGS}/t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz -o t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz
-tar -xf t2-better-audio-${KEKRBY_AUDIO_CONFIGS}.tar.gz
-
-rm -f /usr/share/alsa/cards/AppleT2.conf
-rm -f /usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
-rm -f /usr/lib/udev/rules.d/91-pulseaudio-custom.rules
-
-mkdir -p /usr/lib/udev/rules.d/
-cp -rfv t2-better-audio-${KEKRBY_AUDIO_CONFIGS}/files/91-audio-custom.rules /usr/lib/udev/rules.d/
-
-for i in /usr/share/alsa-card-profile/mixer /usr/share/pulseaudio/alsa-mixer; do
-  mkdir -p $i
-  cp -rfv t2-better-audio-${KEKRBY_AUDIO_CONFIGS}/files/profile-sets $i
-  cp -rfv t2-better-audio-${KEKRBY_AUDIO_CONFIGS}/files/paths $i
-done
+  echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
+  rpm --force -i ./*.rpm
+else
+  echo >&2 "===]> Info: Installing latest kernel from repo";
+  dnf update -y kernel kernel-core kernel-modules mbp-fedora-t2-config mbp-fedora-t2-repo
+fi
 
 ### Cleanup
 echo >&2 "===]> Info: Cleaning old kernel pkgs (leaving 3 latest versions)... ";
@@ -124,4 +105,4 @@ dnf autoremove -y
 # shellcheck disable=SC2046
 dnf remove -y $(dnf repoquery --installonly --latest-limit=-3 -q)
 
-echo >&2 "===]> Info: Kernel update to ${MBP_KERNEL_TAG} finished successfully! ";
+echo >&2 "===]> Info: Kernel update was finished successfully! ";

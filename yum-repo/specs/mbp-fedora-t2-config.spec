@@ -1,6 +1,6 @@
 Name: mbp-fedora-t2-config
-Version: 6.0.5
-Release: 2%{?dist}
+Version: 6.0.7
+Release: 1%{?dist}
 Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
 %undefine _disable_source_fetch
@@ -56,6 +56,7 @@ grubby --remove-args="efi=noruntime" --update-kernel=ALL
 grubby --args="intel_iommu=on iommu=pt pcie_ports=compat" --update-kernel=ALL
 sed -i "/hid_apple/d" /etc/dracut.conf
 sed -i '/^GRUB_ENABLE_BLSCFG=false/c\GRUB_ENABLE_BLSCFG=true' /etc/default/grub
+sed -i 's/,shim//g' /etc/yum.repos.d/fedora*.repo
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Remove old audio confgs
