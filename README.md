@@ -18,7 +18,7 @@ macOS Mojave: 10.14.6 (18G103)
 ```bash
 ### First run or if you want to update your copy of update_kernel_mbp script
 sudo -i
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v6.0-f36/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v6.0-f37/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 update_kernel_mbp
 
@@ -28,13 +28,13 @@ update_kernel_mbp
 
 ### Update to specific version of kernel
 sudo -i
-KERNEL_VERSION="6.0.5-f36" update_kernel_mbp
+KERNEL_VERSION="6.0.7-f37" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
-KERNEL_VERSION="6.0.5-f36" UPDATE_SCRIPT_BRANCH="v6.0-f36" update_kernel_mbp
+KERNEL_VERSION="6.0.7-f37" UPDATE_SCRIPT_BRANCH="v6.0-f37" update_kernel_mbp
 ```
 
 ## CI status
