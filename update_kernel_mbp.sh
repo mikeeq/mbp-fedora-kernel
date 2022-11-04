@@ -79,7 +79,7 @@ if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
   echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
 else
   echo >&2 "===]> Info: Adding fedora-mbp yum repo gpg key...";
-  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
+  curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/sources/repo/fedora-mbp.gpg" > ./fedora-mbp.gpg
   rpm --import ./fedora-mbp.gpg
   rm -rf ./fedora-mbp.gpg
 fi
