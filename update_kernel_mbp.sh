@@ -48,22 +48,6 @@ else
   echo >&2 "===]> Exit: Wrong UPDATE_SCRIPT_BRANCH variable, or update_kernel_mbp.sh doesn't exist on default branch - please rerun!" && exit
 fi
 
-### Check yum repo gpg key
-if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
-  echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
-else
-  echo >&2 "===]> Info: fedora-mbp yum repo gpg key not found, installing latest RPMs...";
-  INSTALL_LATEST=true
-fi
-
-### Check yum repo
-if dnf repolist | grep -iq fedora-mbp; then
-  echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
-else
-  echo >&2 "===]> Info: fedora-mbp repo not found, installing latest RPMs...";
-  INSTALL_LATEST=true
-fi
-
 ### Copy grub config without finding macos partition to fix failure reading sector error
 echo >&2 "===]> Info: Rebuilding GRUB config... ";
 curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
@@ -79,18 +63,33 @@ if [[ -n "${KERNEL_VERSION:-}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
   echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
 else
-  MBP_VERSION=mbp
+  ### Check yum repo gpg key
+  if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
+    echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
+  else
+    echo >&2 "===]> Info: fedora-mbp yum repo gpg key not found, installing latest RPMs...";
+    INSTALL_LATEST=true
+  fi
+
+  ### Check yum repo
+  if dnf repolist | grep -iq fedora-mbp; then
+    echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
+  else
+    echo >&2 "===]> Info: fedora-mbp repo not found, installing latest RPMs...";
+    INSTALL_LATEST=true
+  fi
   MBP_KERNEL_TAG=$(curl -sI https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i "location:" | cut -d'v' -f2 | tr -d '\r')
-  echo >&2 "===]> Info: Downloading latest ${MBP_VERSION} kernel: ${MBP_KERNEL_TAG}";
 fi
 
-while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
+if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST:-false}" = true ]; then
+  echo >&2 "===]> Info: Downloading kernel RPMs: ${MBP_KERNEL_TAG}";
 
-for i in "${KERNEL_PACKAGES[@]}"; do
-  curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
-done
+  while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
 
-if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST}" = true ]; then
+  for i in "${KERNEL_PACKAGES[@]}"; do
+    curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
+  done
+
   echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
   rpm --force -i ./*.rpm
 else
