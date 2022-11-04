@@ -28,7 +28,7 @@ update_kernel_mbp
 
 ### Update to specific version of kernel
 sudo -i
-KERNEL_VERSION="6.0-f36" update_kernel_mbp
+KERNEL_VERSION="6.0.5-f36" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
