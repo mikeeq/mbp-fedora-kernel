@@ -1,0 +1,51 @@
+---
+name: Check runner storage
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
+# https://hub.docker.com/_/alpine
+jobs:
+  tests20:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: "AgentInfo before"
+        run: ./.github/agent-info.sh
+      - name: "ncdu"
+        run: |
+          sudo apt-get update;
+          sudo apt-get install -y ncdu;
+          cd /
+          ncdu -o /tmp/ncdu20.json
+      - name: Archive ncdu output
+        uses: actions/upload-artifact@v3
+        with:
+          name: ncdu20-report
+          path: /tmp/ncdu20.json
+      - name: "AgentInfo after"
+        run: ./.github/agent-info.sh
+  tests22:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: "AgentInfo before"
+        run: ./.github/agent-info.sh
+      - name: "ncdu"
+        run: |
+          sudo apt-get update;
+          sudo apt-get install -y ncdu;
+          cd /
+          ncdu -o /tmp/ncdu22.json
+      - name: Archive ncdu output
+        uses: actions/upload-artifact@v3
+        with:
+          name: ncdu22-report
+          path: /tmp/ncdu22.json
+      - name: "AgentInfo after"
+        run: ./.github/agent-info.sh
