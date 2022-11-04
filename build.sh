@@ -74,7 +74,7 @@ kernel_rpmbuild_exitcode=$?
 echo >&2 "===]> Info: kernel_rpmbuild_exitcode=$kernel_rpmbuild_exitcode"
 
 echo >&2 "===]> Info: Copy source files for other RPMs ...";
-cp -rfv "${REPO_PWD}"/yum-repo/sources/ ${RPMBUILD_PATH}/SOURCES/
+cp -rfv "${REPO_PWD}"/yum-repo/sources/* ${RPMBUILD_PATH}/SOURCES/
 
 ### Build non-debug mbp-fedora-t2-config rpm
 echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-config RPM ...";

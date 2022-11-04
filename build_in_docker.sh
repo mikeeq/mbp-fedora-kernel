@@ -5,14 +5,14 @@ set -eu -o pipefail
 # DOCKER_IMAGE=fedora_build:36
 # docker build -t fedora_build:36 .
 
-DOCKER_IMAGE=fedora:36
+DOCKER_IMAGE=${DOCKER_IMAGE:-fedora:36}
 RPMBUILD_HOST_PATH=~/rpmbuild
 
 mkdir -p ${RPMBUILD_HOST_PATH}
 
 RPM_SIGNING_KEY=${RPM_SIGNING_KEY:-$(gpg --export-secret-keys -a 'mbp-fedora' | base64)}
 
-# docker pull ${DOCKER_IMAGE}
+docker pull ${DOCKER_IMAGE}
 docker run \
   -t \
   --rm \
