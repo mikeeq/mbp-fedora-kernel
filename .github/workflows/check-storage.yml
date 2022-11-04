@@ -1,7 +1,8 @@
 ---
 name: Check runner storage
 # yamllint disable-line rule:truthy
-on: []
+on:
+  workflow_dispatch:
 
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
 # https://hub.docker.com/_/alpine
