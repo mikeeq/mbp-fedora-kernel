@@ -61,7 +61,7 @@ echo >&2 "===]> Info: Current kernel version: ${CURRENT_KERNEL_VERSION}";
 
 if [[ -n "${KERNEL_VERSION:-}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
-  echo >&2 "===]> Info: Downloading specified kernel: ${MBP_KERNEL_TAG}";
+  echo >&2 "===]> Info: Using specified kernel version: ${MBP_KERNEL_TAG}";
 else
   ### Check yum repo gpg key
   if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
@@ -79,6 +79,7 @@ else
     INSTALL_LATEST=true
   fi
   MBP_KERNEL_TAG=$(curl -sI https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i "location:" | cut -d'v' -f2 | tr -d '\r')
+  echo >&2 "===]> Info: Using latest kernel version: ${MBP_KERNEL_TAG}";
 fi
 
 if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST:-false}" = true ]; then
