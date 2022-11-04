@@ -13,7 +13,19 @@ Boot ROM Version:	220.270.99.0.0 (iBridge: 16.16.6571.0.0,0)
 macOS Mojave: 10.14.6 (18G103)
 ```
 
-## How to update kernel-mbp
+## CI status
+
+GitHub Actions kernel build status:
+[![Build Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml)
+
+Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> :
+[![Publish Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml)
+
+## How to update mbp-fedora-kernel
+
+Starting from mbp-fedora release F37 mbp-fedora-kernel should be automatically updated using bultin package manager - DNF, so simply run `dnf update` and it should automatically fetch all needed updates.
+
+If the dnf fail or you're updating your older mbp-fedora, you can still use previously used method with update_kernel_mbp described below.
 
 ```bash
 ### First run or if you want to update your copy of update_kernel_mbp script
@@ -35,23 +47,19 @@ KERNEL_VERSION="6.0.7-f37" update_kernel_mbp
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
 KERNEL_VERSION="6.0.7-f37" UPDATE_SCRIPT_BRANCH="v6.0-f37" update_kernel_mbp
+
+### If kernel update using dnf would file you can execute update_kernel_mbp script with `--github` argument, it will force it to use github to download kernel RPMs
+sudo -i
+update_kernel_mbp --github
 ```
 
-## CI status
-
-GitHub Actions kernel build status:
-[![Build Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml)
-
-Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> :
-[![Publish Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml)
-
-### Known issues
+## Known issues
 
 - TouchID - (@MCMrARM is working on it - https://github.com/Dunedan/mbp-2016-linux/issues/71#issuecomment-528545490)
 - Audio
   - Microphone (it's recognized with new apple t2 sound driver, but there is a low mic volume amp)
 
-#### Working with upstream stable kernel 6.0
+### Working with upstream stable kernel 6.0
 
 - Display/Screen
 - USB-C
@@ -61,7 +69,7 @@ Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> 
 - NVMe
 - Camera
 
-#### Working with mbp-fedora-kernel
+### Working with mbp-fedora-kernel
 
 - with builtin BCE driver
   - Audio
@@ -73,7 +81,7 @@ Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> 
 - WiFi
   - to make it working, you need to grab closed source Broadcom WiFi firmware from MacOS and put it under `/lib/firmware/brcm/` in Linux OS, see <https://wiki.t2linux.org/guides/wifi/>
 
-#### Not tested
+### Not tested
 
 - eGPU
 - Thunderbolt
