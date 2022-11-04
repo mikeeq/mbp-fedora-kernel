@@ -82,7 +82,7 @@ else
   echo >&2 "===]> Info: Using latest kernel version: ${MBP_KERNEL_TAG}";
 fi
 
-if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST:-false}" = true ]; then
+if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST:-false}" = true ] || [ "$1" == "--github"]; then
   echo >&2 "===]> Info: Downloading kernel RPMs: ${MBP_KERNEL_TAG}";
 
   while IFS='' read -r line; do KERNEL_PACKAGES+=("$line"); done <  <(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${MBP_KERNEL_TAG}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1)
