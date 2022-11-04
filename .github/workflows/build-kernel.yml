@@ -5,9 +5,10 @@ name: Build Fedora Kernel
 on: [push]
 
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
+
 jobs:
   tests:
-    runs-on: 	ubuntu-20.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - name: "YamlLint"
