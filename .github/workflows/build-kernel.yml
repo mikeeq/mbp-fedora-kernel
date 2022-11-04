@@ -41,7 +41,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
-      - name: "AgentInfo"
+      - name: "AgentInfo before"
+        run: ./.github/agent-info.sh
+      - name: "Runner storage cleanup"
+        run: ./.github/cleanup-runner.sh
+      - name: "AgentInfo after"
         run: ./.github/agent-info.sh
       - name: "Build Fedora Kernel"
         timeout-minutes: 1200
