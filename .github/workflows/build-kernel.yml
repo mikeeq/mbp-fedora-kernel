@@ -4,9 +4,11 @@ name: Build Fedora Kernel
 # yamllint disable-line rule:truthy
 on: [push]
 
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
+# https://hub.docker.com/_/alpine
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: "YamlLint"
@@ -32,10 +34,19 @@ jobs:
               apk add --no-cache shellcheck bash \
               && shellcheck $(find . -type f -name "*.sh" |  tr '\n' ' ')
             "
+      - name: "AgentInfo"
+        run: ./.github/agent-info.sh
+
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
+      - name: "AgentInfo"
+        run: ./.github/agent-info.sh
+      - name: "Runner storage cleanup"
+        run: ./.github/cleanup-runner.sh
+      - name: "AgentInfo"
+        run: ./.github/agent-info.sh
       - name: "Build Fedora Kernel"
         timeout-minutes: 1200
         run: ./build_in_docker.sh
@@ -52,3 +63,5 @@ jobs:
             ./output_zip/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # You don't need to add this in secrets it's by default.
+      - name: "AgentInfo"
+        run: ./.github/agent-info.sh
