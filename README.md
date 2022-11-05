@@ -23,7 +23,7 @@ Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> 
 
 ## How to update mbp-fedora-kernel
 
-Starting from Fedora 37 `mbp-fedora` release - `mbp-fedora-kernel` should be automatically updated using builtin package manager - DNF, so simply run `dnf update`, and it should automatically fetch all required updates.
+Starting from Fedora 37 `mbp-fedora` release - `mbp-fedora-kernel` should be automatically updated using builtin package manager - DNF, so simply run `dnf update --refresh`, and it should automatically fetch all required updates.
 
 If the DNF fail, or you're updating your older `mbp-fedora`, you can still use previously used method with `update_kernel_mbp` described below.
 

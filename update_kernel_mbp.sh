@@ -91,10 +91,13 @@ if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST:-false}" = true ] || [ 
     curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
   done
 
+  echo >&2 "===]> Info: Installing dependencies...";
+  dnf install -y gcc openssl-devel flex elfutils bison elfutils-libelf-devel
+
   echo >&2 "===]> Info: Installing kernel version: ${MBP_KERNEL_TAG}";
   rpm --force -i ./*.rpm
 else
-  echo >&2 "===]> Info: Installing latest kernel from repo";
+  echo >&2 "===]> Info: Installing latest kernel from repo...";
   dnf update -y kernel kernel-core kernel-modules mbp-fedora-t2-config mbp-fedora-t2-repo
 fi
 
