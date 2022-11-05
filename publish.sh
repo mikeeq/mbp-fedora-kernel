@@ -13,5 +13,5 @@ cd yum-repo || exit
 curl https://cli-assets.heroku.com/install.sh | sh
 
 heroku container:login
-heroku container:push -a fedora-mbp-repo web --arg RELEASE_VERSION="${LATEST_RELEASE}"
-heroku container:release -a fedora-mbp-repo web
+heroku container:push -a mbp-fedora-repo web --arg RELEASE_VERSION="${LATEST_RELEASE}"
+heroku container:release -a mbp-fedora-repo web

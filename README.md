@@ -18,7 +18,7 @@ macOS Mojave: 10.14.6 (18G103)
 GitHub Actions kernel build status:
 [![Build Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/build-kernel.yml)
 
-Github Actions kernel publish status - <https://fedora-mbp-repo.herokuapp.com/> :
+Github Actions kernel publish status - <https://mbp-fedora-repo.herokuapp.com/> :
 [![Publish Status](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml/badge.svg)](https://github.com/mikeeq/mbp-fedora-kernel/actions/workflows/yum-repo.yml)
 
 ## How to update mbp-fedora-kernel

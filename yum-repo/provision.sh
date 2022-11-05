@@ -5,9 +5,9 @@ set -eu -o pipefail
 cd /var/repo
 
 ### Download previous versions of kernel from running yum repo
-# wget -A rpm -r http://fedora-mbp-repo.herokuapp.com/
-# mv -f ./fedora-mbp-repo.herokuapp.com/*.rpm ./
-# rm -rfv fedora-mbp-repo.herokuapp.com
+# wget -A rpm -r http://mbp-fedora-repo.herokuapp.com/
+# mv -f ./mbp-fedora-repo.herokuapp.com/*.rpm ./
+# rm -rfv mbp-fedora-repo.herokuapp.com
 
 
 ### shim 15.6-2 is now working properly on MBP 16,2

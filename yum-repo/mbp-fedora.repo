@@ -1,5 +1,5 @@
-[fedora-mbp]
-name=Fedora MBP
+[mbp-fedora]
+name=mbp-fedora
 baseurl=http://12ba210cd832
 gpgcheck=1
 enabled=1

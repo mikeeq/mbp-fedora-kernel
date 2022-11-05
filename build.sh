@@ -7,7 +7,7 @@ set -eu -o pipefail
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=6.0.7-300.fc37      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
+FEDORA_KERNEL_VERSION=6.0.7-301.fc37      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -101,7 +101,7 @@ EOT
 
 echo "$RPM_SIGNING_KEY" | base64 -d > ./rpm_signing_key
 gpg --import ./rpm_signing_key
-rpm --import "${REPO_PWD}"/yum-repo/sources/repo/fedora-mbp.gpg
+rpm --import "${REPO_PWD}"/yum-repo/sources/repo/mbp-fedora-repo.gpg
 rm -rfv ./rpm_signing_key
 
 rpm --addsign ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm

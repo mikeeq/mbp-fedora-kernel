@@ -1,5 +1,5 @@
 Name: mbp-fedora-t2-repo
-Version: 1.0.0
+Version: 1.1.0
 Release: 1%{?dist}
 Summary: RPM repo for mbp-fedora on Apple T2 Macs.
 
@@ -18,12 +18,15 @@ cp -rf %{_sourcedir}/repo %{_builddir}/
 
 %install
 mkdir -p %{buildroot}/etc/pki/rpm-gpg
-mv %{_builddir}/repo/fedora-mbp.gpg %{buildroot}/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-mbp
+mv %{_builddir}/repo/mbp-fedora-repo.gpg %{buildroot}/etc/pki/rpm-gpg/RPM-GPG-KEY-mbp-fedora
 
 mkdir -p %{buildroot}/etc/yum.repos.d
-mv %{_builddir}/repo/fedora-mbp-external.repo %{buildroot}/etc/yum.repos.d/fedora-mbp.repo
+mv %{_builddir}/repo/mbp-fedora-external.repo %{buildroot}/etc/yum.repos.d/mbp-fedora.repo
 
+%post
+rm -rf /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-mbp
+rm -rf /etc/yum.repos.d/fedora-mbp.repo
 
 %files
-/etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-mbp
-/etc/yum.repos.d/fedora-mbp.repo
+/etc/pki/rpm-gpg/RPM-GPG-KEY-mbp-fedora
+/etc/yum.repos.d/mbp-fedora.repo

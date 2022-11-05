@@ -1,0 +1,8 @@
+[mbp-fedora]
+name=mbp-fedora
+baseurl=https://mbp-fedora-repo.herokuapp.com/
+gpgcheck=1
+enabled=1
+cost=998
+priority=98
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mbp-fedora

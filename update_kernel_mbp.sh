@@ -65,17 +65,17 @@ if [[ -n "${KERNEL_VERSION:-}" ]]; then
 else
   ### Check yum repo gpg key
   if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
-    echo >&2 "===]> Info: fedora-mbp yum repo gpg key is already added, skipping...";
+    echo >&2 "===]> Info: mbp-fedora yum repo gpg key is already added, skipping...";
   else
-    echo >&2 "===]> Info: fedora-mbp yum repo gpg key not found, installing latest RPMs...";
+    echo >&2 "===]> Info: mbp-fedora yum repo gpg key not found, installing latest RPMs...";
     INSTALL_LATEST=true
   fi
 
   ### Check yum repo
-  if dnf repolist | grep -iq fedora-mbp; then
-    echo >&2 "===]> Info: fedora-mbp repo was already added, skipping..."
+  if dnf repolist | grep -iq mbp-fedora; then
+    echo >&2 "===]> Info: mbp-fedora repo was already added, skipping..."
   else
-    echo >&2 "===]> Info: fedora-mbp repo not found, installing latest RPMs...";
+    echo >&2 "===]> Info: mbp-fedora repo not found, installing latest RPMs...";
     INSTALL_LATEST=true
   fi
   MBP_KERNEL_TAG=$(curl -sI https://github.com/mikeeq/mbp-fedora-kernel/releases/latest | grep -i "location:" | cut -d'v' -f2 | tr -d '\r')
