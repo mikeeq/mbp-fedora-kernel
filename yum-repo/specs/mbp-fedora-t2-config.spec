@@ -22,8 +22,6 @@ cp %{_sourcedir}/rmmod_tb.sh %{_builddir}/
 tar -xf %{_sourcedir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 
 %build
-# TODO: add update script?
-
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > apple_bce_install.conf
 # https://github.com/t2linux/wiki/pull/343/files
