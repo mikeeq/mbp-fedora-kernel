@@ -49,7 +49,7 @@ else
 fi
 
 ### Copy grub config without finding macos partition to fix failure reading sector error
-echo >&2 "===]> Info: Rebuilding GRUB config... ";
+echo >&2 "===]> Info: Downloading a fix for GRUB os prober... ";
 curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora/${MBP_FEDORA_BRANCH}/files/grub/30_os-prober -o /etc/grub.d/30_os-prober
 chmod 755 /etc/grub.d/30_os-prober
 
@@ -63,14 +63,6 @@ if [[ -n "${KERNEL_VERSION:-}" ]]; then
   MBP_KERNEL_TAG=${KERNEL_VERSION}
   echo >&2 "===]> Info: Using specified kernel version: ${MBP_KERNEL_TAG}";
 else
-  ### Check yum repo gpg key
-  if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
-    echo >&2 "===]> Info: mbp-fedora yum repo gpg key is already added, skipping...";
-  else
-    echo >&2 "===]> Info: mbp-fedora yum repo gpg key not found, installing latest RPMs...";
-    INSTALL_LATEST=true
-  fi
-
   ### Check yum repo
   if dnf repolist | grep -iq mbp-fedora; then
     echo >&2 "===]> Info: mbp-fedora repo was already added, skipping..."
@@ -90,6 +82,16 @@ if [[ -n "${KERNEL_VERSION:-}" ]] || [ "${INSTALL_LATEST:-false}" = true ] || [ 
   for i in "${KERNEL_PACKAGES[@]}"; do
     curl -LO "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${MBP_KERNEL_TAG}/${i}"
   done
+
+  ### Check yum repo gpg key if exists
+  if rpm -q gpg-pubkey --qf '%{SUMMARY}\n' | grep -q -i mbp-fedora; then
+    echo >&2 "===]> Info: mbp-fedora yum repo gpg key is already added, skipping...";
+  else
+    echo >&2 "===]> Info: Adding mbp-fedora yum repo gpg key...";
+    curl -sSL "https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/${UPDATE_SCRIPT_BRANCH}/yum-repo/sources/repo/mbp-fedora-repo.gpg" > ./mbp-fedora.gpg
+    rpm --import ./mbp-fedora.gpg
+    rm -rf ./mbp-fedora.gpg
+  fi
 
   echo >&2 "===]> Info: Installing dependencies...";
   dnf install -y gcc openssl-devel flex elfutils bison elfutils-libelf-devel
