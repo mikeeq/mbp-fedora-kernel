@@ -13,7 +13,7 @@ MBP_VERSION=mbp
 
 
 export fedver=fc37
-FEDORA_KERNEL_VERSION=6.0.7-300.$fedver
+FEDORA_KERNEL_VERSION=6.0.7-301.$fedver
 
 REPO_PWD=$(pwd)
 
