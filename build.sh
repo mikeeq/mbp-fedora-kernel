@@ -66,59 +66,59 @@ done
 # echo >&2 "===]> Info: Disable process_configs.sh...";
 # sed -i '/RHJOBS=$RPM_BUILD_NCPUS PACKAGE_NAME=kernel \.\/process_configs.sh $OPTS ${specversion}/d' "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
-### Build non-debug kernel rpms
-echo >&2 "===]> Info: Bulding kernel ...";
-cd "${RPMBUILD_PATH}"/SPECS
-rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
-kernel_rpmbuild_exitcode=$?
-echo >&2 "===]> Info: kernel_rpmbuild_exitcode=$kernel_rpmbuild_exitcode"
+# ### Build non-debug kernel rpms
+# echo >&2 "===]> Info: Bulding kernel ...";
+# cd "${RPMBUILD_PATH}"/SPECS
+# rpmbuild -bb --with baseonly --without debug --without debuginfo --target=x86_64 kernel.spec
+# kernel_rpmbuild_exitcode=$?
+# echo >&2 "===]> Info: kernel_rpmbuild_exitcode=$kernel_rpmbuild_exitcode"
 
-echo >&2 "===]> Info: Copy source files for other RPMs ...";
-cp -rfv "${REPO_PWD}"/yum-repo/sources/* ${RPMBUILD_PATH}/SOURCES/
+# echo >&2 "===]> Info: Copy source files for other RPMs ...";
+# cp -rfv "${REPO_PWD}"/yum-repo/sources/* ${RPMBUILD_PATH}/SOURCES/
 
-### Build non-debug mbp-fedora-t2-config rpm
-echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-config RPM ...";
-cp -rfv "${REPO_PWD}"/yum-repo/specs/mbp-fedora-t2-config.spec ./
-rpmbuild -bb --without debug --without debuginfo --target=x86_64 mbp-fedora-t2-config.spec
-config_rpmbuild_exitcode=$?
-echo >&2 "===]> Info: mbp-fedora-t2-config config_rpmbuild_exitcode=$config_rpmbuild_exitcode"
+# ### Build non-debug mbp-fedora-t2-config rpm
+# echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-config RPM ...";
+# cp -rfv "${REPO_PWD}"/yum-repo/specs/mbp-fedora-t2-config.spec ./
+# rpmbuild -bb --without debug --without debuginfo --target=x86_64 mbp-fedora-t2-config.spec
+# config_rpmbuild_exitcode=$?
+# echo >&2 "===]> Info: mbp-fedora-t2-config config_rpmbuild_exitcode=$config_rpmbuild_exitcode"
 
-### Build non-debug mbp-fedora-t2-repo rpm
-echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-repo RPM ...";
-cp -rfv "${REPO_PWD}"/yum-repo/specs/mbp-fedora-t2-repo.spec ./
-rpmbuild -bb --without debug --without debuginfo --target=x86_64 mbp-fedora-t2-repo.spec
-repo_rpmbuild_exitcode=$?
-echo >&2 "===]> Info: mbp-fedora-t2-repo repo_rpmbuild_exitcode=$repo_rpmbuild_exitcode"
+# ### Build non-debug mbp-fedora-t2-repo rpm
+# echo >&2 "===]> Info: Bulding non-debug mbp-fedora-t2-repo RPM ...";
+# cp -rfv "${REPO_PWD}"/yum-repo/specs/mbp-fedora-t2-repo.spec ./
+# rpmbuild -bb --without debug --without debuginfo --target=x86_64 mbp-fedora-t2-repo.spec
+# repo_rpmbuild_exitcode=$?
+# echo >&2 "===]> Info: mbp-fedora-t2-repo repo_rpmbuild_exitcode=$repo_rpmbuild_exitcode"
 
-### Import rpm siging key
-echo >&2 "===]> Info: Importing RPM signing key ..."
-cat <<EOT >> ~/.rpmmacros
-%_signature gpg
-%_gpg_path /root/.gnupg
-%_gpg_name mbp-fedora
-%_gpgbin /usr/bin/gpg
-EOT
+# ### Import rpm siging key
+# echo >&2 "===]> Info: Importing RPM signing key ..."
+# cat <<EOT >> ~/.rpmmacros
+# %_signature gpg
+# %_gpg_path /root/.gnupg
+# %_gpg_name mbp-fedora
+# %_gpgbin /usr/bin/gpg
+# EOT
 
-echo "$RPM_SIGNING_KEY" | base64 -d > ./rpm_signing_key
-gpg --import ./rpm_signing_key
-rpm --import "${REPO_PWD}"/yum-repo/sources/repo/mbp-fedora-repo.gpg
-rm -rfv ./rpm_signing_key
+# echo "$RPM_SIGNING_KEY" | base64 -d > ./rpm_signing_key
+# gpg --import ./rpm_signing_key
+# rpm --import "${REPO_PWD}"/yum-repo/sources/repo/mbp-fedora-repo.gpg
+# rm -rfv ./rpm_signing_key
 
-rpm --addsign ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm
+# rpm --addsign ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm
 
-### Copy artifacts to shared volume
-echo >&2 "===]> Info: Copying rpms and calculating SHA256 ...";
-cd "${REPO_PWD}"
-mkdir -p ./output_zip
-cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm ./output_zip/
-sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > ./output_zip/sha256
+# ### Copy artifacts to shared volume
+# echo >&2 "===]> Info: Copying rpms and calculating SHA256 ...";
+# cd "${REPO_PWD}"
+# mkdir -p ./output_zip
+# cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm ./output_zip/
+# sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > ./output_zip/sha256
 
-### Add patches to artifacts
-zip -r patches.zip patches/
-cp -rfv patches.zip ./output_zip/
-echo
-du -sh ./output_zip
-echo
-du -sh ./output_zip/*.rpm
+# ### Add patches to artifacts
+# zip -r patches.zip patches/
+# cp -rfv patches.zip ./output_zip/
+# echo
+# du -sh ./output_zip
+# echo
+# du -sh ./output_zip/*.rpm
 
-exit $kernel_rpmbuild_exitcode
+# exit $kernel_rpmbuild_exitcode
