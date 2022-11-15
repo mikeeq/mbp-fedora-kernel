@@ -2,8 +2,8 @@
 
 set -eu -o pipefail
 
-DOCKER_IMAGE=fedora_build:37
-docker build -t fedora_build:37 .
+# DOCKER_IMAGE=fedora_build:37
+# docker build -t fedora_build:37 .
 
 DOCKER_IMAGE=${DOCKER_IMAGE:-fedora:37}
 RPMBUILD_HOST_PATH=~/rpmbuild
