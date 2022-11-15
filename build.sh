@@ -20,6 +20,7 @@ grep 'model name' /proc/cpuinfo | uniq
 ### Dependencies
 dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip curl dwarves libbpf rpm-sign
 
+rm -rf ${RPMBUILD_PATH}/SOURCES
 ## Set home build directory
 rpmdev-setuptree
 
@@ -63,8 +64,8 @@ do
 done
 
 ### Disable process-configs.sh from running in kernel.spec (it fails for CONFIG_BT_HCIBCM4377)
-echo >&2 "===]> Info: Disable process_configs.sh...";
-sed -i '/RHJOBS=$RPM_BUILD_NCPUS PACKAGE_NAME=kernel \.\/process_configs.sh $OPTS ${specversion}/d' "${RPMBUILD_PATH}"/SPECS/kernel.spec
+# echo >&2 "===]> Info: Disable process_configs.sh...";
+# sed -i '/RHJOBS=$RPM_BUILD_NCPUS PACKAGE_NAME=kernel \.\/process_configs.sh $OPTS ${specversion}/d' "${RPMBUILD_PATH}"/SPECS/kernel.spec
 
 ### Build non-debug kernel rpms
 echo >&2 "===]> Info: Bulding kernel ...";
