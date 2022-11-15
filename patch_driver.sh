@@ -57,4 +57,4 @@ while IFS= read -r file; do
 done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
 
 rm -rf "${TMP_DIR}"
-rm -rf "${TMP_REPOS_DIR}"
+# rm -rf "${TMP_REPOS_DIR}"
