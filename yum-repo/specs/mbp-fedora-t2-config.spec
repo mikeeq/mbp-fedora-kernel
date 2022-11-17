@@ -59,6 +59,14 @@ sed -i '/^GRUB_ENABLE_BLSCFG=false/c\GRUB_ENABLE_BLSCFG=true' /etc/default/grub
 sed -i 's/,shim//g' /etc/yum.repos.d/fedora*.repo
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
+# Fix suspend
+sed -i '/AllowSuspend=/c\AllowSuspend=yes' /etc/systemd/sleep.conf
+sed -i '/SuspendState=/c\SuspendState=mem' /etc/systemd/sleep.conf
+sed -i '/AllowHybridSleep/c\AllowHybridSleep=no' /etc/systemd/sleep.conf
+grep -q "AllowSuspend=" "/etc/systemd/sleep.conf" || echo "AllowSuspend=yes" >> "/etc/systemd/sleep.conf"
+grep -q "SuspendState=" "/etc/systemd/sleep.conf" || echo "SuspendState=mem" >> "/etc/systemd/sleep.conf"
+grep -q "AllowHybridSleep=" "/etc/systemd/sleep.conf" || echo "AllowHybridSleep=no" >> "/etc/systemd/sleep.conf"
+
 # Remove old audio confgs
 rm -f /usr/share/alsa/cards/AppleT2.conf
 rm -f /usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
