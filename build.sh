@@ -48,8 +48,10 @@ done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 echo >&2 "===]> Info: Applying kconfig changes... ";
 {
   echo "CONFIG_APPLE_BCE=m"
-  echo "CONFIG_APPLE_IBRIDGE=m"
   echo "CONFIG_BT_HCIBCM4377=m"
+  echo "CONFIG_HID_APPLE_IBRIDGE=m"
+  echo "CONFIG_HID_APPLE_TOUCHBAR=m"
+  echo "CONFIG_HID_APPLE_MAGIC_BACKLIGHT=m"
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
