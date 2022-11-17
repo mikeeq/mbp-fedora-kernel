@@ -9,8 +9,8 @@ set -eu -o pipefail
 
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/t2linux/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
-APPLE_SMC_DRIVER_BRANCH_NAME=feature/check_diff_bce_ibridge_drivers
-APPLE_SMC_DRIVER_COMMIT_HASH=3665b0a2f4a818a669c87a59d0e9a8f1278d11e2
+APPLE_SMC_DRIVER_BRANCH_NAME=main
+APPLE_SMC_DRIVER_COMMIT_HASH=769b86994d2e181bfbba4ed8976202278943529c
 
 # TMP_DIR=~/tmp_dir
 TMP_DIR=/tmp/tmp_dir
