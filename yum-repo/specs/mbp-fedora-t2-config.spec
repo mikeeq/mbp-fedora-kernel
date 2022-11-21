@@ -17,7 +17,6 @@ Source0: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIG
 Configuration files for mbp-fedora on Apple T2 Macs. The mbp-fedora-kernel is necessary for this to work, and this must be installed to boot. Everything works except for TouchID and eGPU.
 
 %prep
-cp %{_sourcedir}/rmmod_tb.sh %{_builddir}/
 tar -xf %{_sourcedir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 
 %build
