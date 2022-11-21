@@ -77,7 +77,7 @@ update_kernel_mbp --github
   - Touchpad (scroll, right click)
 - with builtin iBridge driver
   - MacBook Pro Touch Bar
-    - If there's an issue with Touch Bar startup on Linux I recommend to install Win10 and boot it once a while to initialize Touch Bar using BootCamp driver, it seems to fix the issue
+    - If there's an issue with Touch Bar startup on Linux I recommend installing Win10 and boot it once a while to initialize Touch Bar using BootCamp driver, it seems to fix the issue
 - WiFi
   - to make it working, you need to grab closed source Broadcom WiFi firmware from MacOS and put it under `/lib/firmware/brcm/` in Linux OS, see <https://wiki.t2linux.org/guides/wifi/>
 
@@ -97,12 +97,8 @@ update_kernel_mbp --github
 ## Docs
 
 - Discord: <https://discord.gg/Uw56rqW>
-- WiFi firmware: <https://packages.aunali1.com/apple/wifi-fw/18G2022>
-- blog `Installing Fedora 31 on a 2018 Mac mini`: <https://linuxwit.ch/blog/2020/01/installing-fedora-on-mac-mini/>
-- iwd:
-  - <https://iwd.wiki.kernel.org/networkconfigurationsettings>
-  - <https://wiki.archlinux.org/index.php/Iwd>
-  - <https://www.vocal.com/secure-communication/eap-types/>
+- T2 Wiki: <https://wiki.t2linux.org/>
+- WiFi firmware: <https://github.com/AdityaGarg8/Apple-Firmware>
 
 ### Fedora
 
@@ -113,20 +109,42 @@ update_kernel_mbp --github
 ### Github
 
 - GitHub issue (RE history): <https://github.com/Dunedan/mbp-2016-linux/issues/71>
+- @kekerby T2 Audio Config: <https://github.com/kekrby/t2-better-audio>
+- Apple BCE repository (Apple T2 HID): <https://github.com/kekrby/apple-bce.git>
+- Apple iBridge repository (TouchBar): <https://github.com/Redecorating/apple-ib-drv.git>
+
+- hid-apple-patched module for changing mappings of ctrl, fn, option keys: <https://github.com/free5lot/hid-apple-patched>
+- Linux T2 kernel patches: <https://github.com/t2linux/linux-t2-patches>
+- Ubuntu
+  - Kernel <https://github.com/t2linux/T2-Ubuntu-Kernel>
+  - ISO <https://github.com/AdityaGarg8/T2-Ubuntu>
+- Arch Linux
+  - Kernel <https://github.com/Redecorating/linux-t2-arch>
+  - Packages <https://github.com/Redecorating/archlinux-t2-packages>
+  - ISO <https://github.com/t2linux/archiso-t2>
+
+### Old
+
 - VHCI+Sound driver (Apple T2): <https://github.com/MCMrARM/mbp2018-bridge-drv/>
 - AppleSMC driver (fan control): <https://github.com/MCMrARM/mbp2018-etc/tree/master/applesmc>
 - hid-apple keyboard backlight patch: <https://github.com/MCMrARM/mbp2018-etc/tree/master/apple-hid>
 - TouchBar driver: <https://github.com/roadrunner2/macbook12-spi-driver/tree/mbp15>
-- Kernel patches (all are mentioned in github issue above): <https://github.com/aunali1/linux-mbp-arch>
-- ArchLinux kernel patches: <https://github.com/ppaulweber/linux-mba>
-- hid-apple-patched module for changing mappings of ctrl, fn, option keys: <https://github.com/free5lot/hid-apple-patched>
-- AdityaGarg8 kernel patches: <https://github.com/AdityaGarg8/linux-t2-patches>
+
+### Other
+
+- blog `Installing Fedora 31 on a 2018 Mac mini`: <https://linuxwit.ch/blog/2020/01/installing-fedora-on-mac-mini/>
+- iwd:
+  - <https://iwd.wiki.kernel.org/networkconfigurationsettings>
+  - <https://wiki.archlinux.org/index.php/Iwd>
+  - <https://www.vocal.com/secure-communication/eap-types/>
 
 ## Credits
 
 - @MCMrARM - thanks for all RE work
 - @ozbenh - thanks for submitting NVME patch
 - @roadrunner2 - thanks for SPI (touchbar) driver
-- @aunali1 - thanks for ArchLinux Kernel CI
+- @aunali1 - thanks for Kernel Patches
 - @ppaulweber - thanks for keyboard and Macbook Air patches
 - @AdityaGarg8 - thanks for support and upkeeping kernel patches
+- @kekrby for T2 Audio config
+- @Redecorating for Arch support
