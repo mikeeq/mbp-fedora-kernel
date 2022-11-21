@@ -10,8 +10,7 @@ URL: https://github.com/mikeeq/mbp-fedora
 
 %global KEKRBY_AUDIO_CONFIGS e46839a28963e2f7d364020518b9dac98236bcae
 
-Source0: https://wiki.t2linux.org/tools/rmmod_tb.sh
-Source1: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
+Source0: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 # https://codeload.github.com/kekrby/t2-better-audio/tar.gz/%{KEKRBY_AUDIO_CONFIGS}
 
 %description
@@ -27,6 +26,9 @@ echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_appl
 # https://github.com/t2linux/wiki/pull/343/files
 echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"' > 90-backlight.rules
 
+# Suspend script
+echo -e '#!/usr/bin/env bash\nif [ "${1}" = "pre" ]; then\nmodprobe -r apple_touchbar\nelif [ "${1}" = "post" ]; then\nmodprobe apple_touchbar\nfi' > rmmod_tb_install.sh
+
 %install
 mkdir -p %{buildroot}/etc/dracut.conf.d/
 mv %{_builddir}/apple_bce_install.conf %{buildroot}/etc/dracut.conf.d/apple_bce_install.conf
@@ -35,7 +37,7 @@ mkdir -p %{buildroot}/etc/modules-load.d/
 mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
 
 mkdir -p %{buildroot}/lib/systemd/system-sleep
-mv %{_builddir}/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
+mv %{_builddir}/rmmod_tb_install.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 chmod +x %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 
 mkdir -p %{buildroot}/etc/udev/rules.d
@@ -53,7 +55,7 @@ done
 
 %post
 grubby --remove-args="efi=noruntime" --update-kernel=ALL
-grubby --args="intel_iommu=on iommu=pt pcie_ports=compat" --update-kernel=ALL
+grubby --args="intel_iommu=on iommu=pt pcie_ports=compat acpi_osi=linux" --update-kernel=ALL
 sed -i "/hid_apple/d" /etc/dracut.conf
 sed -i '/^GRUB_ENABLE_BLSCFG=false/c\GRUB_ENABLE_BLSCFG=true' /etc/default/grub
 sed -i 's/,shim//g' /etc/yum.repos.d/fedora*.repo
@@ -63,9 +65,12 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 sed -i '/AllowSuspend=/c\AllowSuspend=yes' /etc/systemd/sleep.conf
 sed -i '/SuspendState=/c\SuspendState=mem' /etc/systemd/sleep.conf
 sed -i '/AllowHybridSleep/c\AllowHybridSleep=no' /etc/systemd/sleep.conf
+<<<<<<< Updated upstream
 grep -q "AllowSuspend=" "/etc/systemd/sleep.conf" || echo "AllowSuspend=yes" >> "/etc/systemd/sleep.conf"
 grep -q "SuspendState=" "/etc/systemd/sleep.conf" || echo "SuspendState=mem" >> "/etc/systemd/sleep.conf"
 grep -q "AllowHybridSleep=" "/etc/systemd/sleep.conf" || echo "AllowHybridSleep=no" >> "/etc/systemd/sleep.conf"
+=======
+>>>>>>> Stashed changes
 
 # Remove old audio confgs
 rm -f /usr/share/alsa/cards/AppleT2.conf
