@@ -4,27 +4,47 @@ set -eu -o pipefail
 
 # set -x
 
-### Apple T2 drivers commit hashes
-# APPLE_SMC_DRIVER_GIT_URL=https://github.com/Redecorating/mbp-16.1-linux-wifi
-# APPLE_SMC_REPO_NAME=mbp-16.1-linux-wifi
-# APPLE_SMC_DRIVER_BRANCH_NAME=main
-# APPLE_SMC_DRIVER_COMMIT_HASH=0f18a8ee0e2eb7893222e3d0f433f75ce689aa91
+# APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
+# APPLE_IBRIDGE_REPOSITORY=https://github.com/Redecorating/apple-ib-drv.git
 
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/AdityaGarg8/linux-t2-patches
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/t2linux/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=9dcb1e2d259c8bcdb3242000a552e21f6fabf8cd
+APPLE_SMC_DRIVER_COMMIT_HASH=3a916b371ced596485ef0937b1de0a3fafb896b3
 
-# TMP_DIR=~/temp_dir
-TMP_DIR=/tmp/temp_dir
+# TMP_DIR=~/tmp_dir
+TMP_DIR=/tmp/tmp_dir
+# TMP_REPOS_DIR=/tmp/tmp_repos_dir
 REPO_PWD=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PATCHES_DIR=${PATCHES_DIR:-$REPO_PWD/patches}
 
-mkdir -p "${TMP_DIR}"
-cd "${TMP_DIR}" || exit
-
 rm -rf "${PATCHES_DIR}"
 mkdir -p "${PATCHES_DIR}"
+
+# mkdir -p "${TMP_REPOS_DIR}/"
+
+# cd "${TMP_REPOS_DIR}/" || exit
+# mkdir -p apple-bce
+# cd apple-bce
+# git init
+
+# git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "./drivers/staging/apple-bce"
+# rm -rf "./drivers/staging/apple-bce/.git"
+# git add .
+# git diff --cached > "${PATCHES_DIR}/1001-apple-bce-driver.patch"
+
+# cd "${TMP_REPOS_DIR}/" || exit
+# mkdir -p apple-ibridge
+# cd apple-ibridge
+# git init
+
+# git clone --depth 1 "${APPLE_IBRIDGE_REPOSITORY}" "./drivers/staging/apple-ibridge"
+# rm -rf "./drivers/staging/apple-ibridge/.git"
+# git add .
+# git diff --cached > "${PATCHES_DIR}/1002-apple-ibridge-driver.patch"
+
+mkdir -p "${TMP_DIR}"
+cd "${TMP_DIR}" || exit
 
 ### AppleSMC and BT aunali fixes
 git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_DRIVER_GIT_URL}
@@ -37,3 +57,4 @@ while IFS= read -r file; do
 done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
 
 rm -rf "${TMP_DIR}"
+# rm -rf "${TMP_REPOS_DIR}"

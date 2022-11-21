@@ -7,7 +7,7 @@ set -eu -o pipefail
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=6.0.7-301.fc37      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
+FEDORA_KERNEL_VERSION=6.0.9-300.fc37      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -20,6 +20,7 @@ grep 'model name' /proc/cpuinfo | uniq
 ### Dependencies
 dnf install -y fedpkg fedora-packager rpmdevtools ncurses-devel pesign git libkcapi libkcapi-devel libkcapi-static libkcapi-tools zip curl dwarves libbpf rpm-sign
 
+rm -rf ${RPMBUILD_PATH}/SOURCES
 ## Set home build directory
 rpmdev-setuptree
 
@@ -47,8 +48,10 @@ done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 echo >&2 "===]> Info: Applying kconfig changes... ";
 {
   echo "CONFIG_APPLE_BCE=m"
-  echo "CONFIG_APPLE_IBRIDGE=m"
   echo "CONFIG_BT_HCIBCM4377=m"
+  echo "CONFIG_HID_APPLE_IBRIDGE=m"
+  echo "CONFIG_HID_APPLE_TOUCHBAR=m"
+  echo "CONFIG_HID_APPLE_MAGIC_BACKLIGHT=m"
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
