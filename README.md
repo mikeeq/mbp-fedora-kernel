@@ -4,7 +4,7 @@ Fedora kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
 
 Fedora ISO (with mbp-fedora-kernel builtin): <https://github.com/mikeeq/mbp-fedora>
 
-Kernel patches: <https://github.com/AdityaGarg8/linux-t2-patches>
+Kernel patches: <https://github.com/t2linux/linux-t2-patches>
 
 > Tested on: Macbook Pro 15,2 13" 2019 i5 TouchBar Z0WQ000AR MV972ZE/A/R1 && Macbook Pro 16,2 13" 2020 i5
 
