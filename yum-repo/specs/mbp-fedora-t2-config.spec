@@ -55,7 +55,7 @@ done
 
 %post
 grubby --remove-args="efi=noruntime" --update-kernel=ALL
-grubby --args="intel_iommu=on iommu=pt pcie_ports=compat acpi_osi=linux" --update-kernel=ALL
+grubby --args="intel_iommu=on iommu=pt pcie_ports=compat" --update-kernel=ALL
 sed -i "/hid_apple/d" /etc/dracut.conf
 sed -i '/^GRUB_ENABLE_BLSCFG=false/c\GRUB_ENABLE_BLSCFG=true' /etc/default/grub
 sed -i 's/,shim//g' /etc/yum.repos.d/fedora*.repo
