@@ -68,6 +68,7 @@ update_kernel_mbp --github
 - Bluetooth
 - NVMe
 - Camera
+- Thunderbolt
 
 ### Working with mbp-fedora-kernel
 
@@ -84,7 +85,6 @@ update_kernel_mbp --github
 ### Not tested
 
 - eGPU
-- Thunderbolt
 
 ## How to build mbp-fedora-kernel
 
