@@ -65,12 +65,9 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 sed -i '/AllowSuspend=/c\AllowSuspend=yes' /etc/systemd/sleep.conf
 sed -i '/SuspendState=/c\SuspendState=mem' /etc/systemd/sleep.conf
 sed -i '/AllowHybridSleep/c\AllowHybridSleep=no' /etc/systemd/sleep.conf
-<<<<<<< Updated upstream
 grep -q "AllowSuspend=" "/etc/systemd/sleep.conf" || echo "AllowSuspend=yes" >> "/etc/systemd/sleep.conf"
 grep -q "SuspendState=" "/etc/systemd/sleep.conf" || echo "SuspendState=mem" >> "/etc/systemd/sleep.conf"
 grep -q "AllowHybridSleep=" "/etc/systemd/sleep.conf" || echo "AllowHybridSleep=no" >> "/etc/systemd/sleep.conf"
-=======
->>>>>>> Stashed changes
 
 # Remove old audio confgs
 rm -f /usr/share/alsa/cards/AppleT2.conf
