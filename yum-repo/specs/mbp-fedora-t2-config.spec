@@ -1,6 +1,6 @@
 Name: mbp-fedora-t2-config
 Version: 6.0.9
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
 %undefine _disable_source_fetch
@@ -10,13 +10,15 @@ URL: https://github.com/mikeeq/mbp-fedora
 
 %global KEKRBY_AUDIO_CONFIGS e46839a28963e2f7d364020518b9dac98236bcae
 
-Source0: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
+Source0: https://wiki.t2linux.org/tools/rmmod_tb.sh
+Source1: https://github.com/kekrby/t2-better-audio/archive/%{KEKRBY_AUDIO_CONFIGS}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 # https://codeload.github.com/kekrby/t2-better-audio/tar.gz/%{KEKRBY_AUDIO_CONFIGS}
 
 %description
 Configuration files for mbp-fedora on Apple T2 Macs. The mbp-fedora-kernel is necessary for this to work, and this must be installed to boot. Everything works except for TouchID and eGPU.
 
 %prep
+cp %{_sourcedir}/rmmod_tb.sh %{_builddir}/
 tar -xf %{_sourcedir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 
 %build
@@ -24,9 +26,6 @@ echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > apple_bce_install.conf
 # https://github.com/t2linux/wiki/pull/343/files
 echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"' > 90-backlight.rules
-
-# Suspend script
-echo -e '#!/usr/bin/env bash\nif [ "${1}" = "pre" ]; then\nmodprobe -r apple_touchbar\nelif [ "${1}" = "post" ]; then\nmodprobe apple_touchbar\nfi' > rmmod_tb_install.sh
 
 %install
 mkdir -p %{buildroot}/etc/dracut.conf.d/
@@ -36,7 +35,7 @@ mkdir -p %{buildroot}/etc/modules-load.d/
 mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
 
 mkdir -p %{buildroot}/lib/systemd/system-sleep
-mv %{_builddir}/rmmod_tb_install.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
+mv %{_builddir}/rmmod_tb.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 chmod +x %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 
 mkdir -p %{buildroot}/etc/udev/rules.d
