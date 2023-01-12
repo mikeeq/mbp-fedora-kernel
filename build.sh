@@ -34,7 +34,7 @@ dnf -y builddep kernel.spec
 
 ### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file...";
-FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/patch_driver.sh
+FEDORA_KERNEL_VERSION=${FEDORA_KERNEL_VERSION} "${REPO_PWD}"/kernel_patches.sh
 
 ### Apply patches
 echo >&2 "===]> Info: Applying patches...";
@@ -42,7 +42,7 @@ mkdir -p "${REPO_PWD}"/patches
 while IFS= read -r file
 do
   echo >&2 "===]> Info: Applying patch: $file"
-  "${REPO_PWD}"/patch_kernel.sh "$file"
+  "${REPO_PWD}"/patch_kernel_spec.sh "$file"
 done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 
 echo >&2 "===]> Info: Applying kconfig changes... ";

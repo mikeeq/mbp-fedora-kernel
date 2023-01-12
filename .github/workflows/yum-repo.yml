@@ -1,5 +1,5 @@
 ---
-name: Update yum repo on heroku
+name: Update yum repo on GitHub Pages
 
 # yamllint disable-line rule:truthy
 on:
@@ -13,7 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: "Update yum repo on heroku..."
+      - name: "Update yum repo on GitHub Pages..."
         run: ./publish.sh
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

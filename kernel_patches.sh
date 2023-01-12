@@ -12,36 +12,12 @@ APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
 APPLE_SMC_DRIVER_COMMIT_HASH=5c2a3930cbc83bab1381239cc49c1047db94e753
 
-# TMP_DIR=~/tmp_dir
 TMP_DIR=/tmp/tmp_dir
-# TMP_REPOS_DIR=/tmp/tmp_repos_dir
 REPO_PWD=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PATCHES_DIR=${PATCHES_DIR:-$REPO_PWD/patches}
 
 rm -rf "${PATCHES_DIR}"
 mkdir -p "${PATCHES_DIR}"
-
-# mkdir -p "${TMP_REPOS_DIR}/"
-
-# cd "${TMP_REPOS_DIR}/" || exit
-# mkdir -p apple-bce
-# cd apple-bce
-# git init
-
-# git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "./drivers/staging/apple-bce"
-# rm -rf "./drivers/staging/apple-bce/.git"
-# git add .
-# git diff --cached > "${PATCHES_DIR}/1001-apple-bce-driver.patch"
-
-# cd "${TMP_REPOS_DIR}/" || exit
-# mkdir -p apple-ibridge
-# cd apple-ibridge
-# git init
-
-# git clone --depth 1 "${APPLE_IBRIDGE_REPOSITORY}" "./drivers/staging/apple-ibridge"
-# rm -rf "./drivers/staging/apple-ibridge/.git"
-# git add .
-# git diff --cached > "${PATCHES_DIR}/1002-apple-ibridge-driver.patch"
 
 mkdir -p "${TMP_DIR}"
 cd "${TMP_DIR}" || exit
@@ -57,4 +33,3 @@ while IFS= read -r file; do
 done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v 7001 | grep -v 9001)
 
 rm -rf "${TMP_DIR}"
-# rm -rf "${TMP_REPOS_DIR}"
