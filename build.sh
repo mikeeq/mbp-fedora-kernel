@@ -7,7 +7,8 @@ set -eu -o pipefail
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=6.1.0-65.fc38      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
+# FEDORA_KERNEL_VERSION=6.1.0-65.fc38                     # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
+FEDORA_KERNEL_VANILLA_VERSION=6.1.5-250.vanilla.1.fc37    # https://fedorapeople.org/groups/repos/thl/kernel-vanilla-fedora/fedora-37/SRPMS/
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -26,7 +27,8 @@ rpmdev-setuptree
 
 ## Install the kernel source and finish installing dependencies
 cd ${RPMBUILD_PATH}/SOURCES
-koji download-build --arch=src kernel-${FEDORA_KERNEL_VERSION}
+# koji download-build --arch=src kernel-${FEDORA_KERNEL_VERSION}
+curl -L https://fedorapeople.org/groups/repos/thl/kernel-vanilla-fedora/fedora-37/SRPMS/kernel-${FEDORA_KERNEL_VANILLA_VERSION}.src.rpm -O
 rpm -Uvh kernel-${FEDORA_KERNEL_VERSION}.src.rpm
 
 cd ${RPMBUILD_PATH}/SPECS
