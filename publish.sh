@@ -8,6 +8,7 @@ echo >&2 "===]> Info: LATEST_RELEASE=$LATEST_RELEASE"
 echo >&2 "===]> Info: Build mbp-fedora-repo..."
 cd yum-repo
 docker build -t mbp-fedora-repo --build-arg RELEASE_VERSION="${LATEST_RELEASE}" .
+cd ..
 
 echo >&2 "===]> Info: Run mbp-fedora-repo in the background..."
 DOCKER_CONTAINER_ID=$(docker run --rm -d mbp-fedora-repo)
@@ -15,8 +16,14 @@ DOCKER_CONTAINER_ID=$(docker run --rm -d mbp-fedora-repo)
 echo >&2 "===]> Info: Make a zip file with repo content..."
 docker exec -t -u 0 "$DOCKER_CONTAINER_ID" /bin/bash -c '
 dnf makecache
-dnf install -y zip
+dnf install -y zip unzip curl cmake
+cd /tmp
+curl -L https://github.com/libthinkpad/apindex/archive/refs/tags/2.2.zip -O
+cd apindex-2.2
+cmake . -DCMAKE_INSTALL_PREFIX=/usr
+make install
 cd /var/repo
+apindex .
 zip -r /tmp/repo.zip ./
 '
 
@@ -30,6 +37,8 @@ git checkout gh-pages
 echo >&2 "===]> Info: Remove old RPMs..."
 rm -rfv ./*.rpm
 rm -rfv ./repodata
+rm -rfv ./index.html
+rm -rfv ./yum-repo
 
 echo >&2 "===]> Info: Copy zip file to repo..."
 cp -rfv /tmp/repo.zip ./
