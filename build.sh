@@ -31,8 +31,8 @@ cd ${RPMBUILD_PATH}/SOURCES
 # koji download-build --arch=src kernel-${FEDORA_KERNEL_VERSION}
 # rpm -Uvh kernel-${FEDORA_KERNEL_VERSION}.src.rpm
 
-curl -L https://fedorapeople.org/groups/repos/thl/kernel-vanilla-fedora/fedora-37/SRPMS/kernel-${FEDORA_KERNEL_VANILLA_VERSION}.src.rpm -O
-rpm -Uvh kernel-${FEDORA_KERNEL_VANILLA_VERSION}.src.rpm
+curl -L "https://fedorapeople.org/groups/repos/thl/kernel-vanilla-fedora/fedora-37/SRPMS/kernel-${FEDORA_KERNEL_VANILLA_VERSION}.src.rpm" -O
+rpm -Uvh "kernel-${FEDORA_KERNEL_VANILLA_VERSION}.src.rpm"
 
 cd ${RPMBUILD_PATH}/SPECS
 dnf -y builddep kernel.spec
