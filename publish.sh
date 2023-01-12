@@ -23,15 +23,22 @@ echo >&2 "===]> Info: LATEST_RELEASE=$LATEST_RELEASE"
 cd yum-repo
 docker build -t mbp-fedora-repo --build-arg RELEASE_VERSION="${LATEST_RELEASE}" .
 
-DOCKER_CONTAINER_ID=$(docker run -d -p 8080:8080 mbp-fedora-repo)
+DOCKER_CONTAINER_ID=$(docker run -d mbp-fedora-repo)
 docker exec -t -u 0 $DOCKER_CONTAINER_ID /bin/bash -c '
 dnf makecache
 dnf install -y zip
-zip -r /tmp/repo.zip /var/repo
+cd /var/repo
+zip -r /tmp/repo.zip ./
 '
 docker cp $DOCKER_CONTAINER_ID:/tmp/repo.zip /tmp/repo.zip
-# git checkout gh-pages
-# unzip
+git checkout gh-pages
+cp -rfv /tmp/repo.zip ./
+unzip repo.zip
+rm -rfv repo.zip
+git add .
+git commit -m "Release: $LATEST_RELEASE, date: $(date +'%Y%m%d_%H%M%S')"
+# git push origin gh-pages
+
 # chown
 # commit
 # push
