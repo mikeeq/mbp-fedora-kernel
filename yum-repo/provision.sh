@@ -9,7 +9,6 @@ cd /var/repo
 # mv -f ./mbp-fedora-repo.herokuapp.com/*.rpm ./
 # rm -rfv mbp-fedora-repo.herokuapp.com
 
-
 ### shim 15.6-2 is now working properly on MBP 16,2
 ### Download older version of shim
 ## shim 15.4-4 or -5 is not working on MBP 16,2
@@ -18,10 +17,14 @@ cd /var/repo
 # curl -Ls https://kojipkgs.fedoraproject.org/packages/shim/15/8/x86_64/shim-x64-15-8.x86_64.rpm -O
 
 ### Download RELEASE_VERSION of kernel
+echo >&2 "===]> Info: RELEASE_VERSION=$RELEASE_VERSION"
 for rpm in $(curl -sL "https://github.com/mikeeq/mbp-fedora-kernel/releases/expanded_assets/v${RELEASE_VERSION}" | grep rpm | grep span | cut -d'>' -f2 | cut -d'<' -f1); do
+  echo >&2 "===]> Info: Downloading: $rpm"
   curl -Ls "https://github.com/mikeeq/mbp-fedora-kernel/releases/download/v${RELEASE_VERSION}/${rpm}" -O
 done
 
-### Remove caches and fix permissions
+echo >&2 "===]> Info: Remove caches"
 rm -rfv ./*.1
+
+echo >&2 "===]> Info: Fix file permissions"
 chown -R nginx:nginx /var/repo

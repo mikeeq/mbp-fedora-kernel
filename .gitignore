@@ -3,3 +3,5 @@ patches
 output_zip
 patches.zip
 tempdir
+repodata
+*.rpm

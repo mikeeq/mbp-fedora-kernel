@@ -1,6 +1,6 @@
 FROM fedora:37
 
-ARG RELEASE_VERSION=6.0.10-f37
+ARG RELEASE_VERSION=6.1.0-f37
 
 WORKDIR /var/repo
 
@@ -22,6 +22,9 @@ COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
 
 RUN touch /var/run/nginx.pid && \
     chown -R nginx:nginx /var/run/nginx.pid
+
+RUN mkdir -p /var/log/nginx && \
+    chown -R nginx:nginx /var/log/nginx
 
 USER nginx
 

@@ -1,5 +1,5 @@
 Name: mbp-fedora-t2-repo
-Version: 1.1.0
+Version: 1.2.0
 Release: 1%{?dist}
 Summary: RPM repo for mbp-fedora on Apple T2 Macs.
 

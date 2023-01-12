@@ -1,6 +1,6 @@
 [mbp-fedora]
 name=mbp-fedora
-baseurl=https://mbp-fedora-repo.herokuapp.com/
+baseurl=https://mikeeq.github.io/mbp-fedora-kernel/
 gpgcheck=1
 enabled=1
 cost=998
