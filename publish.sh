@@ -19,6 +19,7 @@ dnf makecache
 dnf install -y zip unzip curl cmake
 cd /tmp
 curl -L https://github.com/libthinkpad/apindex/archive/refs/tags/2.2.zip -O
+unzip 2.2.zip
 cd apindex-2.2
 cmake . -DCMAKE_INSTALL_PREFIX=/usr
 make install
