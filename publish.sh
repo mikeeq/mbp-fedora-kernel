@@ -10,7 +10,7 @@ cd yum-repo
 docker build -t mbp-fedora-repo --build-arg RELEASE_VERSION="${LATEST_RELEASE}" .
 
 echo >&2 "===]> Info: Run mbp-fedora-repo in the background..."
-DOCKER_CONTAINER_ID=$(docker run -d mbp-fedora-repo)
+DOCKER_CONTAINER_ID=$(docker run --rm -d mbp-fedora-repo)
 
 echo >&2 "===]> Info: Make a zip file with repo content..."
 docker exec -t -u 0 "$DOCKER_CONTAINER_ID" /bin/bash -c '
@@ -24,6 +24,7 @@ echo >&2 "===]> Info: Copy zip file to host..."
 docker cp "$DOCKER_CONTAINER_ID":/tmp/repo.zip /tmp/repo.zip
 
 echo >&2 "===]> Info: Change branch to gh-pages..."
+git fetch origin gh-pages
 git checkout gh-pages
 
 echo >&2 "===]> Info: Remove old RPMs..."
@@ -43,3 +44,6 @@ echo >&2 "===]> Info: Add, commit, push changes to gh-pages remote..."
 git add .
 git commit -m "Release: $LATEST_RELEASE, date: $(date +'%Y%m%d_%H%M%S')"
 git push origin gh-pages
+
+echo >&2 "===]> Info: Stop mbp-fedora-repo container..."
+docker stop "$DOCKER_CONTAINER_ID"
