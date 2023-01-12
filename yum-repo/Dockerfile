@@ -23,6 +23,9 @@ COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
 RUN touch /var/run/nginx.pid && \
     chown -R nginx:nginx /var/run/nginx.pid
 
+RUN mkdir -p /var/log/nginx && \
+    chown -R nginx:nginx /var/log/nginx
+
 USER nginx
 
 ENV PORT=8080
