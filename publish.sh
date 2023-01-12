@@ -40,6 +40,9 @@ unzip repo.zip
 echo >&2 "===]> Info: Remove zip..."
 rm -rfv repo.zip
 
+git config user.name "CI-GitHubActions"
+git config user.email "ci@github-actions.com"
+
 echo >&2 "===]> Info: Add, commit, push changes to gh-pages remote..."
 git add .
 git commit -m "Release: $LATEST_RELEASE, date: $(date +'%Y%m%d_%H%M%S')"
