@@ -40,6 +40,7 @@ unzip repo.zip
 echo >&2 "===]> Info: Remove zip..."
 rm -rfv repo.zip
 
+echo >&2 "===]> Info: Add git config..."
 git config user.name "CI-GitHubActions"
 git config user.email "ci@github-actions.com"
 
