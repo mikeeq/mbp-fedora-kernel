@@ -116,6 +116,10 @@ mkdir -p ./output_zip
 cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm ./output_zip/
 sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > ./output_zip/sha256
 
+### Copy other artifacts
+cp -rfv "${RPMBUILD_PATH}/SOURCES/kernel-local" patches/
+cp -rfv "${RPMBUILD_PATH}/SPECS/kernel.spec" patches/
+
 ### Add patches to artifacts
 zip -r patches.zip patches/
 cp -rfv patches.zip ./output_zip/
