@@ -7,7 +7,7 @@ set -eu -o pipefail
 ## Update fedora docker image tag, because kernel build is using `uname -r` when defining package version variable
 RPMBUILD_PATH=/root/rpmbuild
 MBP_VERSION=mbp
-FEDORA_KERNEL_VERSION=6.1.5-200.fc37      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
+FEDORA_KERNEL_VERSION=6.1.6-200.fc37      # https://bodhi.fedoraproject.org/updates/?search=&packages=kernel&releases=F37
 REPO_PWD=$(pwd)
 
 ### Debug commands
@@ -115,6 +115,10 @@ cd "${REPO_PWD}"
 mkdir -p ./output_zip
 cp -rfv ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm ./output_zip/
 sha256sum ${RPMBUILD_PATH}/RPMS/x86_64/*.rpm > ./output_zip/sha256
+
+### Copy other artifacts
+cp -rfv "${RPMBUILD_PATH}/SOURCES/kernel-local" patches/
+cp -rfv "${RPMBUILD_PATH}/SPECS/kernel.spec" patches/
 
 ### Add patches to artifacts
 zip -r patches.zip patches/
