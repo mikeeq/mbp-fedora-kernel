@@ -1,5 +1,5 @@
 Name: mbp-fedora-t2-config
-Version: 6.1.8
+Version: 6.1.9
 Release: 1%{?dist}
 Summary: System configuration for mbp-fedora on Apple T2 Macs.
 
@@ -72,6 +72,8 @@ grep -q "AllowHybridSleep=" "/etc/systemd/sleep.conf" || echo "AllowHybridSleep=
 rm -f /usr/share/alsa/cards/AppleT2.conf
 rm -f /usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
 rm -f /usr/lib/udev/rules.d/91-pulseaudio-custom.rules
+# TODO: verify if it needs to be removed
+rm -f /lib/systemd/system-sleep/rmmod_tb.sh
 
 %files
 /etc/modules-load.d/apple_bce.conf
