@@ -25,19 +25,12 @@ echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_appl
 # https://github.com/t2linux/wiki/pull/343/files
 echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"' > 90-backlight.rules
 
-# Suspend script
-echo -e '#!/usr/bin/env bash\nif [ "${1}" = "pre" ]; then\nmodprobe -r apple_touchbar\nelif [ "${1}" = "post" ]; then\nmodprobe apple_touchbar\nfi' > rmmod_tb_install.sh
-
 %install
 mkdir -p %{buildroot}/etc/dracut.conf.d/
 mv %{_builddir}/apple_bce_install.conf %{buildroot}/etc/dracut.conf.d/apple_bce_install.conf
 
 mkdir -p %{buildroot}/etc/modules-load.d/
 mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
-
-mkdir -p %{buildroot}/lib/systemd/system-sleep
-mv %{_builddir}/rmmod_tb_install.sh %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
-chmod +x %{buildroot}/lib/systemd/system-sleep/rmmod_tb.sh
 
 mkdir -p %{buildroot}/etc/udev/rules.d
 mv %{_builddir}/90-backlight.rules %{buildroot}/etc/udev/rules.d/90-backlight.rules
@@ -72,12 +65,10 @@ grep -q "AllowHybridSleep=" "/etc/systemd/sleep.conf" || echo "AllowHybridSleep=
 rm -f /usr/share/alsa/cards/AppleT2.conf
 rm -f /usr/share/alsa-card-profile/mixer/profile-sets/apple-t2.conf
 rm -f /usr/lib/udev/rules.d/91-pulseaudio-custom.rules
-# TODO: verify if it needs to be removed
 rm -f /lib/systemd/system-sleep/rmmod_tb.sh
 
 %files
 /etc/modules-load.d/apple_bce.conf
-/lib/systemd/system-sleep/rmmod_tb.sh
 /etc/dracut.conf.d/apple_bce_install.conf
 /usr/share/alsa-card-profile/mixer
 /usr/share/pulseaudio/alsa-mixer
