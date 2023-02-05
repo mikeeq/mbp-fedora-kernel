@@ -22,6 +22,7 @@ tar -xf %{_sourcedir}/t2-better-audio-%{KEKRBY_AUDIO_CONFIGS}.tar.gz
 %build
 echo -e 'hid-apple\nbcm5974\nsnd-seq\napple_bce' > apple_bce.conf
 echo -e 'add_drivers+=" hid_apple snd-seq apple_bce "\nforce_drivers+=" hid_apple snd-seq apple_bce "' > apple_bce_install.conf
+echo -e '# Disable Unused Apple Ethernet\nblacklist cdc_ncm\nblacklist cdc_mbim' > apple_internal_eth_blacklist.conf
 # https://github.com/t2linux/wiki/pull/343/files
 echo -e 'SUBSYSTEM=="leds", ACTION=="add", KERNEL=="*::kbd_backlight", RUN+="/bin/chgrp video /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"' > 90-backlight.rules
 
@@ -31,6 +32,9 @@ mv %{_builddir}/apple_bce_install.conf %{buildroot}/etc/dracut.conf.d/apple_bce_
 
 mkdir -p %{buildroot}/etc/modules-load.d/
 mv %{_builddir}/apple_bce.conf %{buildroot}/etc/modules-load.d/apple_bce.conf
+
+mkdir -p %{buildroot}/etc/modprobe.d/
+mv %{_builddir}/apple_internal_eth_blacklist.conf %{buildroot}/etc/modprobe.d/apple_internal_eth_blacklist.conf
 
 mkdir -p %{buildroot}/etc/udev/rules.d
 mv %{_builddir}/90-backlight.rules %{buildroot}/etc/udev/rules.d/90-backlight.rules
@@ -70,6 +74,7 @@ rm -f /lib/systemd/system-sleep/rmmod_tb.sh
 %files
 /etc/modules-load.d/apple_bce.conf
 /etc/dracut.conf.d/apple_bce_install.conf
+/etc/modprobe.d/apple_internal_eth_blacklist.conf
 /usr/share/alsa-card-profile/mixer
 /usr/share/pulseaudio/alsa-mixer
 /usr/lib/udev/rules.d/
