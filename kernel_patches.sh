@@ -32,6 +32,7 @@ while IFS= read -r file; do
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
 done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
 
-curl -Ls "https://raw.githubusercontent.com/t2linux/linux-t2-patches/98e76c4c5bcdb5ce5a3752f68c83e0bcea953654/3009-applesmc-battery-charge-limiter.patch" -o "${PATCHES_DIR}/3009-applesmc-battery-charge-limiter.patch"
+curl -Ls "https://raw.githubusercontent.com/t2linux/linux-t2-patches/98e76c4c5bcdb5ce5a3752f68c83e0bcea953654/3008-applesmc-make-applesmc_remove-void.patch" -o "${PATCHES_DIR}/3008-applesmc-make-applesmc_remove-void.patch"
+# curl -Ls "https://raw.githubusercontent.com/t2linux/linux-t2-patches/98e76c4c5bcdb5ce5a3752f68c83e0bcea953654/3009-applesmc-battery-charge-limiter.patch" -o "${PATCHES_DIR}/3009-applesmc-battery-charge-limiter.patch"
 
 rm -rf "${TMP_DIR}"
