@@ -10,7 +10,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/t2linux/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=21be1b4c1b9ed2decc91ec5db3c2ef22a7fd71ba
+APPLE_SMC_DRIVER_COMMIT_HASH=7f9c606ba611989ee4ac2b186293e3a4b68b49f1
 
 TMP_DIR=/tmp/tmp_dir
 REPO_PWD=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
