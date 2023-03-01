@@ -10,7 +10,7 @@ set -eu -o pipefail
 APPLE_SMC_DRIVER_GIT_URL=https://github.com/t2linux/linux-t2-patches
 APPLE_SMC_REPO_NAME=linux-t2-patches
 APPLE_SMC_DRIVER_BRANCH_NAME=main
-APPLE_SMC_DRIVER_COMMIT_HASH=2baa75151ac05ba3144b9f96234d4b09d34830db
+APPLE_SMC_DRIVER_COMMIT_HASH=5d7fec1df97018a29147917531b248992b5368e9
 
 TMP_DIR=/tmp/tmp_dir
 REPO_PWD=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -31,5 +31,7 @@ while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
 done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
+
+curl -Ls "https://raw.githubusercontent.com/t2linux/linux-t2-patches/98e76c4c5bcdb5ce5a3752f68c83e0bcea953654/3009-applesmc-battery-charge-limiter.patch" -o "${PATCHES_DIR}/3009-applesmc-battery-charge-limiter.patch"
 
 rm -rf "${TMP_DIR}"
