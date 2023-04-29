@@ -1,6 +1,6 @@
-FROM fedora:37
+FROM fedora:38
 
-ARG RELEASE_VERSION=6.2.8-f37
+ARG RELEASE_VERSION=6.2.13-f38
 
 WORKDIR /var/repo
 
