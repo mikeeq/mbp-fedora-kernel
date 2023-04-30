@@ -32,7 +32,7 @@ If the DNF fail, or you're updating your older `mbp-fedora`, you can still use p
 ```bash
 ### First run or if you want to update your copy of update_kernel_mbp script
 sudo -i
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v6.0-f37/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v6.0-f38/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 update_kernel_mbp
 
@@ -42,13 +42,13 @@ update_kernel_mbp
 
 ### Update to specific version of kernel
 sudo -i
-KERNEL_VERSION="6.2.8-f37" update_kernel_mbp
+KERNEL_VERSION="6.2.13-f38" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
-KERNEL_VERSION="6.2.8-f37" UPDATE_SCRIPT_BRANCH="v6.2-f37" update_kernel_mbp
+KERNEL_VERSION="6.2.13-f38" UPDATE_SCRIPT_BRANCH="v6.2-f38" update_kernel_mbp
 
 ### If kernel update using dnf would file you can execute update_kernel_mbp script with `--github` argument, it will force it to use github to download kernel RPMs
 sudo -i
