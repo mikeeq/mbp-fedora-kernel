@@ -4,7 +4,7 @@ set -eu -o pipefail
 
 KERNEL_PATCH_PATH=/tmp/kernel_patch
 
-UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v6.2-f38}
+UPDATE_SCRIPT_BRANCH=${UPDATE_SCRIPT_BRANCH:-v6.3-f38}
 MBP_FEDORA_BRANCH=f38
 
 if [ "$EUID" -ne 0 ]; then
