@@ -30,6 +30,6 @@ cd ..
 while IFS= read -r file; do
   echo "adding ${file}"
   cp -rfv "${file}" "${PATCHES_DIR}"/"${file##*/}"
-done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort | grep -v 2009)
+done < <(find "${APPLE_SMC_REPO_NAME}" -type f -name "*.patch" | sort)
 
 rm -rf "${TMP_DIR}"
