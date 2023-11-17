@@ -49,9 +49,8 @@ echo >&2 "===]> Info: Applying kconfig changes... ";
 {
   echo "CONFIG_APPLE_BCE=m"
   echo "CONFIG_BT_HCIBCM4377=m"
-  echo "CONFIG_HID_APPLETB_BL=m"
-  echo "CONFIG_HID_APPLETB_KBD=m"
-  echo "CONFIG_DRM_APPLETBDRM=m"
+  echo "CONFIG_HID_APPLE_IBRIDGE=m"
+  echo "CONFIG_HID_APPLE_TOUCHBAR=m"
   echo "CONFIG_HID_APPLE_MAGIC_BACKLIGHT=m"
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
