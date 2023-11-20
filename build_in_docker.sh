@@ -2,10 +2,10 @@
 
 set -eu -o pipefail
 
-# DOCKER_IMAGE=fedora_build:38
-# docker build -t fedora_build:38 .
+# DOCKER_IMAGE=fedora_build:39
+# docker build -t fedora_build:39 .
 
-DOCKER_IMAGE=${DOCKER_IMAGE:-fedora:38}
+DOCKER_IMAGE=${DOCKER_IMAGE:-fedora:39}
 RPMBUILD_HOST_PATH=~/rpmbuild
 
 mkdir -p ${RPMBUILD_HOST_PATH}
