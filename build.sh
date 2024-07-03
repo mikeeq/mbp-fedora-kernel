@@ -53,6 +53,7 @@ echo >&2 "===]> Info: Applying kconfig changes... ";
   echo "CONFIG_HID_APPLETB_KBD=m"
   echo "CONFIG_DRM_APPLETBDRM=m"
   echo "CONFIG_HID_APPLE_MAGIC_BACKLIGHT=m"
+  echo "CONFIG_APFS_FS=m"
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
