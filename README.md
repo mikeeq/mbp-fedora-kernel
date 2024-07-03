@@ -32,7 +32,7 @@ If the DNF fail, or you're updating your older `mbp-fedora`, you can still use p
 ```bash
 ### First run or if you want to update your copy of update_kernel_mbp script
 sudo -i
-curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v6.6-f39/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
+curl -L https://raw.githubusercontent.com/mikeeq/mbp-fedora-kernel/v6.9-f40/update_kernel_mbp.sh -o /usr/bin/update_kernel_mbp
 chmod +x /usr/bin/update_kernel_mbp
 update_kernel_mbp
 
@@ -42,7 +42,7 @@ update_kernel_mbp
 
 ### Update to specific version of kernel
 sudo -i
-KERNEL_VERSION="6.6.4-f39" update_kernel_mbp
+KERNEL_VERSION="6.9.7-f40" update_kernel_mbp
 
 ### Update to specific version of kernel using specific version of update script
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
