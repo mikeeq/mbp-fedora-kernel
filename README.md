@@ -48,7 +48,7 @@ KERNEL_VERSION="6.9.7-f40" update_kernel_mbp
 #### Usually not needed, because scripts are shared between branches, but you can use it to update your update_kernel_mbp script
 ##### If the script fails, try to rerun it - it's due to self-upgrading feature of this script
 sudo -i
-KERNEL_VERSION="6.6.4-f39" UPDATE_SCRIPT_BRANCH="v6.6-f39" update_kernel_mbp
+KERNEL_VERSION="6.9.7-f40" UPDATE_SCRIPT_BRANCH="v6.9-f40" update_kernel_mbp
 
 ### If kernel update using dnf would file you can execute update_kernel_mbp script with `--github` argument, it will force it to use github to download kernel RPMs
 sudo -i
