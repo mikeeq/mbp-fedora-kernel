@@ -48,12 +48,24 @@ done < <(find "${REPO_PWD}"/patches -type f -name "*.patch" | sort)
 echo >&2 "===]> Info: Applying kconfig changes... ";
 {
   echo "CONFIG_APPLE_BCE=m"
+  echo "CONFIG_APPLE_GMUX=m"
+  echo "CONFIG_BRCMFMAC=m"
+  echo "CONFIG_BT_BCM=m"
   echo "CONFIG_BT_HCIBCM4377=m"
+  echo "CONFIG_BT_HCIUART_BCM=y"
+  echo "CONFIG_BT_HCIUART=m"
   echo "CONFIG_HID_APPLETB_BL=m"
   echo "CONFIG_HID_APPLETB_KBD=m"
+  echo "CONFIG_HID_APPLE=m"
   echo "CONFIG_DRM_APPLETBDRM=m"
+  echo "CONFIG_DRM_KUNIT_TEST=m"
   echo "CONFIG_HID_APPLE_MAGIC_BACKLIGHT=m"
+  echo "CONFIG_HID_SENSOR_ALS=m"
+  echo "CONFIG_SENSORS_APPLESMC=m"
+  echo "CONFIG_SND_PCM=m"
+  echo "CONFIG_STAGING=y"
   echo "CONFIG_APFS_FS=m"
+
 } >> "${RPMBUILD_PATH}/SOURCES/kernel-local"
 
 ### Change buildid to mbp
