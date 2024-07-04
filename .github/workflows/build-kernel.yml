@@ -7,7 +7,7 @@ on: [push]
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
 # https://hub.docker.com/_/alpine
 jobs:
-  tests:
+  test:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
@@ -40,6 +40,7 @@ jobs:
 
   build:
     runs-on: ubuntu-24.04
+    needs: test
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
