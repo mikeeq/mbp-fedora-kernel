@@ -10,7 +10,8 @@ jobs:
   tests:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: "YamlLint"
         run: |
           docker run \
@@ -40,7 +41,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: "AgentInfo"
         run: ./.github/agent-info.sh
       - name: "Runner storage cleanup"
@@ -52,6 +54,12 @@ jobs:
         run: ./build_in_docker.sh
         env:
           RPM_SIGNING_KEY: ${{ secrets.RPM_SIGNING_KEY }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: output
+          path: |
+            ./output_zip/*
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
