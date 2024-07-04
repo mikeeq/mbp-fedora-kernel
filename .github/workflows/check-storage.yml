@@ -32,7 +32,7 @@ jobs:
       - name: "AgentInfo after"
         run: ./.github/agent-info.sh
   tests22:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
