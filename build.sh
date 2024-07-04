@@ -61,7 +61,6 @@ echo >&2 "===]> Info: Applying kconfig changes... ";
   echo "CONFIG_DRM_KUNIT_TEST=m"
   echo "CONFIG_HID_APPLE_MAGIC_BACKLIGHT=m"
   echo "CONFIG_HID_SENSOR_ALS=m"
-  echo "CONFIG_SENSORS_APPLESMC=m"
   echo "CONFIG_SND_PCM=m"
   echo "CONFIG_STAGING=y"
   echo "CONFIG_APFS_FS=m"
