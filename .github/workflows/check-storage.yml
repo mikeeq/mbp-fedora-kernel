@@ -14,7 +14,8 @@ jobs:
   tests20:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: "AgentInfo before"
         run: ./.github/agent-info.sh
       - name: "ncdu"
@@ -31,9 +32,10 @@ jobs:
       - name: "AgentInfo after"
         run: ./.github/agent-info.sh
   tests22:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: "AgentInfo before"
         run: ./.github/agent-info.sh
       - name: "ncdu"
