@@ -1,4 +1,12 @@
-# mbp-fedora-kernel
+*This project has reached the end of its development. Please start using packages/readmes co-authored by t2linux group.*
+
+- https://wiki.t2linux.org/distributions/fedora/installation/
+- https://github.com/t2linux
+- https://github.com/orgs/t2linux/teams/fedora-maintainers/repositories
+
+# [Tutorial: Migration to t2linux](https://github.com/mikeeq/mbp-fedora?tab=readme-ov-file#migration-to-t2linuxfedora)
+
+## mbp-fedora-kernel - DEPRECATED
 
 Fedora kernel with Apple T2 patches built-in (Macbooks produced >= 2018).
 
